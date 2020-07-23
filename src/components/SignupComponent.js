@@ -5,6 +5,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { signup } from '../redux/ActionCreators';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
     const classes = useStyles();
     const [ pwd, togglePwd ] = useState(false);
+    // const signup = useSelector(state => state.signup );
+    const dispatch = useDispatch();
     const formik = useFormik(
         {
             initialValues: { name: '', username: '', password: '', cfmpassword: '' },
@@ -76,7 +80,13 @@ const SignUp = () => {
                     .required('Confirm Password is Required')
                     .oneOf([Yup.ref('password')], 'Passwords do not match')
             }),
-            onSubmit: (values,actions) => {alert(JSON.stringify(values, null, 2)); actions.setSubmitting(false); actions.resetForm()} 
+            onSubmit: (values,actions) => {  
+                actions.setSubmitting(false);
+                dispatch(signup(values.name,values.username,values.password));
+                alert('Submitted');
+                // return signUp(values.name,values.username,values.password);
+            
+            } 
         }
     );
     return (
