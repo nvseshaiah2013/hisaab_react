@@ -82,10 +82,7 @@ const SignUp = () => {
             }),
             onSubmit: (values,actions) => {  
                 actions.setSubmitting(false);
-                dispatch(signup(values.name,values.username,values.password));
-                alert('Submitted');
-                // return signUp(values.name,values.username,values.password);
-            
+                dispatch(signup(values.name,values.username,values.password));          
             } 
         }
     );

@@ -1,16 +1,17 @@
-import { LOGIN, LOGIN_SUCCESS, LOGIN_FAILED } from './ActionTypes';
+import { LOGIN, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT } from './ActionTypes';
 
 export const Auth = (
     state = {
-                isAuthenticated : false,
+                isAuthenticated : localStorage.getItem('token') ? true : false,
                 errMess : null,
-                token : null,
-                username : null
+                token : localStorage.getItem('token'),
+                username : localStorage.getItem('username')
             }, action) => {
         switch(action.type) {
             case LOGIN : return {...state, username : action.payload };
             case LOGIN_SUCCESS : return {...state, isAuthenticated : true, token : action.payload  };
-            case LOGIN_FAILED : return {...state, isAuthenticated : false, errMess : action.payload }
+            case LOGIN_FAILED : return {...state, isAuthenticated : false, errMess : action.payload, token : null };
+            case LOGOUT : return { ...state, isAuthenticated : false, token : null , username : null }
             default : return state;
         }
 }

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container, Typography, Box, TextField, Button, InputAdornment, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../redux/ActionCreators';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -57,6 +60,14 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
     const classes = useStyles();
     const [ pwd, togglePwd ] = useState(false);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
+    const history = useHistory();
+    useEffect(()=>{
+        if(isAuthenticated){
+            history.push('/dashboard');
+        }
+    },[isAuthenticated,history]);
     const formik = useFormik({
         initialValues: { username: '', password: '' },
         validationSchema: Yup.object({
@@ -66,18 +77,19 @@ const Login = () => {
             password: Yup.string()
                 .required('Password is required')
         }),
-        onSubmit: (values, { setSubmitting }) => {
-            setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-            }, 400);
+        onSubmit: (values, { setSubmitting, resetForm }) => {
+            dispatch(login(values.username,values.password));
+            resetForm();
+            setSubmitting(false);
         },
         onReset: values => {
-            alert('Resetting');
+            values.username = '';
+            values.password = '';
         }
     });
     return (
         <Container maxWidth="sm">
+            { isAuthenticated ? 'True' : 'False'}
             <Box className={classes.box} boxShadow={3}>
 
                 <Typography variant="h4" className={classes.header} align="center"> Login </Typography>
@@ -107,7 +119,7 @@ const Login = () => {
                         id="password"
                         name="password"
                         label="Enter Password"
-                        type="password"
+                        type={pwd ? 'text' : 'password'}
                         autoComplete="current-password"
                         fullWidth
                         className={classes.outlineField}
