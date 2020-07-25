@@ -7,8 +7,7 @@ export const theme = createMuiTheme({
             'Patrick Hand',
             'sans-serif',
             'Roboto'
-        ],
-        
+        ],        
     }
 });
 

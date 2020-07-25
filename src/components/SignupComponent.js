@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { signup } from '../redux/ActionCreators';
-
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -56,13 +57,24 @@ const useStyles = makeStyles((theme) => ({
     pushRight: {
         marginLeft: 'auto'
     },
+    hover : {
+        '&:hover' : {
+            textDecoration : 'none'
+        }
+    },
+    info : {
+        color : theme.palette.info.main,
+        '&:hover' : {
+            color : theme.palette.info.dark
+        }
+    }
 }));
 
-const SignUp = () => {
+const SignUp = (props) => {
     const classes = useStyles();
     const [ pwd, togglePwd ] = useState(false);
-    // const signup = useSelector(state => state.signup );
     const dispatch = useDispatch();
+    console.log(props);
     const formik = useFormik(
         {
             initialValues: { name: '', username: '', password: '', cfmpassword: '' },
@@ -164,7 +176,9 @@ const SignUp = () => {
                     />
                     {formik.touched.cfmpassword && formik.errors.cfmpassword ? <Typography variant="subtitle2" color="error">{formik.errors.cfmpassword}</Typography> : null}
                     <Box className={classes.flex}>
-                        <Typography variant="body1">Have an Account? Log In.</Typography>
+                        <Link to='/login' className={clsx(classes.info,classes.hover)}>
+                            <Typography variant="body2">Have an Account? Log In.</Typography>
+                        </Link>
                         <Button variant="contained" color="primary" type="submit" className={classes.pushRight} disabled={formik.isSubmitting}> Sign Up </Button>
                     </Box>
                 </form>

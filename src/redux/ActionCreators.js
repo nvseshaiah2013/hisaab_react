@@ -10,8 +10,12 @@ export const login = (username,password) => dispatch => {
             localStorage.setItem('username',username);
             dispatch({ type : ActionTypes.LOGIN_SUCCESS, payload : response.data.token })
         })
-        .catch(err=> dispatch({ type : ActionTypes.LOGIN_FAILED, payload : err.message }))
+        .catch(err=> dispatch({ type : ActionTypes.LOGIN_FAILED, payload : err.response.data.message }))
 }
+
+export const clearError = () => dispatch => {
+    dispatch({ type : ActionTypes.CLEAR_LOGIN_ERROR });
+} 
 
 export const signup = (name, username, password ) => dispatch => {
     dispatch({type : ActionTypes.SIGNUP, payload : username });
