@@ -3,11 +3,12 @@ import Reminders from '../components/ReminderComponent';
 import Gives from '../components/GivesComponent';
 import Takes from '../components/TakesComponent';
 import GiveForm from '../components/GiveFormComponent';
+import About from '../components/AboutComponent';
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
 import MonetizationOnSharpIcon from '@material-ui/icons/MonetizationOnSharp';
 import NotificationsSharpIcon from '@material-ui/icons/NotificationsSharp';
 import StorageSharpIcon from '@material-ui/icons/StorageSharp';
-
+import InfoSharpIcon from '@material-ui/icons/InfoSharp';
 export const routes = [
     {
         key : 100,
@@ -23,7 +24,7 @@ export const routes = [
         url : '/given-money/',
         name : 'Given Money',
         component : Gives,
-        type : 'money',
+        type : 'Money',
         show : true,
         icon : <MonetizationOnSharpIcon />
     },    
@@ -32,7 +33,7 @@ export const routes = [
         url : '/given-items/',
         name : 'Given Items',
         component : Gives,
-        type : 'items',
+        type : 'Items',
         show : true,
         icon : <StorageSharpIcon />
     },
@@ -41,7 +42,7 @@ export const routes = [
         url : '/taken-money/',
         name : 'Money Taken',
         component : Takes,
-        type : 'money',
+        type : 'Money',
         show : true,
         icon : <MonetizationOnSharpIcon />
     },
@@ -50,7 +51,7 @@ export const routes = [
         url : '/taken-items/',
         name : 'Items Taken',
         component : Takes,
-        type : 'items',
+        type : 'Items',
         show : true,
         icon : <StorageSharpIcon />
     },
@@ -64,11 +65,20 @@ export const routes = [
         icon : <NotificationsSharpIcon/>
     },
     {
+        key : 107,
+        url : '/about/',
+        name : 'About Project',
+        component : About,
+        type : '',
+        show : true,
+        icon : <InfoSharpIcon />
+    },
+    {
         key : 106,
         url : '/*',
         name : 'Not Found',
         component : GiveForm,
         type : '',
         show : false
-    }
+    },
 ];

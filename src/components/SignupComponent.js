@@ -74,7 +74,6 @@ const SignUp = (props) => {
     const classes = useStyles();
     const [ pwd, togglePwd ] = useState(false);
     const dispatch = useDispatch();
-    console.log(props);
     const formik = useFormik(
         {
             initialValues: { name: '', username: '', password: '', cfmpassword: '' },

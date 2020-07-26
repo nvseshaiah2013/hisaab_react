@@ -3,7 +3,6 @@ import { IconButton, Box, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from './NavbarComponent';
 import MenuIcon from '@material-ui/icons/Menu';
-import Footer from './FooterComponent';
 import { routes } from '../resources/private.navbar';
 import { Switch, Route } from 'react-router-dom';
 
@@ -42,7 +41,13 @@ const Dashboard = ({ match }) => {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+    const handleClose = () => {
+        if(mobileOpen) {
+            setMobileOpen(false);
+        }
+    }
     return (
+        
         <Container maxWidth="md">
             <Box className={classes.appBar}>
                 <IconButton
@@ -56,7 +61,7 @@ const Dashboard = ({ match }) => {
                 <Typography variant="h5" className={classes.white} display="inline">Hisaab Kitaab</Typography>
             </Box>
             <div className={classes.root}>
-                <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+                <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleClose={handleClose} />
                 <main className={classes.content}>
                     <Switch>
                         {routes.map((route) => {
@@ -67,7 +72,6 @@ const Dashboard = ({ match }) => {
                     </Switch>
                 </main>
             </div>
-            <Footer />
         </Container>
     );
 };

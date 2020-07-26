@@ -45,12 +45,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Navbar = ({ mobileOpen, handleDrawerToggle }) => {
+const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const drawer = routes.filter(route => route.show === true).map((route) => {
         return (
-            <Link to={`/dashboard${route.url}`} key={route.key} className={classes.link}>
+            <Link to={`/dashboard${route.url}`} key={route.key} className={classes.link} onClick={handleClose}>
                 <ListItem>
                     <ListItemIcon>{route.icon ? route.icon : ''}</ListItemIcon>
                     <ListItemText primary={route.name} />
@@ -106,8 +106,8 @@ const Navbar = ({ mobileOpen, handleDrawerToggle }) => {
                             {drawer}
                             <div className={classes.toolbar} />
                             <div className={classes.toolbar} />
-
                             <div className={classes.toolbar} />
+                          
 
                             <ListItem key={110}>
                                 <Button onClick={() => dispatch(logout())}>
