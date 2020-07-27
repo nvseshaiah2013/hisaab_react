@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
     },
     header: {
         textAlign: 'center',
-        fontWeight: '900'
+        fontWeight: '900',
     },
     hover: {
         '& :hover': {
-            backgroundColor: 'rgba(10,100,100,0.6)',
+            backgroundColor: theme.palette.info.light,
         }
     },
     paddingUpDown: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
             textDecoration: 'none',
         }
 
-    },
+    }
 }));
 
 const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
@@ -98,17 +98,12 @@ const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
                         variant="permanent"
                         open
                     >
-                        <List>
+                        <List className={classes.hover}>
                             <ListItem key={99}>
                                 <Typography variant="h5" align="right" className={classes.header}> Hisaab Kitaab </Typography>
                             </ListItem>
                             <Divider />
-                            {drawer}
-                            <div className={classes.toolbar} />
-                            <div className={classes.toolbar} />
-                            <div className={classes.toolbar} />
-                          
-
+                            {drawer}              
                             <ListItem key={110}>
                                 <Button onClick={() => dispatch(logout())}>
                                     <ListItemIcon>

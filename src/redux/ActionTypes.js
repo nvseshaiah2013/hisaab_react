@@ -9,3 +9,11 @@ export const SIGNUP = 'SIGNUP';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILED = 'SIGNUP_FAILED';
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+//Gives Reducer 
+export const SELECT_FRIEND = 'SELECT_FRIEND';
+export const DESELET_FRIEND = 'DESELECT_FRIEND';
+export const FETCH_GIVEN_MONEY = 'FETCH_GIVEN_MONEY';
+export const FETCH_GIVEN_ITEMS = 'FETCH_GIVEN_ITEMS';
+export const GIVE_MONEY = 'GIVE_MONEY';
+export const GIVE_ITEM = 'GIVE_ITEM';
+export const GIVES_LOADING = 'GIVES_LOADING';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Container, Typography, TextField, RadioGroup, Radio, FormControlLabel, Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -6,6 +6,11 @@ import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import Typeahead from './TypeAheadComponent';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import { debounce } from 'lodash';
+import { baseurl } from '../resources/baseurl';
+import { useDispatch } from 'react-redux';
+import { clearFriend } from '../redux/ActionCreators';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -38,18 +43,41 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: 'white',
             color: theme.palette.error.main,
         }
+    },
+    padding: {
+        padding: theme.spacing(1)
     }
 }));
 
 const GiveForm = (props) => {
     const classes = useStyles();
     const [type, setType] = useState('Money');
+    const [users, setUsers] = useState([]);
+    const [width, setWidth] = useState(0);
+    const [ searched, setSearched] = useState(false);
+    const [ open, setOpen ] = useState(true);
+    const ref = useRef();
+    const dispatch = useDispatch();
+    useLayoutEffect(() => {
+        if (ref.current) {
+            setWidth(ref.current.clientWidth);
+        }
+    }, []);
+   
+    const fetchUsers = () => {
+        if (formik.values.username === '')
+            return;
+        axios.get(baseurl + `users`, { params: { username: formik.values.username } })
+            .then((data) => { setUsers(data.data.users) })
+            .catch(err => console.log(err));
+    }
+    const debouncedFetchUsers = debounce(fetchUsers, 3000);
     const formik = useFormik({
-        initialValues : { name : ''},
-        validationSchema : Yup.object({
-            name : Yup.string().required('Username is Required to Search')
+        initialValues: { username: '' },
+        validationSchema: Yup.object({
+            username: Yup.string().required('Username is Required to Search')
         }),
-        onSubmit : values => alert(`${JSON.stringify(values)}`)
+        onSubmit: values => {fetchUsers(); setSearched(true); setOpen(true); dispatch(clearFriend());}
     });
     const handleChange = (event) => {
         setType(event.target.value)
@@ -59,20 +87,30 @@ const GiveForm = (props) => {
         <Container maxWidth="md" className={classes.content}>
             <Typography align="center" variant="h4">Welcome {localStorage.getItem('username').split('@')[0]}</Typography>
             <div className={classes.toolbar} />
-            
+
             <form noValidate onSubmit={formik.handleSubmit}>
                 <TextField
                     label="Search Friend's Username"
-                    name="name"
-                    id="name"
+                    name="username"
+                    id="username"
                     variant="outlined"
                     fullWidth={true}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.name}
-                    error={true}
+                    value={formik.values.username}
+                    error={formik.touched.username && formik.errors.username ? true : false}
+                    onKeyUp={debouncedFetchUsers}
+                    ref={ref}
                 />
-                <Typeahead />
+                {<Typography color="error" variant="body2" className={classes.padding}>{formik.errors.username}</Typography>}
+                <Typeahead 
+                    users={users} 
+                    username={formik.values.username} 
+                    width={width} searched={searched} 
+                    setUsers={setUsers}
+                    open={open}
+                    setOpen={setOpen}
+                    />
                 <Box textAlign="center" className={classes.space2}>
                     <Button endIcon={<SearchSharpIcon />} type="submit" variant="contained" color="primary"> Search </Button>
                 </Box>
@@ -81,7 +119,7 @@ const GiveForm = (props) => {
             <RadioGroup aria-label="type" name="type" value={type} onChange={handleChange} className={classes.inline}>
                 <FormControlLabel value="Money" control={<Radio />} label="Money" className={classes.flexCell} />
                 <div className={classes.flexCell} />
-                <FormControlLabel value="Item" control={<Radio />} label="Item" className={classes.flexCell}/>
+                <FormControlLabel value="Item" control={<Radio />} label="Item" className={classes.flexCell} />
             </RadioGroup>
 
             <Typography variant="h6" align="center" className={classes.space2}> Give {type} to Friend </Typography>
@@ -104,7 +142,7 @@ const GiveMoneyForm = () => {
                     type="number"
                     className={classes.space2}
                 />
-               
+
                 <TextField
                     label="Enter Place of Transaction"
                     name="place"
@@ -136,9 +174,9 @@ const GiveMoneyForm = () => {
                     }}
                 />
                 <Box className={classes.inline}>
-                    <Button variant="outlined" className={clsx(classes.info,classes.flexCell)} type="submit"> Give Money </Button>
+                    <Button variant="outlined" className={clsx(classes.info, classes.flexCell)} type="submit"> Give Money </Button>
                     <div className={classes.flexCell} />
-                    <Button variant="contained"type="reset" className={clsx(classes.red,classes.flexCell)}> Reset </Button>
+                    <Button variant="contained" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
                 </Box>
             </form>
         </Container>
@@ -199,9 +237,9 @@ const GiveItemForm = () => {
                     }}
                 />
                 <Box className={classes.inline}>
-                    <Button variant="outlined" className={clsx(classes.info,classes.flexCell)} type="submit"> Give Item </Button>
+                    <Button variant="outlined" className={clsx(classes.info, classes.flexCell)} type="submit"> Give Item </Button>
                     <div className={classes.flexCell} />
-                    <Button variant="contained"type="reset" className={clsx(classes.red,classes.flexCell)}> Reset </Button>
+                    <Button variant="contained" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
                 </Box>
             </form>
         </Container>

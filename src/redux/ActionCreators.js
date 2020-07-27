@@ -31,3 +31,14 @@ export const logout = () => dispatch => {
     localStorage.removeItem('username');
     dispatch({type : ActionTypes.LOGOUT });
 }
+
+
+// Gives Creators
+
+export const selectedFriend = (username,name) => dispatch => {
+    dispatch({type : ActionTypes.SELECT_FRIEND, payload : { username, name }});
+}
+
+export const clearFriend = () => dispatch => {
+    dispatch({type : ActionTypes.DESELET_FRIEND });
+}

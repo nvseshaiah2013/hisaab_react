@@ -101,7 +101,7 @@ const SignUp = (props) => {
         <Container maxWidth="sm">
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Sign Up </Typography>
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} noValidate>
                     <TextField
                         label="Enter Name"
                         variant="outlined"
