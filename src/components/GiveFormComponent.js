@@ -1,16 +1,17 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Container, Typography, TextField, RadioGroup, Radio, FormControlLabel, Button, Box } from '@material-ui/core';
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { Box, Button, Container, FormControlLabel, Radio, RadioGroup, Snackbar, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
-import Typeahead from './TypeAheadComponent';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import axios from 'axios';
+import clsx from 'clsx';
+import { useFormik } from 'formik';
 import { debounce } from 'lodash';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import { clearFriend, giveitem, givemoney } from '../redux/ActionCreators';
 import { baseurl } from '../resources/baseurl';
-import { useDispatch } from 'react-redux';
-import { clearFriend } from '../redux/ActionCreators';
+import Typeahead from './TypeAheadComponent';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -32,20 +33,33 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.info.main,
         color: 'white',
         '& :hover': {
-            backgroundColor: 'white',
-            color: theme.palette.info.main,
+            backgroundColor: theme.palette.info.dark,
         }
     },
     red: {
         backgroundColor: theme.palette.error.main,
         color: 'white',
         '& :hover': {
-            backgroundColor: 'white',
-            color: theme.palette.error.main,
+            backgroundColor: theme.palette.error.dark,
         }
     },
     padding: {
         padding: theme.spacing(1)
+    },
+    textField: {
+        margin: '1rem auto',
+        '& input:valid + fieldset': {
+            borderColor: theme.palette.info.main,
+            borderWidth: 2,
+        },
+        '& input:invalid + fieldset': {
+            borderColor: theme.palette.error.dark,
+            borderWidth: 2,
+        },
+        '& input:valid:focus + fieldset': {
+            borderLeftWidth: 6,
+            padding: '4px !important',
+        },
     }
 }));
 
@@ -54,16 +68,28 @@ const GiveForm = (props) => {
     const [type, setType] = useState('Money');
     const [users, setUsers] = useState([]);
     const [width, setWidth] = useState(0);
-    const [ searched, setSearched] = useState(false);
-    const [ open, setOpen ] = useState(true);
+    const [searched, setSearched] = useState(false);
+    const [open, setOpen] = useState(true);
     const ref = useRef();
+    const token = useSelector(state => state.auth.token);
     const dispatch = useDispatch();
     useLayoutEffect(() => {
         if (ref.current) {
             setWidth(ref.current.clientWidth);
         }
     }, []);
-   
+    const formik = useFormik({
+        initialValues: { username: '' },
+        validationSchema: Yup.object({
+            username: Yup.string().required('Username is Required to Search')
+        }),
+        onSubmit: values => { fetchUsers(); setSearched(true); setOpen(true); dispatch(clearFriend()); }
+    });
+    const handleChange = (event) => {
+        setType(event.target.value)
+    }
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const fetchUsers = () => {
         if (formik.values.username === '')
             return;
@@ -72,16 +98,6 @@ const GiveForm = (props) => {
             .catch(err => console.log(err));
     }
     const debouncedFetchUsers = debounce(fetchUsers, 3000);
-    const formik = useFormik({
-        initialValues: { username: '' },
-        validationSchema: Yup.object({
-            username: Yup.string().required('Username is Required to Search')
-        }),
-        onSubmit: values => {fetchUsers(); setSearched(true); setOpen(true); dispatch(clearFriend());}
-    });
-    const handleChange = (event) => {
-        setType(event.target.value)
-    }
 
     return (
         <Container maxWidth="md" className={classes.content}>
@@ -95,6 +111,7 @@ const GiveForm = (props) => {
                     id="username"
                     variant="outlined"
                     fullWidth={true}
+                    className={classes.textField}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.username}
@@ -103,14 +120,14 @@ const GiveForm = (props) => {
                     ref={ref}
                 />
                 {<Typography color="error" variant="body2" className={classes.padding}>{formik.errors.username}</Typography>}
-                <Typeahead 
-                    users={users} 
-                    username={formik.values.username} 
-                    width={width} searched={searched} 
+                <Typeahead
+                    users={users}
+                    username={formik.values.username}
+                    width={width} searched={searched}
                     setUsers={setUsers}
                     open={open}
                     setOpen={setOpen}
-                    />
+                />
                 <Box textAlign="center" className={classes.space2}>
                     <Button endIcon={<SearchSharpIcon />} type="submit" variant="contained" color="primary"> Search </Button>
                 </Box>
@@ -123,16 +140,42 @@ const GiveForm = (props) => {
             </RadioGroup>
 
             <Typography variant="h6" align="center" className={classes.space2}> Give {type} to Friend </Typography>
-            {type === 'Money' ? <GiveMoneyForm /> : <GiveItemForm />}
+            {type === 'Money' ? <GiveMoneyForm dispatch={dispatch}/> : <GiveItemForm dispatch={dispatch}/>}
+            <SnackBar />
         </Container>
     );
 };
 
-const GiveMoneyForm = () => {
+const GiveMoneyForm = ( {dispatch}) => {
     const classes = useStyles();
+    const [message, setMessage] = useState('');
+    const [open, setOpen] = useState(false);
+    const selectedFriend = useSelector(state => state.gives.selectedFriend);  
+    const formik = useFormik({
+        initialValues: {
+            amount: 1,
+            place: '',
+            occasion: '',
+            expected_return_date: moment().add(1, 'day').format('YYYY-MM-DD')
+        },
+        validationSchema: Yup.object({
+            amount: Yup.number().required('Amount is Required!').min(1, 'Amount should be greater than 0 !'),
+            place: Yup.string().required('Place is Required!'),
+            occasion: Yup.string().required('Occasion is Required!'),
+            expected_return_date: Yup.date()
+                .required('Expected Return Date is Required!')
+                .min(moment().add(1, 'day').format('YYYY-MM-DD'), 'Expected Date should be in future!')
+        }),
+        onSubmit: values => { if(selectedFriend!==null)
+            dispatch(givemoney(values,selectedFriend));
+        else {
+            setOpen(true);
+            setMessage('Please Select A Friend')
+        } }
+    });
     return (
         <Container>
-            <form noValidate>
+            <form noValidate onSubmit={formik.handleSubmit}>
                 <TextField
                     label="Enter Amount"
                     name="amount"
@@ -140,8 +183,13 @@ const GiveMoneyForm = () => {
                     variant="outlined"
                     fullWidth
                     type="number"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.amount}
+                    error={formik.touched.amount && formik.errors.amount ? true : false}
                 />
+                {formik.touched.amount && formik.errors.amount ? <div>{formik.errors.amount}</div> : ''}
 
                 <TextField
                     label="Enter Place of Transaction"
@@ -150,8 +198,14 @@ const GiveMoneyForm = () => {
                     variant="outlined"
                     fullWidth
                     type="text"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.place}
+                    error={formik.touched.place && formik.errors.place ? true : false}
                 />
+                {formik.touched.place && formik.errors.place ? <div>{formik.errors.place}</div> : ''}
+
                 <TextField
                     label="Enter Occasion"
                     name="occasion"
@@ -159,8 +213,13 @@ const GiveMoneyForm = () => {
                     variant="outlined"
                     fullWidth
                     type="text"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.occasion}
+                    error={formik.touched.occasion && formik.errors.occasion ? true : false}
                 />
+                {formik.touched.occasion && formik.errors.occasion ? <div>{formik.errors.occasion}</div> : ''}
                 <TextField
                     label="Enter Expected Return Date"
                     name="expected_return_date"
@@ -168,26 +227,61 @@ const GiveMoneyForm = () => {
                     variant="outlined"
                     fullWidth
                     type="date"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.expected_return_date}
+                    error={formik.touched.expected_return_date && formik.errors.expected_return_date ? true : false}
                 />
+                {formik.touched.expected_return_date && formik.errors.expected_return_date ? <div>{formik.errors.expected_return_date} </div> : ''}
                 <Box className={classes.inline}>
                     <Button variant="outlined" className={clsx(classes.info, classes.flexCell)} type="submit"> Give Money </Button>
                     <div className={classes.flexCell} />
-                    <Button variant="contained" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
+                    <Button variant="outlined" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
                 </Box>
             </form>
+            <SnackBar open={open} message={message} setOpen={setOpen}/>
         </Container>
     );
 };
 
-const GiveItemForm = () => {
+const GiveItemForm = ({dispatch}) => {
     const classes = useStyles();
+    const [message, setMessage] = useState('');
+    const [open, setOpen] = useState(false);
+    const selectedFriend = useSelector(state => state.gives.selectedFriend);
+    const formik = useFormik({
+        initialValues: {
+            itemName: '',
+            description: '',
+            place: '',
+            occasion: '',
+            expected_return_date: moment().add(1, 'day').format('YYYY-MM-DD')
+        },
+        validationSchema: Yup.object({
+            itemName: Yup.string().required('Item Name is Required!'),
+            description: Yup.string().required('Description is Required!'),
+            place: Yup.string().required('Place is Required'),
+            occasion: Yup.string().required('Occasion is Required'),
+            expected_return_date: Yup.date()
+                .required('Expected Return Date is Required!')
+                .min(moment().add(1, 'day').format('YYYY-MM-DD'), 'Expected Date should be in future!')
+        }),
+        onSubmit: values => {  
+            if(selectedFriend!==null)
+                dispatch(giveitem(values,selectedFriend));
+            else {
+                setOpen(true);
+                setMessage('Please Select A Friend')
+            }  
+        }
+    });
     return (
         <Container>
-            <form noValidate>
+            <form noValidate onSubmit={formik.handleSubmit}>
                 <TextField
                     label="Enter Item Name"
                     name="itemName"
@@ -195,8 +289,14 @@ const GiveItemForm = () => {
                     variant="outlined"
                     fullWidth
                     type="text"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    value={formik.values.itemName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.itemName && formik.errors.itemName ? true : false}
                 />
+                {formik.touched.itemName && formik.errors.itemName ? <div>{formik.errors.itemName}</div> : ''}
+
                 <TextField
                     label="Enter Description"
                     name="description"
@@ -204,8 +304,14 @@ const GiveItemForm = () => {
                     variant="outlined"
                     fullWidth
                     type="text"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.description && formik.errors.description ? true : false}
                 />
+                {formik.touched.description && formik.errors.description ? <div>{formik.errors.description}</div> : ''}
+
                 <TextField
                     label="Enter Place of Transaction"
                     name="place"
@@ -213,8 +319,14 @@ const GiveItemForm = () => {
                     variant="outlined"
                     fullWidth
                     type="text"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    value={formik.values.place}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.place && formik.errors.place ? true : false}
                 />
+                {formik.touched.place && formik.errors.place ? <div>{formik.errors.place}</div> : ''}
+
                 <TextField
                     label="Enter Occasion"
                     name="occasion"
@@ -222,8 +334,13 @@ const GiveItemForm = () => {
                     variant="outlined"
                     fullWidth
                     type="text"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
+                    value={formik.values.occasion}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.occasion && formik.errors.occasion ? true : false}
                 />
+                {formik.touched.occasion && formik.errors.occasion ? <div>{formik.errors.occasion}</div> : ''}
                 <TextField
                     label="Enter Expected Return Date"
                     name="expected_return_date"
@@ -231,19 +348,32 @@ const GiveItemForm = () => {
                     variant="outlined"
                     fullWidth
                     type="date"
-                    className={classes.space2}
+                    className={clsx(classes.space2, classes.textField)}
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    value={formik.values.expected_return_date}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.expected_return_date && formik.errors.expected_return_date ? true : false}
                 />
+                {formik.touched.expected_return_date && formik.errors.expected_return_date ? <div>{formik.errors.expected_return_date} </div> : ''}
                 <Box className={classes.inline}>
                     <Button variant="outlined" className={clsx(classes.info, classes.flexCell)} type="submit"> Give Item </Button>
                     <div className={classes.flexCell} />
-                    <Button variant="contained" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
+                    <Button variant="outlined" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
                 </Box>
             </form>
+            <SnackBar open={open} message={message} setOpen={setOpen}/>
         </Container>
     );
 };
+
+const SnackBar = ({ message, open, setOpen }) => {
+    if(open){
+        setTimeout(()=> setOpen(false),3000);
+    }
+    return (<Snackbar message={message} open={open} autoHideDuration={6000} />);
+}
 
 export default GiveForm;

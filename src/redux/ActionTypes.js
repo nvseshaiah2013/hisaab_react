@@ -17,3 +17,4 @@ export const FETCH_GIVEN_ITEMS = 'FETCH_GIVEN_ITEMS';
 export const GIVE_MONEY = 'GIVE_MONEY';
 export const GIVE_ITEM = 'GIVE_ITEM';
 export const GIVES_LOADING = 'GIVES_LOADING';
+export const GIVE_ERROR = 'GIVE_ERROR';
