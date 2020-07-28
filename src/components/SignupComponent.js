@@ -3,12 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../redux/ActionCreators';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+import SuccessSnack from './SuccessSnackComponent';
+import FailureSnack from './FailureSnackComponent';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     box: {
         border: '2px solid gray',
-        margin: '15vh auto',
+        margin: '12vh auto',
         padding: '1rem 2rem',
         borderRadius: '5px'
     },
@@ -73,7 +75,22 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = (props) => {
     const classes = useStyles();
     const [ pwd, togglePwd ] = useState(false);
+    const [ success, setSuccess ] = useState(false);
+    const [ failure, setFailure ] = useState(false);
+    const [ message, setMessage ] = useState('');
+    const state = useSelector(state => state.signup );
     const dispatch = useDispatch();
+
+    useEffect(()=> {
+        if(state.status === true ) {
+            setSuccess(true);
+            setMessage(state.message);
+        }
+        else if(state.status === false) {
+            setFailure(true);
+            setMessage(state.message);
+        }
+    },[state]);
     const formik = useFormik(
         {
             initialValues: { name: '', username: '', password: '', cfmpassword: '' },
@@ -91,8 +108,9 @@ const SignUp = (props) => {
                     .required('Confirm Password is Required')
                     .oneOf([Yup.ref('password')], 'Passwords do not match')
             }),
-            onSubmit: (values,actions) => {  
-                actions.setSubmitting(false);
+            onSubmit: (values, {setSubmitting,resetForm}) => {  
+                setSubmitting(false);
+                resetForm();
                 dispatch(signup(values.name,values.username,values.password));          
             } 
         }
@@ -153,7 +171,7 @@ const SignUp = (props) => {
                                     onClick={() => togglePwd(!pwd)}
                                     edge="end"
                                 >
-                                    {pwd ? <Visibility /> : <VisibilityOff />}
+                                    {pwd ? <VisibilityOff /> : <Visibility /> }
                                 </IconButton>
                             </InputAdornment>
                         }}
@@ -182,6 +200,8 @@ const SignUp = (props) => {
                     </Box>
                 </form>
             </Box>
+            <SuccessSnack message={message} open={success} setOpen={setSuccess}/>
+            <FailureSnack message={message} open={failure} setOpen={setFailure}/>
         </Container>
     );
 

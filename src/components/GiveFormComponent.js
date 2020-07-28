@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { Box, Button, Container, FormControlLabel, Radio, RadioGroup, Snackbar, TextField, Typography } from '@material-ui/core';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
+import { Box, Button, Container, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import axios from 'axios';
@@ -12,6 +12,8 @@ import * as Yup from 'yup';
 import { clearFriend, giveitem, givemoney } from '../redux/ActionCreators';
 import { baseurl } from '../resources/baseurl';
 import Typeahead from './TypeAheadComponent';
+import FailureSnack from './FailureSnackComponent';
+import SuccessSnack from './SuccessSnackComponent';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -141,7 +143,6 @@ const GiveForm = (props) => {
 
             <Typography variant="h6" align="center" className={classes.space2}> Give {type} to Friend </Typography>
             {type === 'Money' ? <GiveMoneyForm dispatch={dispatch}/> : <GiveItemForm dispatch={dispatch}/>}
-            <SnackBar />
         </Container>
     );
 };
@@ -149,8 +150,20 @@ const GiveForm = (props) => {
 const GiveMoneyForm = ( {dispatch}) => {
     const classes = useStyles();
     const [message, setMessage] = useState('');
-    const [open, setOpen] = useState(false);
-    const selectedFriend = useSelector(state => state.gives.selectedFriend);  
+    const [success, setSuccess] = useState(false);
+    const [failure, setFailure] = useState(false);
+    const gives = useSelector(state => state.gives);
+    const selectedFriend = gives.selectedFriend;
+    useEffect(()=> { 
+        if(gives.status === true ) {
+            setMessage(gives.message);
+            setSuccess(true);
+        }
+        else if(gives.status === false) {
+            setMessage(gives.message);
+            setFailure(true);
+        }
+    },[gives]);  
     const formik = useFormik({
         initialValues: {
             amount: 1,
@@ -169,7 +182,7 @@ const GiveMoneyForm = ( {dispatch}) => {
         onSubmit: values => { if(selectedFriend!==null)
             dispatch(givemoney(values,selectedFriend));
         else {
-            setOpen(true);
+            setFailure(true);
             setMessage('Please Select A Friend')
         } }
     });
@@ -243,7 +256,8 @@ const GiveMoneyForm = ( {dispatch}) => {
                     <Button variant="outlined" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
                 </Box>
             </form>
-            <SnackBar open={open} message={message} setOpen={setOpen}/>
+            <FailureSnack open={failure} setOpen={setFailure} message={message}/>
+            <SuccessSnack open={success} setOpen={setSuccess} message={message}/>
         </Container>
     );
 };
@@ -251,8 +265,20 @@ const GiveMoneyForm = ( {dispatch}) => {
 const GiveItemForm = ({dispatch}) => {
     const classes = useStyles();
     const [message, setMessage] = useState('');
-    const [open, setOpen] = useState(false);
-    const selectedFriend = useSelector(state => state.gives.selectedFriend);
+    const [success, setSuccess] = useState(false);
+    const [failure, setFailure] = useState(false);
+    const gives = useSelector(state => state.gives);
+    const selectedFriend = gives.selectedFriend;
+    useEffect(()=> { 
+        if(gives.status === true ) {
+            setMessage(gives.message);
+            setSuccess(true); 
+        }
+        else if(gives.status === false) {
+            setMessage(gives.message);
+            setFailure(true);
+        }
+    },[gives]);
     const formik = useFormik({
         initialValues: {
             itemName: '',
@@ -274,8 +300,8 @@ const GiveItemForm = ({dispatch}) => {
             if(selectedFriend!==null)
                 dispatch(giveitem(values,selectedFriend));
             else {
-                setOpen(true);
-                setMessage('Please Select A Friend')
+                setFailure(true);
+                setMessage('Please select a friend before submitting!');
             }  
         }
     });
@@ -364,16 +390,11 @@ const GiveItemForm = ({dispatch}) => {
                     <Button variant="outlined" type="reset" className={clsx(classes.red, classes.flexCell)}> Reset </Button>
                 </Box>
             </form>
-            <SnackBar open={open} message={message} setOpen={setOpen}/>
+            <FailureSnack message={message} open={failure} setOpen={setFailure}/>
+            <SuccessSnack message={message} open={success} setOpen={setSuccess}/>
         </Container>
     );
 };
 
-const SnackBar = ({ message, open, setOpen }) => {
-    if(open){
-        setTimeout(()=> setOpen(false),3000);
-    }
-    return (<Snackbar message={message} open={open} autoHideDuration={6000} />);
-}
 
 export default GiveForm;

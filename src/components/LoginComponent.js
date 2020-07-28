@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, TextField, Button, InputAdornment, IconButton, Snackbar } from '@material-ui/core';
+import { Container, Typography, Box, TextField, Button, InputAdornment, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import { useSelector, useDispatch } from 'react-redux';
-import { login,clearError } from '../redux/ActionCreators';
+import { login } from '../redux/ActionCreators';
 import { useHistory, Link } from 'react-router-dom';
 import clsx from 'clsx';
+import FailureSnack from './FailureSnackComponent';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -78,21 +79,22 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
     const classes = useStyles();
     const [pwd, togglePwd] = useState(false);
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const errMess = useSelector(state => state.auth.errMess);
+    const auth = useSelector(state => state.auth);
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
     const dispatch = useDispatch();
     const history = useHistory();
-    const [open, setOpen] = useState(false);
     useEffect(() => {
-        if (errMess) {
+        if (auth.errMess) {
             setOpen(true);
+            setMessage(auth.errMess);
         }
-    }, [errMess]);
+    }, [auth.errMess]);
     useEffect(() => {
-        if (isAuthenticated) {
+        if (auth.isAuthenticated) {
             history.push('/dashboard');
         }
-    }, [isAuthenticated, history]);
+    }, [auth.isAuthenticated, history]);
     const formik = useFormik({
         initialValues: { username: '', password: '' },
         validationSchema: Yup.object({
@@ -114,9 +116,7 @@ const Login = () => {
     });
     return (
         <Container maxWidth="sm">
-            <Snackbar open={open} autoHideDuration={6000} onClose={() => { setOpen(false); dispatch(clearError())} }>
-                <div>{errMess}</div>
-            </Snackbar>
+
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Login </Typography>
                 <form noValidate={true} onSubmit={formik.handleSubmit} >
@@ -164,7 +164,7 @@ const Login = () => {
                                     onClick={() => togglePwd(!pwd)}
                                     edge="end"
                                 >
-                                    {pwd ? <Visibility /> : <VisibilityOff />}
+                                    {pwd ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
                         }}
@@ -180,6 +180,7 @@ const Login = () => {
                     </Box>
                 </form>
             </Box>
+            <FailureSnack message={message} open={open} setOpen={setOpen} />
         </Container>
     );
 }

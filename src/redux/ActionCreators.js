@@ -13,10 +13,6 @@ export const login = (username, password) => dispatch => {
         .catch(err => dispatch({ type: ActionTypes.LOGIN_FAILED, payload: err.response.data.message }))
 }
 
-export const clearError = () => dispatch => {
-    dispatch({ type: ActionTypes.CLEAR_LOGIN_ERROR });
-}
-
 export const signup = (name, username, password) => dispatch => {
     dispatch({ type: ActionTypes.SIGNUP, payload: username });
     axios.post(`${baseurl}users/signup`, { username: username, name: name, password: password })
@@ -57,6 +53,12 @@ export const clearFriend = () => dispatch => {
     dispatch({ type: ActionTypes.DESELET_FRIEND });
 }
 
+
+const clearGiveMessage = () => ({type : ActionTypes.CLEAR_GIVE_MESSAGE });
+const givesLoading = () => ({ type : ActionTypes.GIVES_LOADING });
+const clearTakeMessage = () => ({type: ActionTypes.CLEAR_TAKE_MESSAGE });
+const takesLoading = () => ({ type : ActionTypes.TAKES_LOADING });
+
 export const givemoney = (moneyForm, friend ) => dispatch => {
     let money = { 
         borowee : friend.username,
@@ -67,12 +69,14 @@ export const givemoney = (moneyForm, friend ) => dispatch => {
     };
     axios.post(baseurl + 'borrow/borrowMoney', money )
         .then(response => {
-            dispatch({type : ActionTypes.GIVE_MONEY, payload : response.data.borrow });
-            console.log(response.data.borrow);
+            dispatch({type : ActionTypes.GIVE_MONEY, payload : response.data });
         })
         .catch(err=> {
-            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data.message })
-        });
+            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+        })
 }
 
 export const giveitem = (itemForm, friend ) => dispatch => {
@@ -86,10 +90,68 @@ export const giveitem = (itemForm, friend ) => dispatch => {
     };
     axios.post(baseurl + 'borrow/borrowItem', item )
         .then(response => {
-            dispatch({type : ActionTypes.GIVE_ITEM, payload : response.data.borrow });
-            console.log(response.data.borrow);
+            dispatch({type : ActionTypes.GIVE_ITEM, payload : response.data });
         })
         .catch(err=> {
-            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data.message })
+            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+        });
+}
+
+export const fetchGivenMoney = (pageNo=1) => dispatch => {
+    dispatch(givesLoading());
+    axios.get(`${baseurl}borrow/borrowMoney`, { params : { pageNo }})
+        .then(response => {
+            dispatch({type : ActionTypes.FETCH_GIVEN_MONEY, payload : response.data });
+        })
+        .catch(err=> {
+            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+        });
+}
+
+export const fetchGivenItems = (pageNo=1) => dispatch => {
+    dispatch(givesLoading());
+    axios.get(`${baseurl}borrow/borrowItem`, { params : { pageNo }} )
+        .then(response => {
+            dispatch({type : ActionTypes.FETCH_GIVEN_ITEMS, payload : response.data });
+        })
+        .catch(err=> {
+            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+        });
+}
+
+export const fetchTakenItems = (pageNo=1) => dispatch => {
+    dispatch(takesLoading());
+    axios.get(`${baseurl}borrow/takenItems`, { params : { pageNo }})
+        .then(response => {
+            dispatch({type : ActionTypes.FETCH_TAKEN_ITEMS, payload : response.data });
+        })
+        .catch(err=> {
+            dispatch({type : ActionTypes.TAKE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(clearTakeMessage()), 4000);
+        });
+}
+
+export const fetchTakenMoney = (pageNo=1) => dispatch => {
+    dispatch(takesLoading());
+    axios.get(`${baseurl}borrow/takenMoney`, { params : { pageNo }})
+        .then(response => {
+            dispatch({type : ActionTypes.FETCH_TAKEN_MONEY, payload : response.data });
+        })
+        .catch(err=> {
+            dispatch({type : ActionTypes.TAKE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(clearTakeMessage()), 4000);
         });
 }
