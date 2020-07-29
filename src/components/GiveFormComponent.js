@@ -17,7 +17,8 @@ import SuccessSnack from './SuccessSnackComponent';
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        padding: theme.spacing(3)
+        padding: theme.spacing(3),
+        justifyContent : 'center'
     },
     toolbar: theme.mixins.toolbar,
     inline: {
@@ -102,7 +103,7 @@ const GiveForm = (props) => {
     const debouncedFetchUsers = debounce(fetchUsers, 3000);
 
     return (
-        <Container maxWidth="md" className={classes.content}>
+        <Container maxWidth="sm" className={classes.content}>
             <Typography align="center" variant="h4">Welcome {localStorage.getItem('username').split('@')[0]}</Typography>
             <div className={classes.toolbar} />
 

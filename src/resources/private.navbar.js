@@ -1,14 +1,16 @@
-import React from 'react';
-import Reminders from '../components/ReminderComponent';
-import Gives from '../components/GivesComponent';
-import Takes from '../components/TakesComponent';
-import GiveForm from '../components/GiveFormComponent';
-import About from '../components/AboutComponent';
+import React,{lazy} from 'react';
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
 import MonetizationOnSharpIcon from '@material-ui/icons/MonetizationOnSharp';
 import NotificationsSharpIcon from '@material-ui/icons/NotificationsSharp';
 import StorageSharpIcon from '@material-ui/icons/StorageSharp';
 import InfoSharpIcon from '@material-ui/icons/InfoSharp';
+
+const Takes = lazy(() => import('../components/TakesComponent'));
+const GiveForm = lazy(() => import('../components/GiveFormComponent'));
+const About = lazy(() => import('../components/AboutComponent'));
+const Gives = lazy(()=> import('../components/GivesComponent'));
+const Reminders = lazy(() => import('../components/ReminderComponent'));
+
 export const routes = [
     {
         key : 100,

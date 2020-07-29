@@ -1,19 +1,20 @@
-import React from 'react';
+import React,{ Suspense} from 'react';
 import { IconButton, Box, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from './NavbarComponent';
 import MenuIcon from '@material-ui/icons/Menu';
 import { routes } from '../resources/private.navbar';
 import { Switch, Route } from 'react-router-dom';
-
+import Loading from './LoadingComponent';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex'
-    },
+
     content: {
-        flexGrow: 1,
-        padding: theme.spacing(2)
+        padding: theme.spacing(3),
+        marginTop : theme.spacing(3),
+        [theme.breakpoints.up('md')] : {
+            marginLeft : '15vw'
+        }
     },
     menuButton: {
         color: theme.palette.grey.main,
@@ -48,7 +49,7 @@ const Dashboard = ({ match }) => {
     }
     return (
         
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
             <Box className={classes.appBar}>
                 <IconButton
                     color="inherit"
@@ -60,9 +61,10 @@ const Dashboard = ({ match }) => {
                 </IconButton>
                 <Typography variant="h5" className={classes.white} display="inline">Hisaab Kitaab</Typography>
             </Box>
-            <div className={classes.root}>
+            <div>
                 <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleClose={handleClose} />
-                <main className={classes.content}>
+                <div className={classes.content}>
+                    <Suspense fallback={Loading}>
                     <Switch>
                         {routes.map((route) => {
                             return (
@@ -70,7 +72,8 @@ const Dashboard = ({ match }) => {
                             );
                         })}
                     </Switch>
-                </main>
+                    </Suspense>
+                </div>
             </div>
         </Container>
     );

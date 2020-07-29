@@ -7,18 +7,21 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/ActionCreators';
 
-const drawerWidth = 250;
+const drawerWidth = '20vw';
 
 const useStyles = makeStyles((theme) => ({
-    drawer: {
-        [theme.breakpoints.up('sm')]: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
-    },
     toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-        width: drawerWidth,
+    drawerPaper1: {
+        [theme.breakpoints.down('sm')] : {
+            width : '50vw'
+        },
+        width : 0
+    },
+    drawerPaper2 : {
+        [theme.breakpoints.up('md')] : {
+            width : drawerWidth
+        },
+        width : 0
     },
     content: {
         flexGrow: 1,
@@ -59,18 +62,18 @@ const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
         );
     });
     return (
-        <div>
-            <nav className={classes.drawer}>
+        
+            <nav>
                 <Hidden smUp implementation="css">
                     <Drawer
                         variant="temporary"
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.drawerPaper1,
                         }}
                         ModalProps={{
-                            keepMounted: true,
+                            keepMounted: false,
                         }}
                     >
                         <List>
@@ -93,7 +96,7 @@ const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
                 <Hidden xsDown implementation="css">
                     <Drawer
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.drawerPaper2,
                         }}
                         variant="permanent"
                         open
@@ -116,7 +119,6 @@ const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
                     </Drawer>
                 </Hidden>
             </nav>
-        </div>
     );
 }
 

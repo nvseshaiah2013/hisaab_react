@@ -22,19 +22,7 @@ export const signup = (name, username, password) => dispatch => {
         .catch(err => dispatch({ type: ActionTypes.SIGNUP_FAILED, payload: { status: err.response.data.status, message: err.response.data.message } }))
 }
 
-axios.interceptors.request.use(function (config) {
-    let exceptions = [`${baseurl}users/login`,`${baseurl}users/signup`];
-    if(exceptions.indexOf(config.url) > -1 ){
-        return config;
-    }
-    if(localStorage.getItem('token') == null){
-        throw new Error('JWT Error');
-    }
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    return config;
-}, function (error) {
-    return Promise.reject(error);
-});
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
 
 export const logout = () => dispatch => {
     localStorage.removeItem('token');
@@ -121,6 +109,7 @@ export const fetchGivenItems = (pageNo=1) => dispatch => {
             dispatch({type : ActionTypes.FETCH_GIVEN_ITEMS, payload : response.data });
         })
         .catch(err=> {
+            console.log(err.response);
             dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
         })
         .finally(() => {
