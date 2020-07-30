@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, Table, TableRow, TableContainer, TableBody, TableHead, TableCell, Tooltip, IconButton, Collapse, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,6 @@ import red from '@material-ui/core/colors/red';
 import indigo from '@material-ui/core/colors/indigo';
 import lime from '@material-ui/core/colors/lime'
 import Legend from './LegendComponent';
-import { useState } from 'react';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import EditIcon from '@material-ui/icons/Edit';
@@ -20,6 +19,9 @@ import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded';
 import NotificationsRoundedIcon from '@material-ui/icons/NotificationsRounded';
 import RefreshRoundedIcon from '@material-ui/icons/RefreshRounded';
+import EditGiveItemComponent from './EditGiveItemComponent';
+import EditGiveMoneyComponent from './EditGiveMoneyComponent';
+import ValidateDialog from './ValidateDialogComponent';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -106,7 +108,7 @@ const Gives = ({ type }) => {
                                 })
                             }
                             {
-                                gives.givenMoney.length === 0 ? <EmptyRow type={type} /> : ''
+                                gives.givenMoney.length === 0 ? <EmptyRow type={type} /> : <React.Fragment />
                             }
                         </TableBody>
                     </Table>
@@ -163,7 +165,7 @@ const Gives = ({ type }) => {
                             })
                             }
                             {
-                                gives.givenItems.length === 0 ? <EmptyRow type={type} /> : ''
+                                gives.givenItems.length === 0 ? <EmptyRow type={type} /> : <React.Fragment />
                             }
                         </TableBody>
                     </Table>
@@ -192,6 +194,9 @@ const Gives = ({ type }) => {
 const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, actual_return_date, status }) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [validate, setValidate] = useState(false);
+
     let color = orange;
     if (status === 0) {
         color = orange;
@@ -206,6 +211,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
         color = indigo;
     } return (
         <React.Fragment>
+            <EditGiveMoneyComponent open={edit} setOpen={setEdit} />
+            <ValidateDialog open={validate} setOpen={setValidate}/>
             <TableRow hover>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -255,6 +262,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                 style={{ backgroundColor: green[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<CheckCircleOutlineRoundedIcon />}
+                                type="button"
+                                onClick={() => setValidate(true)}
                             > Validate </Button> : ''}
 
                             <span className={classes.button} />
@@ -263,6 +272,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                 style={{ backgroundColor: orange[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<EditIcon />}
+                                type="button"
+                                onClick={() => setEdit(true)}
                             > Edit </Button> : ''}
 
                             <span className={classes.button} />
@@ -298,6 +309,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
 
 const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date }) => {
     const [open, setOpen] = useState(false);
+    const [ edit, setEdit ] = useState(false);
+    const [ validate, setValidate ] = useState(false);
     const classes = useStyles();
     let color = orange;
     if (status === 0) {
@@ -314,6 +327,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
     }
     return (
         <React.Fragment>
+            <EditGiveItemComponent open={edit} setOpen={setEdit}/>
+            <ValidateDialog open={validate} setOpen={setValidate}/>
             <TableRow hover>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -354,7 +369,6 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                         </IconButton>
                     </Tooltip>
                 </TableCell>
-
                 <TableCell>
                     <span className={classes.span} style={{ backgroundColor: color[500] }} />
                 </TableCell>
@@ -368,6 +382,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                 style={{ backgroundColor: green[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<CheckCircleOutlineRoundedIcon />}
+                                type="button"
+                                onClick={() => setValidate(true)}
                             > Validate </Button> : ''}
 
                             <span className={classes.button} />
@@ -376,6 +392,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                 style={{ backgroundColor: orange[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<EditIcon />}
+                                type="button"
+                                onClick={() => setEdit(true)}
                             > Edit </Button> : ''}
 
                             <span className={classes.button} />

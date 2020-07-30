@@ -1,5 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
+
 export const theme = createMuiTheme({
     typography: {
         fontFamily: [
@@ -10,6 +11,22 @@ export const theme = createMuiTheme({
         ],
     },
     overrides: {
+        MuiTextField : {
+            root : {
+                '& input:valid + fieldset': {
+                    borderColor: '#2196f3',
+                    borderWidth: 2,
+                },
+                '& input:invalid + fieldset': {
+                    borderColor: '#d32f2f',
+                    borderWidth: 2,
+                },
+                '& input:valid:focus + fieldset': {
+                    borderLeftWidth: 6,
+                    padding: '4px !important',
+                },
+            }
+        },
         MuiButton: {
             label: {
                 textTransform: 'capitalize',

@@ -102,7 +102,7 @@ const Takes = ({ type }) => {
                                 })
                             }
                             {
-                                takes.takenItems.length === 0 ? <EmptyRow type={type} /> : ''
+                                takes.takenItems.length === 0 ? <EmptyRow type={type} /> : <React.Fragment />
                             }
                         </TableBody>
                     </Table>
@@ -159,7 +159,7 @@ const Takes = ({ type }) => {
                                 })
                             }
                             {
-                                takes.takenMoney.length === 0 ? <EmptyRow type={type} /> : ''
+                                takes.takenMoney.length === 0 ? <EmptyRow type={type} /> : <React.Fragment />
                             }
                         </TableBody>
                     </Table>

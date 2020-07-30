@@ -64,7 +64,7 @@ const Dashboard = ({ match }) => {
             <div>
                 <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleClose={handleClose} />
                 <div className={classes.content}>
-                    <Suspense fallback={Loading}>
+                    <Suspense fallback={<Loading />}>
                     <Switch>
                         {routes.map((route) => {
                             return (

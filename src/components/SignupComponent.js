@@ -23,25 +23,9 @@ const useStyles = makeStyles((theme) => ({
         padding: '1rem 2rem',
         borderRadius: '5px'
     },
-    textField: {
-        margin: '1rem auto',
-        '& input:valid + fieldset': {
-            borderColor: 'green',
-            borderWidth: 2,
-        },
-        '& input:invalid + fieldset': {
-            borderColor: 'red',
-            borderWidth: 2,
-        },
-        '& input:valid:focus + fieldset': {
-            borderLeftWidth: 6,
-            padding: '4px !important',
-        },
-    },
     outlineField : {
-        margin: '1rem auto',
         '& input:valid + div + fieldset': {
-            borderColor: 'green',
+            borderColor: theme.palette.info.main,
             borderWidth: 2,
         },
         '& input:invalid + div + fieldset': {
@@ -120,6 +104,7 @@ const SignUp = (props) => {
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Sign Up </Typography>
                 <form onSubmit={formik.handleSubmit} noValidate>
+                    <Box margin={3}> 
                     <TextField
                         label="Enter Name"
                         variant="outlined"
@@ -128,13 +113,14 @@ const SignUp = (props) => {
                         type="text"
                         autoComplete="name"
                         fullWidth={true}
-                        className={classes.textField}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.name}
                         error={formik.touched.name && formik.errors.name ? true : false }
                     />
+                    </Box>
                     {formik.touched.name && formik.errors.name ? <Typography variant="subtitle2" color="error">{formik.errors.name}</Typography> : null}
+                    <Box margin={3}> 
                     <TextField
                         label="Enter Email"
                         variant="outlined"
@@ -143,14 +129,14 @@ const SignUp = (props) => {
                         type="email"
                         autoComplete="username"
                         fullWidth={true}
-                        className={classes.textField}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.username}
                         error={formik.touched.username && formik.errors.username ? true : false}
                     />
+                    </Box>
                     {formik.touched.username && formik.errors.username ? <Typography variant="subtitle2" color="error">{formik.errors.username}</Typography> : null}
-                    
+                    <Box margin={3}>
                     <TextField
                         label="Enter Password"
                         variant="outlined"
@@ -177,7 +163,9 @@ const SignUp = (props) => {
                         }}
                         
                     />
+                    </Box>
                     {formik.touched.password && formik.errors.password ? <Typography variant="subtitle2" color="error">{formik.errors.password}</Typography> : null}
+                    <Box margin={3}>
                     <TextField
                         label="Confirm Password"
                         variant="outlined"
@@ -185,12 +173,12 @@ const SignUp = (props) => {
                         id="cfmpassword"
                         type="password"
                         fullWidth={true}
-                        className={classes.textField}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.cfmpassword}
                         error={formik.touched.cfmpassword && formik.errors.cfmpassword ? true : false}
                     />
+                    </Box>
                     {formik.touched.cfmpassword && formik.errors.cfmpassword ? <Typography variant="subtitle2" color="error">{formik.errors.cfmpassword}</Typography> : null}
                     <Box className={classes.flex}>
                         <Link to='/login' className={clsx(classes.info,classes.hover)}>

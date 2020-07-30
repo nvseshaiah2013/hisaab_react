@@ -21,25 +21,10 @@ const useStyles = makeStyles((theme) => ({
         padding: '1rem 2rem',
         borderRadius: '5px'
     },
-    textField: {
-        margin: '1rem auto',
-        '& input:valid + fieldset': {
-            borderColor: 'green',
-            borderWidth: 2,
-        },
-        '& input:invalid + fieldset': {
-            borderColor: 'red',
-            borderWidth: 2,
-        },
-        '& input:valid:focus + fieldset': {
-            borderLeftWidth: 6,
-            padding: '4px !important',
-        },
-    },
     outlineField: {
         margin: '1rem auto',
         '& input:valid + div + fieldset': {
-            borderColor: 'green',
+            borderColor: theme.palette.info.main,
             borderWidth: 2,
         },
         '& input:invalid + div + fieldset': {
@@ -119,20 +104,21 @@ const Login = () => {
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Login </Typography>
                 <form noValidate={true} onSubmit={formik.handleSubmit} >
-                    <TextField
-                        variant="outlined"
-                        id="username"
-                        name="username"
-                        label="Enter Email"
-                        type="email"
-                        autoComplete="username"
-                        fullWidth
-                        className={classes.textField}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.username}
-                        error={formik.touched.username && formik.errors.username ? true : false}
-                    />
+                    <Box marginTop={3} marginBottom={1} marginLeft={3} marginRight={3}>
+                        <TextField
+                            variant="outlined"
+                            id="username"
+                            name="username"
+                            label="Enter Email"
+                            type="email"
+                            autoComplete="username"
+                            fullWidth
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.username}
+                            error={formik.touched.username && formik.errors.username ? true : false}
+                        />
+                    </Box>
                     {formik.touched.username && formik.errors.username ? (
                         <Typography color="error" variant="subtitle2">{formik.errors.username}</Typography>
                     ) : null}
@@ -143,31 +129,33 @@ const Login = () => {
                             </Typography>
                         </Link>
                     </Box>
-                    <TextField
-                        variant="outlined"
-                        id="password"
-                        name="password"
-                        label="Enter Password"
-                        type={pwd ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        fullWidth
-                        className={classes.outlineField}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.password}
-                        error={formik.touched.password && formik.errors.password ? true : false}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end" color="error">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={() => togglePwd(!pwd)}
-                                    edge="end"
-                                >
-                                    {pwd ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }}
-                    />
+                    <Box marginBottom={3} marginTop={1} marginLeft={3} marginRight={3}>
+                        <TextField
+                            variant="outlined"
+                            id="password"
+                            name="password"
+                            label="Enter Password"
+                            type={pwd ? 'text' : 'password'}
+                            autoComplete="current-password"
+                            fullWidth
+                            className={classes.outlineField}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.password}
+                            error={formik.touched.password && formik.errors.password ? true : false}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end" color="error">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => togglePwd(!pwd)}
+                                        edge="end"
+                                    >
+                                        {pwd ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }}
+                        />
+                    </Box>
                     {formik.touched.password && formik.errors.password ?
                         <Typography variant="subtitle2" color="error">{formik.errors.password}</Typography> : null
                     }
