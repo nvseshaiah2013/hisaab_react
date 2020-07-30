@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, Table, TableRow, TableContainer, TableBody, TableHead, TableCell, Tooltip, IconButton, Collapse, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGivenItems, fetchGivenMoney } from '../redux/ActionCreators';
+import { fetchGivenItems, fetchGivenMoney, getToken } from '../redux/ActionCreators';
 import moment from 'moment';
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
 import orange from '@material-ui/core/colors/orange';
@@ -22,6 +22,9 @@ import RefreshRoundedIcon from '@material-ui/icons/RefreshRounded';
 import EditGiveItemComponent from './EditGiveItemComponent';
 import EditGiveMoneyComponent from './EditGiveMoneyComponent';
 import ValidateDialog from './ValidateDialogComponent';
+import TokenDialog from './TokenDialogComponent';
+import SuccessSnack from './SuccessSnackComponent';
+import FailureSnack from './FailureSnackComponent';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -57,6 +60,10 @@ const Gives = ({ type }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const gives = useSelector(state => state.gives);
+    const token  = useSelector(state => state.token );
+    const [ failure , setFailure ] = useState(false);
+    const [ success , setSuccess ] = useState(false);
+    const [ tokenOp, setTokenOp ] = useState(false);
     useEffect(() => {
         if (type === 'Money') {
             dispatch(fetchGivenMoney());
@@ -65,6 +72,17 @@ const Gives = ({ type }) => {
             dispatch(fetchGivenItems());
         }
     }, [type, dispatch]);
+    useEffect(()=> {
+        if(token.secretToken) {
+            setTokenOp(true);
+        }
+        else if(token.status === false) {
+            setFailure(true);
+        }
+        else if(token.status === true) {
+            setSuccess(true);
+        }
+    },[token]);
     const moneyHeaders = ['Action', 'Amount', 'Name', 'Place', 'Expected Ret. Date.', 'Status'];
     const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Ret. Date.', 'Status'];
     if (type === 'Money') {
@@ -73,6 +91,7 @@ const Gives = ({ type }) => {
                 <Typography variant="h4" align="center" display="block" className={classes.header}> Given {type} </Typography>
                 <div className={classes.toolbar} />
                 <Legend />
+                <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken}/>
                 <div className={classes.toolbar} />
                 <TableContainer>
                     <Table stickyHeader={true} className={classes.table}>
@@ -103,6 +122,7 @@ const Gives = ({ type }) => {
                                             expected_return_date={money.expected_return_date}
                                             status={money.status}
                                             actual_return_date={money.actual_return_date}
+                                            _id={money._id}
                                         />
                                     );
                                 })
@@ -122,6 +142,8 @@ const Gives = ({ type }) => {
                         onClick={() => dispatch(fetchGivenMoney())}
                     > Refresh </Button>
                 </Box>
+                <SuccessSnack open={success} setOpen={setSuccess} message={token.message}/>
+                <FailureSnack open={failure} setOpen={setFailure} message={token.message}/>
             </Container>
         );
     }
@@ -131,6 +153,7 @@ const Gives = ({ type }) => {
                 <Typography variant="h4" align="center" display="block" className={classes.header}> Given {type} </Typography>
                 <div className={classes.toolbar} />
                 <Legend />
+                <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken}/>
                 <div className={classes.toolbar} />
                 <TableContainer>
                     <Table stickyHeader={true} className={classes.table}>
@@ -160,6 +183,7 @@ const Gives = ({ type }) => {
                                         expected_return_date={item.expected_return_date}
                                         status={item.status}
                                         actual_return_date={item.actual_return_date}
+                                        _id={item._id}
                                     />
                                 );
                             })
@@ -179,6 +203,8 @@ const Gives = ({ type }) => {
                         onClick={() => dispatch(fetchGivenItems())}
                     > Refresh </Button>
                 </Box>
+                <SuccessSnack open={success} setOpen={setSuccess} message={token.message}/>
+                <FailureSnack open={failure} setOpen={setFailure} message={token.message}/>
             </Container >
         );
     }
@@ -191,12 +217,15 @@ const Gives = ({ type }) => {
         );
 }
 
-const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, actual_return_date, status }) => {
+const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, actual_return_date, status, _id }) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [edit, setEdit] = useState(false);
     const [validate, setValidate] = useState(false);
-
+    const dispatch = useDispatch();
+    const handleViewToken = () => {
+        dispatch(getToken(_id));
+    }
     let color = orange;
     if (status === 0) {
         color = orange;
@@ -212,7 +241,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
     } return (
         <React.Fragment>
             <EditGiveMoneyComponent open={edit} setOpen={setEdit} />
-            <ValidateDialog open={validate} setOpen={setValidate}/>
+            <ValidateDialog open={validate} setOpen={setValidate} page={'money'} borrowId={_id} type={'borrow'}/>
             <TableRow hover>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -298,6 +327,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                 style={{ backgroundColor: indigo[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<CodeRoundedIcon />}
+                                type="button"
+                                onClick={handleViewToken}
                             > View Token </Button> : ''}
                         </Box>
                     </Collapse>
@@ -307,11 +338,15 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
     );
 }
 
-const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date }) => {
+const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date, _id }) => {
     const [open, setOpen] = useState(false);
     const [ edit, setEdit ] = useState(false);
     const [ validate, setValidate ] = useState(false);
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const handleViewToken = () => {
+        dispatch(getToken(_id));
+    }
     let color = orange;
     if (status === 0) {
         color = orange;
@@ -328,7 +363,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
     return (
         <React.Fragment>
             <EditGiveItemComponent open={edit} setOpen={setEdit}/>
-            <ValidateDialog open={validate} setOpen={setValidate}/>
+            <ValidateDialog open={validate} setOpen={setValidate} page={'items'} borrowId={_id} type={'borrow'}/>
             <TableRow hover>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -417,6 +452,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                 style={{ backgroundColor: indigo[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<CodeRoundedIcon />}
+                                type="button"
+                                onClick={handleViewToken}
                             > View Token </Button> : ''}
                         </Box>
                     </Collapse>

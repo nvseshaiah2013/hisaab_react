@@ -42,105 +42,197 @@ export const clearFriend = () => dispatch => {
 }
 
 
-const clearGiveMessage = () => ({type : ActionTypes.CLEAR_GIVE_MESSAGE });
-const givesLoading = () => ({ type : ActionTypes.GIVES_LOADING });
-const clearTakeMessage = () => ({type: ActionTypes.CLEAR_TAKE_MESSAGE });
-const takesLoading = () => ({ type : ActionTypes.TAKES_LOADING });
+const clearGiveMessage = () => ({ type: ActionTypes.CLEAR_GIVE_MESSAGE });
+const givesLoading = () => ({ type: ActionTypes.GIVES_LOADING });
+const clearTakeMessage = () => ({ type: ActionTypes.CLEAR_TAKE_MESSAGE });
+const takesLoading = () => ({ type: ActionTypes.TAKES_LOADING });
 
-export const givemoney = (moneyForm, friend ) => dispatch => {
-    let money = { 
-        borowee : friend.username,
-        expectedReturnDate : moneyForm.expected_return_date,
-        amount : moneyForm.amount,
-        occasion : moneyForm.occasion,
-        place : moneyForm.place
+export const givemoney = (moneyForm, friend) => dispatch => {
+    let money = {
+        borowee: friend.username,
+        expectedReturnDate: moneyForm.expected_return_date,
+        amount: moneyForm.amount,
+        occasion: moneyForm.occasion,
+        place: moneyForm.place
     };
-    axios.post(baseurl + 'borrow/borrowMoney', money )
+    axios.post(baseurl + 'borrow/borrowMoney', money)
         .then(response => {
-            dispatch({type : ActionTypes.GIVE_MONEY, payload : response.data });
+            dispatch({ type: ActionTypes.GIVE_MONEY, payload: response.data });
         })
-        .catch(err=> {
-            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        .catch(err => {
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+            setTimeout(() => dispatch(clearGiveMessage()), 4000);
         })
 }
 
-export const giveitem = (itemForm, friend ) => dispatch => {
-    let item = { 
-        borowee : friend.username,
-        expectedReturnDate : itemForm.expected_return_date,
-        itemName : itemForm.itemName,
-        description : itemForm.description,
-        occasion : itemForm.occasion,
-        place : itemForm.place
+export const giveitem = (itemForm, friend) => dispatch => {
+    let item = {
+        borowee: friend.username,
+        expectedReturnDate: itemForm.expected_return_date,
+        itemName: itemForm.itemName,
+        description: itemForm.description,
+        occasion: itemForm.occasion,
+        place: itemForm.place
     };
-    axios.post(baseurl + 'borrow/borrowItem', item )
+    axios.post(baseurl + 'borrow/borrowItem', item)
         .then(response => {
-            dispatch({type : ActionTypes.GIVE_ITEM, payload : response.data });
+            dispatch({ type: ActionTypes.GIVE_ITEM, payload: response.data });
         })
-        .catch(err=> {
-            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        .catch(err => {
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+            setTimeout(() => dispatch(clearGiveMessage()), 4000);
         });
 }
 
-export const fetchGivenMoney = (pageNo=1) => dispatch => {
+export const fetchGivenMoney = (pageNo = 1) => dispatch => {
     dispatch(givesLoading());
-    axios.get(`${baseurl}borrow/borrowMoney`, { params : { pageNo }})
+    axios.get(`${baseurl}borrow/borrowMoney`, { params: { pageNo } })
         .then(response => {
-            dispatch({type : ActionTypes.FETCH_GIVEN_MONEY, payload : response.data });
+            dispatch({ type: ActionTypes.FETCH_GIVEN_MONEY, payload: response.data });
         })
-        .catch(err=> {
-            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        .catch(err => {
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+            setTimeout(() => dispatch(clearGiveMessage()), 4000);
         });
 }
 
-export const fetchGivenItems = (pageNo=1) => dispatch => {
+export const fetchGivenItems = (pageNo = 1) => dispatch => {
     dispatch(givesLoading());
-    axios.get(`${baseurl}borrow/borrowItem`, { params : { pageNo }} )
+    axios.get(`${baseurl}borrow/borrowItem`, { params: { pageNo } })
         .then(response => {
-            dispatch({type : ActionTypes.FETCH_GIVEN_ITEMS, payload : response.data });
+            dispatch({ type: ActionTypes.FETCH_GIVEN_ITEMS, payload: response.data });
         })
-        .catch(err=> {
+        .catch(err => {
             console.log(err.response);
-            dispatch({type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(clearGiveMessage()), 4000);
+            setTimeout(() => dispatch(clearGiveMessage()), 4000);
         });
 }
 
-export const fetchTakenItems = (pageNo=1) => dispatch => {
+export const fetchTakenItems = (pageNo = 1) => dispatch => {
     dispatch(takesLoading());
-    axios.get(`${baseurl}borrow/takenItems`, { params : { pageNo }})
+    axios.get(`${baseurl}borrow/takenItems`, { params: { pageNo } })
         .then(response => {
-            dispatch({type : ActionTypes.FETCH_TAKEN_ITEMS, payload : response.data });
+            dispatch({ type: ActionTypes.FETCH_TAKEN_ITEMS, payload: response.data });
         })
-        .catch(err=> {
-            dispatch({type : ActionTypes.TAKE_ERROR, payload : err.response.data });
+        .catch(err => {
+            dispatch({ type: ActionTypes.TAKE_ERROR, payload: err.response.data });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(clearTakeMessage()), 4000);
+            setTimeout(() => dispatch(clearTakeMessage()), 4000);
         });
 }
 
-export const fetchTakenMoney = (pageNo=1) => dispatch => {
+export const fetchTakenMoney = (pageNo = 1) => dispatch => {
     dispatch(takesLoading());
-    axios.get(`${baseurl}borrow/takenMoney`, { params : { pageNo }})
+    axios.get(`${baseurl}borrow/takenMoney`, { params: { pageNo } })
         .then(response => {
-            dispatch({type : ActionTypes.FETCH_TAKEN_MONEY, payload : response.data });
+            dispatch({ type: ActionTypes.FETCH_TAKEN_MONEY, payload: response.data });
         })
-        .catch(err=> {
-            dispatch({type : ActionTypes.TAKE_ERROR, payload : err.response.data });
+        .catch(err => {
+            dispatch({ type: ActionTypes.TAKE_ERROR, payload: err.response.data });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(clearTakeMessage()), 4000);
+            setTimeout(() => dispatch(clearTakeMessage()), 4000);
+        });
+}
+
+// Token Actions
+
+const isLoadingToken = () => ({ type: ActionTypes.TOKEN_LOADING });
+const clearTokenMessage = () => ({ type: ActionTypes.CLEAR_TOKEN_MESSAGE });
+export const clearToken = () => ({ type: ActionTypes.CLEAR_TOKEN });
+
+export const validateBorrow = (secretToken, borrowId, type) => dispatch => {
+    dispatch(isLoadingToken());
+    axios.post(`${baseurl}borrow/validateborrow/${borrowId}`, { secretToken })
+        .then(response => {
+            dispatch({ type: ActionTypes.VALIDATE_BORROW, payload: response.data });
+            if (type === 'money') {
+                dispatch(fetchGivenMoney());
+            }
+            else if (type === 'items') {
+                dispatch(fetchGivenItems());
+            }
+        })
+        .catch(err => {
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearTokenMessage()), 4000);
+        });
+}
+
+export const rejectBorrow = (borrowId, type) => dispatch => {
+    dispatch(isLoadingToken());
+    axios.post(`${baseurl}borrow/reject/${borrowId}`)
+        .then(response => {
+            dispatch({ type: ActionTypes.REJECT_BORROW, payload: response.data });
+            if (type === 'money') {
+                dispatch(fetchTakenMoney());
+            }
+            else if (type === 'items') {
+                dispatch(fetchTakenItems());
+            }
+        })
+        .catch(err => dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data }))
+        .finally(() => {
+            setTimeout(() => dispatch(clearTokenMessage()), 4000);
+        });
+}
+
+export const validateReturn = (secretToken, borrowId, type) => dispatch => {
+    dispatch(isLoadingToken());
+    axios.post(`${baseurl}borrow/validatereturn/${borrowId}`, { secretToken })
+        .then(response => {
+            dispatch({ type: ActionTypes.VALIDATE_RETURN, payload: response.data });
+            if (type === 'money') {
+                dispatch(fetchTakenMoney());
+            }
+            else if (type === 'items') {
+                dispatch(fetchTakenItems());
+            }
+        })
+        .catch(err => {
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearTokenMessage()), 4000);
+        });
+}
+
+export const getToken = (borrowId) => dispatch => {
+    dispatch(isLoadingToken());
+    axios.get(`${baseurl}token/${borrowId}`)
+        .then(response => {
+            dispatch({ type: ActionTypes.GET_TOKEN, payload: response.data });
+        })
+        .catch(err => {
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearTokenMessage()), 4000);
+        });
+}
+
+export const generateToken = (borrowId) => dispatch => {
+    dispatch(isLoadingToken());
+    axios.post(`${baseurl}token/${borrowId}`)
+        .then(response => {
+            dispatch({ type: ActionTypes.GENERATE_TOKEN, payload: response.data });
+        })
+        .catch(err => {
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearTokenMessage()), 4000);
         });
 }

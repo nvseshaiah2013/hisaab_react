@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         backgroundColor: theme.palette.success.dark,
         color: 'white',
+        fontWeight : 'bolder'
     },
     icon: {
         color: 'white',

@@ -33,8 +33,10 @@ export const TAKE_ERROR = 'TAKE_ERROR';
 //Token Reducer
 export const GET_TOKEN = 'GET_TOKEN';
 export const CLEAR_TOKEN = 'CLEAR_TOKEN';
+export const CLEAR_TOKEN_MESSAGE = 'CLEAR_TOKEN_MESSAGE';
 export const GENERATE_TOKEN = 'GENERATE_TOKEN';
 export const VALIDATE_BORROW = 'VALIDATE_BORROW';
+export const REJECT_BORROW = 'REJECT_BORROW';
 export const VALIDATE_RETURN = 'VALIDATE_RETURN';
 export const TOKEN_ERROR = 'TOKEN_ERROR';
 export const TOKEN_LOADING = 'TOKEN_LOADING';
