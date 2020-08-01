@@ -4,15 +4,14 @@ import { createMuiTheme } from '@material-ui/core/styles';
 export const theme = createMuiTheme({
     typography: {
         fontFamily: [
-            'Raleway',
-            'Patrick Hand',
-            'sans-serif',
-            'Roboto'
+            'Special Elite',
+            'sans-serif'
         ],
     },
     overrides: {
         MuiTextField : {
             root : {
+                margin : '1rem auto',
                 '& input:valid + fieldset': {
                     borderColor: '#2196f3',
                     borderWidth: 2,

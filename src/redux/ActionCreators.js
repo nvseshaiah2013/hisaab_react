@@ -22,7 +22,7 @@ export const signup = (name, username, password) => dispatch => {
         .catch(err => dispatch({ type: ActionTypes.SIGNUP_FAILED, payload: { status: err.response.data.status, message: err.response.data.message } }))
 }
 
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
+// axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
 
 export const logout = () => dispatch => {
     localStorage.removeItem('token');
@@ -235,4 +235,123 @@ export const generateToken = (borrowId) => dispatch => {
         .finally(() => {
             setTimeout(() => dispatch(clearTokenMessage()), 4000);
         });
+}
+
+export const deleteBorrowMoney = (borrowId) => dispatch => {
+    dispatch(givesLoading());
+    axios.delete(`${baseurl}borrow/borrowMoney/${borrowId}`)
+        .then(response => {
+            dispatch(fetchGivenMoney(1));
+        })
+        .catch(err=> {
+            dispatch({ type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearGiveMessage()),4000);
+        })
+}
+
+export const deleteBorrowItem = (borrowId) => dispatch => {
+    dispatch(givesLoading());
+    axios.delete(`${baseurl}borrow/borrowItem/${borrowId}`)
+        .then(response => {
+            dispatch(fetchGivenItems(1));
+        })
+        .catch(err=> {
+            dispatch({ type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearGiveMessage()),4000);
+        })
+}
+
+export const updateBorrowMoney = (borrowId, values) => dispatch => {
+    let money = {
+        expectedReturnDate: values.expected_return_date,
+        amount: values.amount,
+        occasion: values.occasion,
+        place: values.place
+    };
+    axios.put(`${baseurl}borrow/borrowMoney/${borrowId}`, money)
+        .then(response => {
+            dispatch({ type: ActionTypes.UPDATE_GIVE_MONEY, payload: response.data });
+        })
+        .catch(err => {
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearGiveMessage()), 4000);
+        })
+}
+
+export const updateBorrowItem = (borrowId, values) => dispatch => {
+    let item = {
+        expectedReturnDate: values.expected_return_date,
+        itemName: values.itemName,
+        description: values.description,
+        occasion: values.occasion,
+        place: values.place
+    };
+    axios.put(`${baseurl}borrow/borrowItem/${borrowId}`, item)
+        .then(response => {
+            dispatch({ type: ActionTypes.UPDATE_GIVE_ITEM, payload: response.data });
+        })
+        .catch(err => {
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
+        })
+        .finally(() => {
+            setTimeout(() => dispatch(clearGiveMessage()), 4000);
+        });
+}
+
+// Reminders Reducer  Creators 
+
+const reminderLoading = () => ({ type : ActionTypes.REMINDER_LOADING });
+const reminderClearMessage = () => ({ type : ActionTypes.CLEAR_REMINDER_MESSAGE });
+
+export const sendReminder = (borrowId, reminder) => dispatch => {
+    dispatch(reminderLoading());
+    let reminderObj = { 
+        borrowId : borrowId,
+        header : reminder.header,
+        message : reminder.message
+    }
+    axios.post(`${baseurl}reminder/sent`,reminderObj )
+        .then(response => {
+            dispatch({ type : ActionTypes.SEND_REMINDER, payload : response.data })
+        })
+        .catch(err => {
+            dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(reminderClearMessage()));
+        })
+}
+
+export const fetchSentReminders = (pageNo=1) => dispatch => {
+    dispatch(reminderLoading());
+    axios.get(`${baseurl}reminder/sent`)
+        .then(response => {
+            dispatch({ type : ActionTypes.FETCH_SENT_REMINDERS, payload : response.data })
+        })
+        .catch(err => {
+            dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(reminderClearMessage()));
+        })
+}
+
+export const fetchReceivedReminders = (pageNo=1) => dispatch => {
+    dispatch(reminderLoading());
+    axios.get(`${baseurl}reminder/received`)
+        .then(response => {
+            dispatch({ type : ActionTypes.FETCH_RECEIVED_REMINDERS, payload : response.data })
+        })
+        .catch(err => {
+            dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(reminderClearMessage()));
+        })
 }

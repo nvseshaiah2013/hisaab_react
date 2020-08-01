@@ -12,12 +12,12 @@ const TokenDialog = ({open, setOpen, message }) => {
     }
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open && message !== null} onClose={handleClose}>
             <DialogTitle> Secret Token </DialogTitle>
             <DialogContent>
                 <DialogContentText color="primary">
-                    Here is your secret Token :  Only share with the concerned person.
-                    <span style={{fontWeight : 'bolder'}}> {message}</span>
+                    Here is your secret Token :  
+                    <span style={{fontWeight : 'bolder'}}> {message}</span> Only share with the concerned person.
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

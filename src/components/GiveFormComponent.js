@@ -10,13 +10,14 @@ import * as Yup from 'yup';
 import { clearFriend } from '../redux/ActionCreators';
 import { baseurl } from '../resources/baseurl';
 import Typeahead from './TypeAheadComponent';
+import ErrorMessage from './ErrorMessageComponent';
 const GiveItemForm = lazy(() => import('./GiveItemComponent'));
 const GiveMoneyForm = lazy(() => import('./GiveMoneyComponent'));
 
 const useStyles = makeStyles((theme) => ({
     content: {
         padding: theme.spacing(3),
-        justifyContent : 'center'
+        justifyContent: 'center'
     },
     toolbar: theme.mixins.toolbar,
     inline: {
@@ -77,20 +78,23 @@ const GiveForm = (props) => {
             <div className={classes.toolbar} />
 
             <form noValidate onSubmit={formik.handleSubmit}>
-                <TextField
-                    label="Search Friend's Username"
-                    name="username"
-                    id="username"
-                    variant="outlined"
-                    fullWidth={true}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.username}
-                    error={formik.touched.username && formik.errors.username ? true : false}
-                    onKeyUp={debouncedFetchUsers}
-                    ref={ref}
-                />
-                {<Typography color="error" variant="body2" className={classes.padding}>{formik.errors.username}</Typography>}
+                <Box>
+
+                    <TextField
+                        label="Search Friend's Username"
+                        name="username"
+                        id="username"
+                        variant="outlined"
+                        fullWidth={true}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.username}
+                        error={formik.touched.username && formik.errors.username ? true : false}
+                        onKeyUp={debouncedFetchUsers}
+                        ref={ref}
+                    />
+                    {formik.touched.username && formik.errors.username ? <ErrorMessage message={formik.errors.username} /> : ''}
+                </Box>
                 <Typeahead
                     users={users}
                     username={formik.values.username}

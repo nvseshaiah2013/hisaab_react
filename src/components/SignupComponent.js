@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import SuccessSnack from './SuccessSnackComponent';
 import FailureSnack from './FailureSnackComponent';
+import ErrorMessage from './ErrorMessageComponent';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '1rem 2rem',
         borderRadius: '5px'
     },
-    outlineField : {
+    outlineField: {
         '& input:valid + div + fieldset': {
             borderColor: theme.palette.info.main,
             borderWidth: 2,
@@ -43,38 +44,38 @@ const useStyles = makeStyles((theme) => ({
     pushRight: {
         marginLeft: 'auto'
     },
-    hover : {
-        '&:hover' : {
-            textDecoration : 'none'
+    hover: {
+        '&:hover': {
+            textDecoration: 'none'
         }
     },
-    info : {
-        color : theme.palette.info.main,
-        '&:hover' : {
-            color : theme.palette.info.dark
+    info: {
+        color: theme.palette.info.main,
+        '&:hover': {
+            color: theme.palette.info.dark
         }
     }
 }));
 
 const SignUp = (props) => {
     const classes = useStyles();
-    const [ pwd, togglePwd ] = useState(false);
-    const [ success, setSuccess ] = useState(false);
-    const [ failure, setFailure ] = useState(false);
-    const [ message, setMessage ] = useState('');
-    const state = useSelector(state => state.signup );
+    const [pwd, togglePwd] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [failure, setFailure] = useState(false);
+    const [message, setMessage] = useState('');
+    const state = useSelector(state => state.signup);
     const dispatch = useDispatch();
 
-    useEffect(()=> {
-        if(state.status === true ) {
+    useEffect(() => {
+        if (state.status === true) {
             setSuccess(true);
             setMessage(state.message);
         }
-        else if(state.status === false) {
+        else if (state.status === false) {
             setFailure(true);
             setMessage(state.message);
         }
-    },[state]);
+    }, [state]);
     const formik = useFormik(
         {
             initialValues: { name: '', username: '', password: '', cfmpassword: '' },
@@ -92,11 +93,11 @@ const SignUp = (props) => {
                     .required('Confirm Password is Required')
                     .oneOf([Yup.ref('password')], 'Passwords do not match')
             }),
-            onSubmit: (values, {setSubmitting,resetForm}) => {  
+            onSubmit: (values, { setSubmitting, resetForm }) => {
                 setSubmitting(false);
                 resetForm();
-                dispatch(signup(values.name,values.username,values.password));          
-            } 
+                dispatch(signup(values.name, values.username, values.password));
+            }
         }
     );
     return (
@@ -104,92 +105,92 @@ const SignUp = (props) => {
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Sign Up </Typography>
                 <form onSubmit={formik.handleSubmit} noValidate>
-                    <Box margin={3}> 
-                    <TextField
-                        label="Enter Name"
-                        variant="outlined"
-                        name="name"
-                        id="name"
-                        type="text"
-                        autoComplete="name"
-                        fullWidth={true}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.name}
-                        error={formik.touched.name && formik.errors.name ? true : false }
-                    />
+                    <Box marginRight={3} marginLeft={3}>
+                        <TextField
+                            label="Enter Name"
+                            variant="outlined"
+                            name="name"
+                            id="name"
+                            type="text"
+                            autoComplete="name"
+                            fullWidth={true}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.name}
+                            error={formik.touched.name && formik.errors.name ? true : false}
+                        />
+                        {formik.touched.name && formik.errors.name ? <ErrorMessage message={formik.errors.name} /> : null}
                     </Box>
-                    {formik.touched.name && formik.errors.name ? <Typography variant="subtitle2" color="error">{formik.errors.name}</Typography> : null}
-                    <Box margin={3}> 
-                    <TextField
-                        label="Enter Email"
-                        variant="outlined"
-                        name="username"
-                        id="username"
-                        type="email"
-                        autoComplete="username"
-                        fullWidth={true}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.username}
-                        error={formik.touched.username && formik.errors.username ? true : false}
-                    />
+                    <Box marginLeft={3} marginRight={3}>
+                        <TextField
+                            label="Enter Email"
+                            variant="outlined"
+                            name="username"
+                            id="username"
+                            type="email"
+                            autoComplete="username"
+                            fullWidth={true}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.username}
+                            error={formik.touched.username && formik.errors.username ? true : false}
+                        />
+                        {formik.touched.username && formik.errors.username ? <ErrorMessage message={formik.errors.username} /> : null}
                     </Box>
-                    {formik.touched.username && formik.errors.username ? <Typography variant="subtitle2" color="error">{formik.errors.username}</Typography> : null}
-                    <Box margin={3}>
-                    <TextField
-                        label="Enter Password"
-                        variant="outlined"
-                        name="password"
-                        id="password"
-                        type={pwd ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        fullWidth={true}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.password}
-                        error={formik.touched.password && formik.errors.password ? true : false }
-                        className={classes.outlineField}
-                        InputProps={{
-                            endAdornment : <InputAdornment position="end" color="error">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={() => togglePwd(!pwd)}
-                                    edge="end"
-                                >
-                                    {pwd ? <VisibilityOff /> : <Visibility /> }
-                                </IconButton>
-                            </InputAdornment>
-                        }}
-                        
-                    />
+                    <Box marginRight={3} marginLeft={3}>
+                        <TextField
+                            label="Enter Password"
+                            variant="outlined"
+                            name="password"
+                            id="password"
+                            type={pwd ? 'text' : 'password'}
+                            autoComplete="current-password"
+                            fullWidth={true}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.password}
+                            error={formik.touched.password && formik.errors.password ? true : false}
+                            className={classes.outlineField}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end" color="error">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => togglePwd(!pwd)}
+                                        edge="end"
+                                    >
+                                        {pwd ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }}
+
+                        />
+                        {formik.touched.password && formik.errors.password ? <ErrorMessage message={formik.errors.password} /> : null}
                     </Box>
-                    {formik.touched.password && formik.errors.password ? <Typography variant="subtitle2" color="error">{formik.errors.password}</Typography> : null}
-                    <Box margin={3}>
-                    <TextField
-                        label="Confirm Password"
-                        variant="outlined"
-                        name="cfmpassword"
-                        id="cfmpassword"
-                        type="password"
-                        fullWidth={true}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.cfmpassword}
-                        error={formik.touched.cfmpassword && formik.errors.cfmpassword ? true : false}
-                    />
+                    <Box marginRight={3} marginLeft={3}>
+                        <TextField
+                            label="Confirm Password"
+                            variant="outlined"
+                            name="cfmpassword"
+                            id="cfmpassword"
+                            type="password"
+                            fullWidth={true}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.cfmpassword}
+                            error={formik.touched.cfmpassword && formik.errors.cfmpassword ? true : false}
+                        />
+                        {formik.touched.cfmpassword && formik.errors.cfmpassword ? <ErrorMessage message={formik.errors.cfmpassword} /> : null}
                     </Box>
-                    {formik.touched.cfmpassword && formik.errors.cfmpassword ? <Typography variant="subtitle2" color="error">{formik.errors.cfmpassword}</Typography> : null}
                     <Box className={classes.flex}>
-                        <Link to='/login' className={clsx(classes.info,classes.hover)}>
+                        <Link to='/login' className={clsx(classes.info, classes.hover)}>
                             <Typography variant="body2">Have an Account? Log In.</Typography>
                         </Link>
                         <Button variant="contained" color="primary" type="submit" className={classes.pushRight} disabled={formik.isSubmitting}> Sign Up </Button>
                     </Box>
                 </form>
             </Box>
-            <SuccessSnack message={message} open={success} setOpen={setSuccess}/>
-            <FailureSnack message={message} open={failure} setOpen={setFailure}/>
+            <SuccessSnack message={message} open={success} setOpen={setSuccess} />
+            <FailureSnack message={message} open={failure} setOpen={setFailure} />
         </Container>
     );
 

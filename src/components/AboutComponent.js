@@ -20,7 +20,7 @@ const About = () => {
     return (
         <Container className={classes.root}>
             <Typography variant="h4" align="center" className={classes.header}>About Project</Typography>
-            <Button type="button" endIcon={<GitHubIcon />} variant="contained"> View Source Code </Button>
+            <Button type="button" endIcon={<GitHubIcon />} variant="outlined"> View Source Code </Button>
         </Container>
     );
 }

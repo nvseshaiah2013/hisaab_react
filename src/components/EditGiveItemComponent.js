@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, Box } from '@material-ui/core';
 import GiveItemForm from './GiveItemComponent';
 
-const EditGiveItem = ({ open, setOpen }) => {
+const EditGiveItem = ({ open, setOpen, borrowId, occasion, itemName, description, expected_return_date, place }) => {
     return (
         <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogTitle id="title"> Edit Give Item Request </DialogTitle>
@@ -12,7 +12,15 @@ const EditGiveItem = ({ open, setOpen }) => {
                     So, update carefully.
                 </DialogContentText>
                 <Box marginBottom={3}>
-                 <GiveItemForm />
+                    <GiveItemForm
+                        setOpen={setOpen}
+                        borrowId={borrowId}
+                        occasion={occasion}
+                        itemName={itemName}
+                        description={description}
+                        expected_return_date={expected_return_date}
+                        place={place}
+                    />
                 </Box>
             </DialogContent>
         </Dialog>

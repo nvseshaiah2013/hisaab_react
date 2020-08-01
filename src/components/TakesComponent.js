@@ -82,7 +82,7 @@ const Takes = ({ type }) => {
         }
     }, [token]);
     const moneyHeaders = ['Action', 'Amount', 'Name', 'Place', 'Expected Return Date', 'Status'];
-    const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Ret. Date.', 'Status',];
+    const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Return Date', 'Status',];
     if (type === 'Items') {
         return (
             <Container maxWidth="xl" className={classes.content}>
@@ -311,8 +311,8 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
                                 type="button"
                                 onClick={handleReturn}
                             > Return </Button> : ''}
-                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight : 'bolder' }}> You rejected the order!</Typography> : ''}
-                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight : 'bolder' }}> You returned the order!</Typography> : ''}
+                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight : 'bolder' }}> You rejected the borrow!</Typography> : ''}
+                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight : 'bolder' }}> You returned the borrow!</Typography> : ''}
                             {status === 0 ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: indigo[500], color: 'white' }}
@@ -432,8 +432,8 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
                                 onClick={handleReject}
                             > Reject </Button> : ''}
                             <span className={classes.button} />
-                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight : 'bolder' }}> You rejected the order!</Typography> : ''}
-                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight : 'bolder' }}> You returned the order!</Typography> : ''}
+                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight : 'bolder' }}> You rejected the borrow!</Typography> : ''}
+                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight : 'bolder' }}> You returned the borrow!</Typography> : ''}
 
                             {status === 1 ? <Button
                                 className={classes.button}

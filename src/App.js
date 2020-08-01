@@ -4,10 +4,9 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Provider } from 'react-redux';
 import { theme } from './resources/theme';
-import { ConfigureStore } from './redux/configureStore';
+import { store } from './redux/configureStore';
 import Main from './components/MainComponent';
 
-const store = ConfigureStore();
 
 const App = () => {
   return (

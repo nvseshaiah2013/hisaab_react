@@ -3,6 +3,7 @@ import { Typography, Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch,useSelector } from 'react-redux';
 import  { selectedFriend, clearFriend } from '../redux/ActionCreators';
+import ErrorMessage from './ErrorMessageComponent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,9 +83,7 @@ const Typeahead = ({ users, username, width, searched, setUsers, open, setOpen }
             );
     }
     else if (searched && users.length === 0) {
-        return (<div>
-            No User with username {username} found !
-        </div>);
+        return (<ErrorMessage message={`No User with username ${username} found !`}/>);
     }
     else
         return (<div className={classes.root} />);

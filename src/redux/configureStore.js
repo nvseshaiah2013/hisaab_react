@@ -17,7 +17,9 @@ const appReducer = combineReducers({
     token: Token
 });
 
-export const ConfigureStore = () => {
+const ConfigureStore = () => {
     const store = createStore(appReducer,applyMiddleware(thunk, logger));
     return store;
 }
+
+export const store = ConfigureStore();

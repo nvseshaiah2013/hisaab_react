@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, Box } from '@mat
 import GiveMoneyForm from './GiveMoneyComponent';
 
 
-const EditGiveMoney = ({open, setOpen }) => {
+const EditGiveMoney = ({ open, setOpen, borrowId, occasion, amount, place, expected_return_date }) => {
     return (
         <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogTitle id="title"> Edit Give Money Request </DialogTitle>
@@ -13,7 +13,14 @@ const EditGiveMoney = ({open, setOpen }) => {
                     So, update carefully.
                 </DialogContentText>
                 <Box marginBottom={3}>
-                    <GiveMoneyForm />
+                    <GiveMoneyForm
+                        borrowId={borrowId}
+                        occasion={occasion}
+                        place={place}
+                        expected_return_date={expected_return_date}
+                        amount={amount}
+                        setOpen={setOpen}
+                    />
                 </Box>
             </DialogContent>
         </Dialog>

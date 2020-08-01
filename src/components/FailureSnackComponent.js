@@ -18,11 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 const FailureSnack = ({ message, open, setOpen }) => {
     const classes = useStyles();
-    if (open) {
-        setTimeout(() => setOpen(false), 3000);
-    }
     return (
-        <Snackbar open={open}>
+        <Snackbar open={open && message !== null} onClose={() => setOpen(false)}>
             <div className={classes.content}> <HighlightOffTwoToneIcon className={classes.icon} />
                 <Typography variant="body1" display="inline" >
                     {message}

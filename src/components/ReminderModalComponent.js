@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 
-const ReminderModal = ({open, setOpen}) => {
+const ReminderModal = ({open, setOpen , borrowId }) => {
     const formik = useFormik({
         initialValues : { 
             header  : '',

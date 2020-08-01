@@ -10,6 +10,7 @@ import { login } from '../redux/ActionCreators';
 import { useHistory, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import FailureSnack from './FailureSnackComponent';
+import ErrorMessage from './ErrorMessageComponent';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -118,10 +119,10 @@ const Login = () => {
                             value={formik.values.username}
                             error={formik.touched.username && formik.errors.username ? true : false}
                         />
+                        {formik.touched.username && formik.errors.username ? 
+                            <ErrorMessage message={formik.errors.username} />
+                         : null}
                     </Box>
-                    {formik.touched.username && formik.errors.username ? (
-                        <Typography color="error" variant="subtitle2">{formik.errors.username}</Typography>
-                    ) : null}
                     <Box className={classes.flex}>
                         <Link to='/forgot-password' className={clsx(classes.pushRight, classes.hover, classes.red)}>
                             <Typography variant="body2">
@@ -155,10 +156,10 @@ const Login = () => {
                                 </InputAdornment>
                             }}
                         />
+                        {formik.touched.password && formik.errors.password ?
+                            <ErrorMessage message={formik.errors.password} /> : null
+                        }
                     </Box>
-                    {formik.touched.password && formik.errors.password ?
-                        <Typography variant="subtitle2" color="error">{formik.errors.password}</Typography> : null
-                    }
                     <Box className={classes.flex}>
                         <Link to='/signup' className={classes.hover}>
                             <Typography variant="body2" className={classes.info}>Don't Have Account? Sign Up.</Typography>

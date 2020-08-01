@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, Table, TableRow, TableContainer, TableBody, TableHead, TableCell, Tooltip, IconButton, Collapse, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGivenItems, fetchGivenMoney, getToken } from '../redux/ActionCreators';
+import { fetchGivenItems, fetchGivenMoney, getToken, deleteBorrowMoney, deleteBorrowItem } from '../redux/ActionCreators';
 import moment from 'moment';
 import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
 import orange from '@material-ui/core/colors/orange';
@@ -83,8 +83,8 @@ const Gives = ({ type }) => {
             setSuccess(true);
         }
     },[token]);
-    const moneyHeaders = ['Action', 'Amount', 'Name', 'Place', 'Expected Ret. Date.', 'Status'];
-    const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Ret. Date.', 'Status'];
+    const moneyHeaders = ['Action', 'Amount', 'Name', 'Place', 'Expected Return Date', 'Status'];
+    const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Return Date', 'Status'];
     if (type === 'Money') {
         return (
             <Container className={classes.content} maxWidth="md">
@@ -240,7 +240,15 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
         color = indigo;
     } return (
         <React.Fragment>
-            <EditGiveMoneyComponent open={edit} setOpen={setEdit} />
+            <EditGiveMoneyComponent 
+                open={edit} 
+                setOpen={setEdit}
+                borrowId={_id}
+                amount={amount}
+                occasion={occasion}
+                place={place}
+                expected_return_date={expected_return_date}
+                 />
             <ValidateDialog open={validate} setOpen={setValidate} page={'money'} borrowId={_id} type={'borrow'}/>
             <TableRow hover>
                 <TableCell>
@@ -311,6 +319,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                 style={{ backgroundColor: red[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<DeleteRoundedIcon />}
+                                type="button"
+                                onClick={() => dispatch(deleteBorrowMoney(_id))}
                             > Delete </Button> : ''}
 
                             <span className={classes.button} />
@@ -362,7 +372,16 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
     }
     return (
         <React.Fragment>
-            <EditGiveItemComponent open={edit} setOpen={setEdit}/>
+            <EditGiveItemComponent 
+                open={edit} 
+                setOpen={setEdit}
+                itemName={itemName}
+                description={description}
+                place={place}
+                occasion={occasion}
+                expected_return_date={expected_return_date}
+                borrowId={_id}
+                />
             <ValidateDialog open={validate} setOpen={setValidate} page={'items'} borrowId={_id} type={'borrow'}/>
             <TableRow hover>
                 <TableCell>
@@ -437,6 +456,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                 style={{ backgroundColor: red[500], color: 'white' }}
                                 variant="outlined"
                                 endIcon={<DeleteRoundedIcon />}
+                                type="button"
+                                onClick={()=> dispatch(deleteBorrowItem(_id))}
                             > Delete </Button> : ''}
                             <span className={classes.button} />
                             {status === 1 ?
