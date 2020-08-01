@@ -25,6 +25,7 @@ import ValidateDialog from './ValidateDialogComponent';
 import TokenDialog from './TokenDialogComponent';
 import SuccessSnack from './SuccessSnackComponent';
 import FailureSnack from './FailureSnackComponent';
+import ReminderModal from './ReminderModalComponent';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -61,6 +62,7 @@ const Gives = ({ type }) => {
     const dispatch = useDispatch();
     const gives = useSelector(state => state.gives);
     const token  = useSelector(state => state.token );
+    const reminders = useSelector(state => state.reminders);
     const [ failure , setFailure ] = useState(false);
     const [ success , setSuccess ] = useState(false);
     const [ tokenOp, setTokenOp ] = useState(false);
@@ -70,6 +72,9 @@ const Gives = ({ type }) => {
         }
         else if (type === 'Items') {
             dispatch(fetchGivenItems());
+        }
+        return () => {
+
         }
     }, [type, dispatch]);
     useEffect(()=> {
@@ -82,7 +87,22 @@ const Gives = ({ type }) => {
         else if(token.status === true) {
             setSuccess(true);
         }
+        return () => {
+
+        }
     },[token]);
+
+    useEffect(() => {
+        if(reminders.status === true ) {
+            setSuccess(true);
+        }
+        else if(reminders.status === false) {
+            setFailure(true);
+        }
+        return () => {
+
+        }
+    }, [reminders]);
     const moneyHeaders = ['Action', 'Amount', 'Name', 'Place', 'Expected Return Date', 'Status'];
     const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Return Date', 'Status'];
     if (type === 'Money') {
@@ -142,8 +162,8 @@ const Gives = ({ type }) => {
                         onClick={() => dispatch(fetchGivenMoney())}
                     > Refresh </Button>
                 </Box>
-                <SuccessSnack open={success} setOpen={setSuccess} message={token.message}/>
-                <FailureSnack open={failure} setOpen={setFailure} message={token.message}/>
+                <SuccessSnack open={success} setOpen={setSuccess} message={reminders.message ? reminders.message : token.message}/>
+                <FailureSnack open={failure} setOpen={setFailure} message={reminders.message  ? reminders.message : token.message}/>
             </Container>
         );
     }
@@ -203,8 +223,8 @@ const Gives = ({ type }) => {
                         onClick={() => dispatch(fetchGivenItems())}
                     > Refresh </Button>
                 </Box>
-                <SuccessSnack open={success} setOpen={setSuccess} message={token.message}/>
-                <FailureSnack open={failure} setOpen={setFailure} message={token.message}/>
+                <SuccessSnack open={success} setOpen={setSuccess} message={reminders.message ? reminders.message : token.message}/>
+                <FailureSnack open={failure} setOpen={setFailure} message={reminders.message  ? reminders.message : token.message}/>
             </Container >
         );
     }
@@ -222,6 +242,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
     const [open, setOpen] = useState(false);
     const [edit, setEdit] = useState(false);
     const [validate, setValidate] = useState(false);
+    const [remind, setReminder ] = useState(false);
     const dispatch = useDispatch();
     const handleViewToken = () => {
         dispatch(getToken(_id));
@@ -240,7 +261,12 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
         color = indigo;
     } return (
         <React.Fragment>
-            <EditGiveMoneyComponent 
+            <ReminderModal 
+                open={remind}
+                setOpen={setReminder}
+                borrowId={_id}
+            />
+            <EditGiveMoneyComponent
                 open={edit} 
                 setOpen={setEdit}
                 borrowId={_id}
@@ -330,6 +356,8 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                     className={classes.button}
                                     style={{ backgroundColor: lime[500], color: 'white' }}
                                     endIcon={<NotificationsRoundedIcon />}
+                                    type="button"
+                                    onClick={()=> setReminder(true)}
                                 > Remind </Button> : ''}
                             <span className={classes.button} />
                             {status === 1 ? <Button
@@ -352,6 +380,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
     const [open, setOpen] = useState(false);
     const [ edit, setEdit ] = useState(false);
     const [ validate, setValidate ] = useState(false);
+    const [ remind, setReminder ] = useState(false);
     const classes = useStyles();
     const dispatch = useDispatch();
     const handleViewToken = () => {
@@ -372,6 +401,11 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
     }
     return (
         <React.Fragment>
+            <ReminderModal 
+                open={remind}
+                setOpen={setReminder}
+                borrowId={_id}
+            />
             <EditGiveItemComponent 
                 open={edit} 
                 setOpen={setEdit}
@@ -466,6 +500,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                     className={classes.button}
                                     style={{ backgroundColor: lime[500], color: 'white' }}
                                     endIcon={<NotificationsRoundedIcon />}
+                                    type="button"
+                                    onClick={()=> setReminder(true)}
                                 > Remind </Button> : ''}
                             <span className={classes.button} />
                             {status === 1 ? <Button

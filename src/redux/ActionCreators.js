@@ -22,7 +22,7 @@ export const signup = (name, username, password) => dispatch => {
         .catch(err => dispatch({ type: ActionTypes.SIGNUP_FAILED, payload: { status: err.response.data.status, message: err.response.data.message } }))
 }
 
-// axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
 
 export const logout = () => dispatch => {
     localStorage.removeItem('token');
@@ -324,13 +324,13 @@ export const sendReminder = (borrowId, reminder) => dispatch => {
             dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(reminderClearMessage()));
+            setTimeout(()=> dispatch(reminderClearMessage()),3000);
         })
 }
 
 export const fetchSentReminders = (pageNo=1) => dispatch => {
     dispatch(reminderLoading());
-    axios.get(`${baseurl}reminder/sent`)
+    axios.get(`${baseurl}reminder/sent`, { params : { pageNo }})
         .then(response => {
             dispatch({ type : ActionTypes.FETCH_SENT_REMINDERS, payload : response.data })
         })
@@ -338,13 +338,13 @@ export const fetchSentReminders = (pageNo=1) => dispatch => {
             dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(reminderClearMessage()));
+            setTimeout(()=> dispatch(reminderClearMessage()),3000);
         })
 }
 
 export const fetchReceivedReminders = (pageNo=1) => dispatch => {
     dispatch(reminderLoading());
-    axios.get(`${baseurl}reminder/received`)
+    axios.get(`${baseurl}reminder/received`,{ params : { pageNo }})
         .then(response => {
             dispatch({ type : ActionTypes.FETCH_RECEIVED_REMINDERS, payload : response.data })
         })
@@ -352,6 +352,35 @@ export const fetchReceivedReminders = (pageNo=1) => dispatch => {
             dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
-            setTimeout(()=> dispatch(reminderClearMessage()));
+            setTimeout(()=> dispatch(reminderClearMessage()),3000);
         })
 }
+
+export const markReminderAsRead = (reminderId) => dispatch => {
+    dispatch(reminderLoading());
+    axios.post(`${baseurl}reminder/${reminderId}`)
+        .then(response => {
+            dispatch({ type : ActionTypes.MARK_REMINDER_READ, payload : response.data })
+        })
+        .catch(err=> {
+            dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(reminderClearMessage()),3000);
+        })
+} 
+
+export const deleteReminder = (reminderId, index ) => dispatch => {
+    dispatch(reminderLoading());
+    axios.delete(`${baseurl}reminder/${reminderId}`)
+        .then(response => {
+            response.data.index = index;
+            dispatch({ type : ActionTypes.DELETE_SENT_REMINDER, payload : response.data })
+        })
+        .catch(err=> {
+            dispatch({type : ActionTypes.REMINDER_ERROR , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
+        })
+        .finally(() => {
+            setTimeout(()=> dispatch(reminderClearMessage()),3000);
+        })
+} 

@@ -2,19 +2,26 @@ import React from 'react';
 import { Dialog, DialogContent, DialogContentText, DialogTitle, TextField, Button, Box } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { sendReminder } from '../redux/ActionCreators';
+import ErrorMessage from './ErrorMessageComponent';
 
-
-const ReminderModal = ({open, setOpen , borrowId }) => {
+const ReminderModal = ({ open, setOpen, borrowId }) => {
+    const dispatch = useDispatch();
     const formik = useFormik({
-        initialValues : { 
-            header  : '',
-            message  : ''
+        initialValues: {
+            header: '',
+            message: ''
         },
-        validationSchema : Yup.object({
-            header  : Yup.string().required('Subject of Reminder is Required!'),
-            message : Yup.string().required('Message of Reminder is Required!')
+        validationSchema: Yup.object({
+            header: Yup.string().required('Subject of Reminder is Required!'),
+            message: Yup.string().required('Message of Reminder is Required!')
         }),
-        onSubmit : values => alert('Submitted')
+        onSubmit: values => { dispatch(sendReminder(borrowId, values)); setOpen(false); },
+        onReset : values => {
+            values.header = '';
+            values.message = '';
+        }
     });
     return (
         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -23,32 +30,41 @@ const ReminderModal = ({open, setOpen , borrowId }) => {
                 <DialogContentText>
                     Send a gentle reminder to return your property back to you.
                 </DialogContentText>
-                <form noValidate onSubmit={formik.handleSubmit}>
-                    <TextField 
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.header}
-                        error={formik.touched.header && formik.errors.header ? true : false}
-                        label={'Enter Subject'}
-                        variant="outlined"
-                        name="header"
-                        id="header"                    
-                    />
-                    {formik.touched.header && formik.errors.header ? <div>{formik.errors.header}</div> : <React.Fragment />}
-                    <TextField 
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.message}
-                        error={formik.touched.message && formik.errors.message ? true : false}
-                        label={'Enter Message'}
-                        variant="outlined"
-                        name="message"
-                        id="message"                    
-                    />
-                    {formik.touched.message && formik.errors.message ? <div>{formik.errors.message}</div> : <React.Fragment />}
-                    <Box marginLeft={3} marginRight={3}>                        
-                        <Button type="submit" variant="contained"> Send </Button> 
-                        <Button type="reset" variant="outlined"> Reset </Button>
+                <form noValidate onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
+                    <Box margin={1}>
+                        <TextField
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            value={formik.values.header}
+                            error={formik.touched.header && formik.errors.header ? true : false}
+                            label={'Enter Subject'}
+                            variant="outlined"
+                            name="header"
+                            id="header"
+                            fullWidth
+                        />
+                        {formik.touched.header && formik.errors.header ? <ErrorMessage message={formik.errors.header} /> : <React.Fragment />}
+                    </Box>
+                    <Box margin={1}>
+                        <TextField
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            value={formik.values.message}
+                            error={formik.touched.message && formik.errors.message ? true : false}
+                            label={'Enter Message'}
+                            variant="outlined"
+                            name="message"
+                            id="message"
+                            fullWidth
+                            multiline
+                            rows={3}
+                            rowsMax={4}
+                        />
+                        {formik.touched.message && formik.errors.message ? <ErrorMessage message={formik.errors.message} /> : <React.Fragment />}
+                    </Box>
+                    <Box margin={3}>
+                        <Button type="submit" variant="contained" color="primary" style={{ width : '40%'}}> Send </Button>
+                        <Button type="reset" variant="outlined" color="error" style={{ width : '40%', marginLeft : '20%'}}> Reset </Button>
                     </Box>
                 </form>
             </DialogContent>

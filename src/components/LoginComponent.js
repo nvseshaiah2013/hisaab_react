@@ -11,6 +11,7 @@ import { useHistory, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import FailureSnack from './FailureSnackComponent';
 import ErrorMessage from './ErrorMessageComponent';
+import LockOpenRoundedIcon from '@material-ui/icons/LockOpenRounded';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -164,7 +165,7 @@ const Login = () => {
                         <Link to='/signup' className={classes.hover}>
                             <Typography variant="body2" className={classes.info}>Don't Have Account? Sign Up.</Typography>
                         </Link>
-                        <Button variant="contained" color="primary" type="submit" className={classes.pushRight} disabled={formik.isSubmitting}> Login </Button>
+                        <Button variant="contained" color="primary" type="submit" className={classes.pushRight} disabled={formik.isSubmitting} endIcon={<LockOpenRoundedIcon />}> Login </Button>
                     </Box>
                 </form>
             </Box>

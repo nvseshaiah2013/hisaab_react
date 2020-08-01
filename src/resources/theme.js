@@ -29,7 +29,8 @@ export const theme = createMuiTheme({
         MuiButton: {
             label: {
                 textTransform: 'capitalize',
-                fontWeight: 'bolder'
+                fontWeight: 'bolder',
+                letterSpacing : '1.2px'
             }
         },
         MuiTooltip: {

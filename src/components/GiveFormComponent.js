@@ -109,9 +109,9 @@ const GiveForm = (props) => {
             </form>
             <div className={classes.toolbar} />
             <RadioGroup aria-label="type" name="type" value={type} onChange={handleChange} className={classes.inline}>
-                <FormControlLabel value="Money" control={<Radio />} label="Money" className={classes.flexCell} />
+                <FormControlLabel value="Money" control={<Radio color="primary"/>} label="Money" className={classes.flexCell} />
                 <div className={classes.flexCell} />
-                <FormControlLabel value="Item" control={<Radio />} label="Item" className={classes.flexCell} />
+                <FormControlLabel value="Item" control={<Radio color="primary"/>} label="Item" className={classes.flexCell} />
             </RadioGroup>
 
             <Typography variant="h6" align="center" className={classes.space2}> Give {type} to Friend </Typography>

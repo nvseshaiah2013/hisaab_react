@@ -4,7 +4,6 @@ import {
     FETCH_SENT_REMINDERS,
     FETCH_RECEIVED_REMINDERS,
     DELETE_SENT_REMINDER,
-    EDIT_SENT_REMINDER,
     MARK_REMINDER_READ,
     CLEAR_REMINDER_MESSAGE,
     SEND_REMINDER,
@@ -17,8 +16,8 @@ export const Reminders = (state = {
     isLoading: false,
     message: null,
     status: null,
-    sentReminders: [],
-    receivedReminders: []
+    sentReminders: [ ],
+    receivedReminders: [ ]
 }, action) => {
     switch (action.type) {
         case REMINDER_ERROR: return {
@@ -49,23 +48,22 @@ export const Reminders = (state = {
             ...state,
             status: action.payload.status,
             message: action.payload.message,
+            isLoading : false,
+            sentReminders : [...state.sentReminders.slice(0,action.payload.index), ...state.sentReminders.slice(action.payload.index+1)]
         };
 
-        case EDIT_SENT_REMINDER: return {
-            ...state,
-            status: action.payload.status,
-            message: action.payload.message
-        };
         case MARK_REMINDER_READ: return {
             ...state,
             status: action.payload.status,
-            message: action.payload.message
+            message: action.payload.message,
+            isLoading : false,
+            receivedReminders : state.receivedReminders.map(reminder => reminder._id === action.payload.reminder._id ? action.payload.reminder : reminder)
         };
         case SEND_REMINDER: return {
             ...state,
             status: action.payload.status,
             message: action.payload.message,
-            sentReminders : state.sentReminders.push(action.payload.reminder)
+            sentReminders : [...state.sentReminders, action.payload.reminder ]
         };
         default: return state;
     }
