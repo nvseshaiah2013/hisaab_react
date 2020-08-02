@@ -1,4 +1,4 @@
-import React,{ Suspense} from 'react';
+import React, { Suspense } from 'react';
 import { IconButton, Box, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from './NavbarComponent';
@@ -6,12 +6,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { routes } from '../resources/private.navbar';
 import { Switch, Route } from 'react-router-dom';
 import Loading from './LoadingComponent';
+import SocialButtons from './SocialComponent';
 
 const useStyles = makeStyles((theme) => ({
 
     content: {
-        [theme.breakpoints.up('md')] : {
-            marginLeft : '15vw'
+        [theme.breakpoints.up('md')]: {
+            marginLeft: '15vw'
         }
     },
     menuButton: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         width: '100vw',
         marginLeft: -theme.spacing(2),
-        marginTop : -theme.spacing(3),
+        marginTop: -theme.spacing(3),
         backgroundColor: theme.palette.info.dark,
         [theme.breakpoints.up('sm')]: {
             display: 'none',
@@ -42,13 +43,15 @@ const Dashboard = ({ match }) => {
         setMobileOpen(!mobileOpen);
     };
     const handleClose = () => {
-        if(mobileOpen) {
+        if (mobileOpen) {
             setMobileOpen(false);
         }
     }
     return (
-        
         <Container maxWidth="lg">
+             <Box zIndex={2000} position={'fixed'} right={'0'} top={'200px'}>                
+                    <SocialButtons />                
+            </Box>
             <Box className={classes.appBar}>
                 <IconButton
                     color="inherit"
@@ -64,13 +67,13 @@ const Dashboard = ({ match }) => {
                 <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleClose={handleClose} />
                 <div className={classes.content}>
                     <Suspense fallback={<Loading />}>
-                    <Switch>
-                        {routes.map((route) => {
-                            return (
-                                <Route exact path={`${match.path}${route.url}`} render={(props) => <route.component {...props} type={route.type} />} key={route.key + 100} />
-                            );
-                        })}
-                    </Switch>
+                        <Switch>
+                            {routes.map((route) => {
+                                return (
+                                    <Route exact path={`${match.path}${route.url}`} render={(props) => <route.component {...props} type={route.type} />} key={route.key + 100} />
+                                );
+                            })}
+                        </Switch>
                     </Suspense>
                 </div>
             </div>

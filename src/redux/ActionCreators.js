@@ -2,7 +2,10 @@ import axios from 'axios';
 import * as ActionTypes from './ActionTypes';
 import { baseurl } from '../resources/baseurl';
 
+const loginLoading = () => ({ type : ActionTypes.LOGIN_LOADING });
+
 export const login = (username, password) => dispatch => {
+    dispatch(loginLoading());
     dispatch({ type: ActionTypes.LOGIN, payload: username });
     axios.post(`${baseurl}users/login`, { username: username, password: password })
         .then((response) => {
@@ -10,17 +13,27 @@ export const login = (username, password) => dispatch => {
             localStorage.setItem('username', username);
             dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: response.data.token })
         })
-        .catch(err => dispatch({ type: ActionTypes.LOGIN_FAILED, payload: err.response.data.message }))
+        .catch(err => dispatch({ type: ActionTypes.LOGIN_FAILED, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
+        .finally(() => {
+            setTimeout(() => dispatch({type : ActionTypes.CLEAR_LOGIN_MESSAGE }),1500);
+        })
 }
+const signupLoading = () => ({ type : ActionTypes.SIGNUP_LOADING });
+
 
 export const signup = (name, username, password) => dispatch => {
     dispatch({ type: ActionTypes.SIGNUP, payload: username });
+    dispatch(signupLoading());
     axios.post(`${baseurl}users/signup`, { username: username, name: name, password: password })
         .then((response) => {
             dispatch({ type: ActionTypes.SIGNUP_SUCCESS, payload: { status: response.data.status, message: response.data.message } })
         })
-        .catch(err => dispatch({ type: ActionTypes.SIGNUP_FAILED, payload: { status: err.response.data.status, message: err.response.data.message } }))
-}
+        .catch(err => dispatch({ type: ActionTypes.SIGNUP_FAILED, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
+        .finally(() => {
+            setTimeout(()=> dispatch({ type : ActionTypes.CLEAR_SIGNUP_MESSAGE }), 1500);
+            ;
+        })
+    }
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
 
@@ -28,6 +41,22 @@ export const logout = () => dispatch => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     dispatch({ type: ActionTypes.LOGOUT });
+}
+
+export const changePassword = (oldPassword, newPassword) => dispatch => {
+    dispatch(signupLoading());
+    let changePasswordObj = {
+        oldPassword : oldPassword,
+        newPassword : newPassword
+    }
+    axios.post(`${baseurl}users/changePassword`, changePasswordObj )
+         .then(response => {
+            dispatch({type : ActionTypes.CHANGE_PASSWORD, payload : response.data });
+         })
+         .catch(err => dispatch({ type: ActionTypes.CHANGE_PASSWORD , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
+        .finally(() => {
+            setTimeout(() => dispatch({type : ActionTypes.CLEAR_LOGIN_MESSAGE }),1500);
+        })
 }
 
 
@@ -60,7 +89,7 @@ export const givemoney = (moneyForm, friend) => dispatch => {
             dispatch({ type: ActionTypes.GIVE_MONEY, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()), 4000);
@@ -81,7 +110,7 @@ export const giveitem = (itemForm, friend) => dispatch => {
             dispatch({ type: ActionTypes.GIVE_ITEM, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.GIVE_ERROR,payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()), 4000);
@@ -95,7 +124,7 @@ export const fetchGivenMoney = (pageNo = 1) => dispatch => {
             dispatch({ type: ActionTypes.FETCH_GIVEN_MONEY, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()), 4000);
@@ -110,7 +139,7 @@ export const fetchGivenItems = (pageNo = 1) => dispatch => {
         })
         .catch(err => {
             console.log(err.response);
-            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()), 4000);
@@ -124,7 +153,7 @@ export const fetchTakenItems = (pageNo = 1) => dispatch => {
             dispatch({ type: ActionTypes.FETCH_TAKEN_ITEMS, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.TAKE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.TAKE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'}});
         })
         .finally(() => {
             setTimeout(() => dispatch(clearTakeMessage()), 4000);
@@ -138,7 +167,7 @@ export const fetchTakenMoney = (pageNo = 1) => dispatch => {
             dispatch({ type: ActionTypes.FETCH_TAKEN_MONEY, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.TAKE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.TAKE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearTakeMessage()), 4000);
@@ -164,7 +193,7 @@ export const validateBorrow = (secretToken, borrowId, type) => dispatch => {
             }
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'}});
         })
         .finally(() => {
             setTimeout(() => dispatch(clearTokenMessage()), 4000);
@@ -183,7 +212,7 @@ export const rejectBorrow = (borrowId, type) => dispatch => {
                 dispatch(fetchTakenItems());
             }
         })
-        .catch(err => dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data }))
+        .catch(err => dispatch({ type: ActionTypes.TOKEN_ERROR,payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
         .finally(() => {
             setTimeout(() => dispatch(clearTokenMessage()), 4000);
         });
@@ -202,7 +231,7 @@ export const validateReturn = (secretToken, borrowId, type) => dispatch => {
             }
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearTokenMessage()), 4000);
@@ -216,7 +245,7 @@ export const getToken = (borrowId) => dispatch => {
             dispatch({ type: ActionTypes.GET_TOKEN, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearTokenMessage()), 4000);
@@ -230,7 +259,7 @@ export const generateToken = (borrowId) => dispatch => {
             dispatch({ type: ActionTypes.GENERATE_TOKEN, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.TOKEN_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearTokenMessage()), 4000);
@@ -245,7 +274,7 @@ export const deleteBorrowMoney = (borrowId,index) => dispatch => {
             dispatch({type : ActionTypes.DELETE_BORROW_MONEY, payload : response.data });
         })
         .catch(err=> {
-            dispatch({ type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+            dispatch({ type : ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()),4000);
@@ -260,7 +289,7 @@ export const deleteBorrowItem = (borrowId,index) => dispatch => {
             dispatch({ type : ActionTypes.DELETE_BORROW_ITEM, payload : response.data });
         })
         .catch(err=> {
-            dispatch({ type : ActionTypes.GIVE_ERROR, payload : err.response.data });
+            dispatch({ type : ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()),4000);
@@ -299,7 +328,7 @@ export const updateBorrowItem = (borrowId, values) => dispatch => {
             dispatch({ type: ActionTypes.UPDATE_GIVE_ITEM, payload: response.data });
         })
         .catch(err => {
-            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response.data });
+            dispatch({ type: ActionTypes.GIVE_ERROR, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {
             setTimeout(() => dispatch(clearGiveMessage()), 4000);

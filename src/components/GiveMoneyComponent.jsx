@@ -51,7 +51,8 @@ const GiveMoneyForm = ({ borrowId, amount, place, occasion, expected_return_date
             amount: amount || 1,
             place: place || '',
             occasion: occasion || '',
-            expected_return_date: moment(expected_return_date).format('YYYY-MM-DD') || moment().add(1, 'day').format('YYYY-MM-DD')
+            expected_return_date: expected_return_date ? moment(expected_return_date).format('YYYY-MM-DD') : 
+                                  moment().add(1, 'day').format('YYYY-MM-DD')
         },
         validationSchema: Yup.object({
             amount: Yup.number().required('Amount is Required!').min(1, 'Amount should be greater than 0 !'),

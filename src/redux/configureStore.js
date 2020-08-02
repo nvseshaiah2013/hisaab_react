@@ -7,6 +7,7 @@ import { Reminders } from './reminders';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Token } from './token';
+import { LOGOUT } from './ActionTypes';
 
 const appReducer = combineReducers({
     auth: Auth,
@@ -17,9 +18,11 @@ const appReducer = combineReducers({
     token: Token
 });
 
-const ConfigureStore = () => {
-    const store = createStore(appReducer,applyMiddleware(thunk, logger));
-    return store;
+const rootReducer = (state, action) => {
+    if(action.type === LOGOUT) {
+        state = undefined;
+    }
+    return appReducer(state, action);
 }
 
-export const store = ConfigureStore();
+export const store = createStore(rootReducer,applyMiddleware(thunk,logger));

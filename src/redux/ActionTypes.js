@@ -3,11 +3,16 @@ export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const LOGOUT = 'LOGOUT';
+export const LOGIN_LOADING = 'LOGIN_LOADING';
+export const CLEAR_LOGIN_MESSAGE = 'CLEAR_LOGIN_MESSAGE';
 // Signup Reducer 
 export const SIGNUP = 'SIGNUP';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILED = 'SIGNUP_FAILED';
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+export const CLEAR_SIGNUP_MESSAGE = 'CLEAR_SIGNUP_MESSAGE';
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const SIGNUP_LOADING = 'SIGNUP_LOADING';
 
 //Gives Reducer 
 export const SELECT_FRIEND = 'SELECT_FRIEND';

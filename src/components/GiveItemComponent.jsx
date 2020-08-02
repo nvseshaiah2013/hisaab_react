@@ -51,7 +51,8 @@ const GiveItemForm = ({ setOpen, borrowId, itemName, description, occasion, expe
             description: description || '',
             place: place || '',
             occasion: occasion || '',
-            expected_return_date: moment(expected_return_date).format('YYYY-MM-DD') || moment().add(1, 'day').format('YYYY-MM-DD')
+            expected_return_date: expected_return_date ? moment(expected_return_date).format('YYYY-MM-DD') : 
+            moment().add(1, 'day').format('YYYY-MM-DD')
         },
         validationSchema: Yup.object({
             itemName: Yup.string().required('Item Name is Required!'),

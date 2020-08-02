@@ -1,4 +1,4 @@
-import { SIGNUP, SIGNUP_FAILED, SIGNUP_SUCCESS } from './ActionTypes';
+import { SIGNUP, SIGNUP_FAILED, SIGNUP_SUCCESS, CLEAR_SIGNUP_MESSAGE, SIGNUP_LOADING, CHANGE_PASSWORD } from './ActionTypes';
 
 export const Signup = (
             state = {
@@ -10,8 +10,11 @@ export const Signup = (
             switch(action.type)
             {
                 case SIGNUP : return { ...state, username : action.payload };
-                case SIGNUP_SUCCESS : return {...state, status : action.payload.status, message : action.payload.message };
-                case SIGNUP_FAILED : return {...state, status : action.payload.status, message : action.payload.message };
+                case SIGNUP_SUCCESS : return {...state, status : action.payload.status, message : action.payload.message, isLoading : false };
+                case SIGNUP_FAILED : return {...state, status : action.payload.status, message : action.payload.message, isLoading : false };
+                case CLEAR_SIGNUP_MESSAGE : return { ...state, status : null, message : null };
+                case SIGNUP_LOADING : return { ...state, isLoading : true };
+                case CHANGE_PASSWORD : return { ...state, status : action.payload.status, message : action.payload.message, isLoading :false };
                 default : return state;
             }
 }
