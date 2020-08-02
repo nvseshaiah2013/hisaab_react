@@ -1,7 +1,19 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { Container, Button, Collapse, Box, Typography, Table, TableBody, TableContainer, TableCell, TableRow, TableHead, Tooltip, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react/';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableCell from '@material-ui/core/TableCell';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import Heading from './HeadingComponent';
 import moment from 'moment';
 import { fetchTakenItems, fetchTakenMoney, getToken, rejectBorrow } from '../redux/ActionCreators';
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,14 +37,6 @@ import axios from 'axios';
 import { baseurl } from '../resources/baseurl';
 
 const useStyles = makeStyles((theme) => ({
-    header: {
-        borderBottom: `3px solid ${theme.palette.info.dark}`,
-        marginBottom: '1rem',
-        paddingBottom: '1rem'
-    },
-    content: {
-        padding: theme.spacing(3),
-    },
     toolbar: theme.mixins.toolbar,
     margin: {
         marginBottom: '4px',
@@ -57,12 +61,12 @@ const useStyles = makeStyles((theme) => ({
 const Takes = ({ type }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [tokenOp, setTokenOp] = useState(false);
+    const [tokenOp, setTokenOp] = React.useState(false);
     const takes = useSelector(state => state.takes);
     const token = useSelector(state => state.token);
-    const [failure, setFailure] = useState(false);
-    const [success, setSuccess] = useState(false);
-    useEffect(() => {
+    const [failure, setFailure] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    React.useEffect(() => {
         if (type === 'Money') {
             dispatch(fetchTakenMoney())
         }
@@ -70,7 +74,7 @@ const Takes = ({ type }) => {
             dispatch(fetchTakenItems());
         }
     }, [type, dispatch]);
-    useEffect(() => {
+    React.useEffect(() => {
         if (token.secretToken) {
             setTokenOp(true);
         }
@@ -85,8 +89,8 @@ const Takes = ({ type }) => {
     const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Return Date', 'Status',];
     if (type === 'Items') {
         return (
-            <Container maxWidth="xl" className={classes.content}>
-                <Typography variant="h4" align="center" className={classes.header}>Taken {type}</Typography>
+            <Container maxWidth="xl">
+                <Heading heading={`Taken ${type}`} />
                 <div className={classes.toolbar} />
                 <Legend />
                 <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken} />
@@ -147,8 +151,8 @@ const Takes = ({ type }) => {
     }
     else if (type === 'Money') {
         return (
-            <Container maxWidth="xl" className={classes.content}>
-                <Typography variant="h4" align="center" className={classes.header}>Taken {type}</Typography>
+            <Container maxWidth="xl">
+                <Heading heading={`Taken ${type}`} />
                 <div className={classes.toolbar} />
                 <Legend />
                 <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken} />
@@ -216,8 +220,8 @@ const Takes = ({ type }) => {
 
 const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, status, actual_return_date, _id }) => {
     const classes = useStyles();
-    const [open, setOpen] = useState(false);
-    const [validate, setValidate] = useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [validate, setValidate] = React.useState(false);
     const dispatch = useDispatch();
     const handleViewToken = () => {
         dispatch(getToken(_id));
@@ -311,8 +315,8 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
                                 type="button"
                                 onClick={handleReturn}
                             > Return </Button> : ''}
-                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight : 'bolder' }}> You rejected the borrow!</Typography> : ''}
-                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight : 'bolder' }}> You returned the borrow!</Typography> : ''}
+                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight: 'bolder' }}> You rejected the borrow!</Typography> : ''}
+                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight: 'bolder' }}> You returned the borrow!</Typography> : ''}
                             {status === 0 ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: indigo[500], color: 'white' }}
@@ -333,9 +337,9 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
 
 const TakenItem = ({ itemName, description, borrower, place, occasion, expected_return_date, actual_return_date, status, _id }) => {
     const classes = useStyles();
-    const [open, setOpen] = useState(false);
-    const [validate, setValidate] = useState(false);
-    const [tokenOp, setTokenOp] = useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [validate, setValidate] = React.useState(false);
+    const [tokenOp, setTokenOp] = React.useState(false);
     const token = useSelector(state => state.token.secretToken);
     const dispatch = useDispatch();
     const handleViewToken = () => {
@@ -432,8 +436,8 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
                                 onClick={handleReject}
                             > Reject </Button> : ''}
                             <span className={classes.button} />
-                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight : 'bolder' }}> You rejected the borrow!</Typography> : ''}
-                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight : 'bolder' }}> You returned the borrow!</Typography> : ''}
+                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight: 'bolder' }}> You rejected the borrow!</Typography> : ''}
+                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight: 'bolder' }}> You returned the borrow!</Typography> : ''}
 
                             {status === 1 ? <Button
                                 className={classes.button}

@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Box, Typography, Table, TableRow, TableContainer, TableBody, TableHead, TableCell, Tooltip, IconButton, Collapse, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableCell from '@material-ui/core/TableCell';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import Button from '@material-ui/core/Button';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGivenItems, fetchGivenMoney, getToken, deleteBorrowMoney, deleteBorrowItem } from '../redux/ActionCreators';
 import moment from 'moment';
@@ -26,17 +38,10 @@ import TokenDialog from './TokenDialogComponent';
 import SuccessSnack from './SuccessSnackComponent';
 import FailureSnack from './FailureSnackComponent';
 import ReminderModal from './ReminderModalComponent';
+import Heading from './HeadingComponent';
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        padding: theme.spacing(3),
-    },
     toolbar: theme.mixins.toolbar,
-    header: {
-        borderBottom: `3px solid ${theme.palette.info.dark}`,
-        marginBottom: '1rem',
-        paddingBottom: '1rem'
-    },
     table: {
         overflowX: 'scroll',
         width: '100%'
@@ -61,11 +66,11 @@ const Gives = ({ type }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const gives = useSelector(state => state.gives);
-    const token  = useSelector(state => state.token );
+    const token = useSelector(state => state.token);
     const reminders = useSelector(state => state.reminders);
-    const [ failure , setFailure ] = useState(false);
-    const [ success , setSuccess ] = useState(false);
-    const [ tokenOp, setTokenOp ] = useState(false);
+    const [failure, setFailure] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [tokenOp, setTokenOp] = useState(false);
     useEffect(() => {
         if (type === 'Money') {
             dispatch(fetchGivenMoney());
@@ -77,26 +82,26 @@ const Gives = ({ type }) => {
 
         }
     }, [type, dispatch]);
-    useEffect(()=> {
-        if(token.secretToken) {
+    useEffect(() => {
+        if (token.secretToken) {
             setTokenOp(true);
         }
-        else if(token.status === false) {
+        else if (token.status === false) {
             setFailure(true);
         }
-        else if(token.status === true) {
+        else if (token.status === true) {
             setSuccess(true);
         }
         return () => {
 
         }
-    },[token]);
+    }, [token]);
 
     useEffect(() => {
-        if(reminders.status === true ) {
+        if (reminders.status === true) {
             setSuccess(true);
         }
-        else if(reminders.status === false) {
+        else if (reminders.status === false) {
             setFailure(true);
         }
         return () => {
@@ -107,11 +112,11 @@ const Gives = ({ type }) => {
     const itemHeaders = ['Action', 'Item', 'Name', 'Place', 'Expected Return Date', 'Status'];
     if (type === 'Money') {
         return (
-            <Container className={classes.content} maxWidth="md">
-                <Typography variant="h4" align="center" display="block" className={classes.header}> Given {type} </Typography>
+            <Container maxWidth="md">
+                <Heading heading={`Given ${type}`} />
                 <div className={classes.toolbar} />
                 <Legend />
-                <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken}/>
+                <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken} />
                 <div className={classes.toolbar} />
                 <TableContainer>
                     <Table stickyHeader={true} className={classes.table}>
@@ -143,6 +148,7 @@ const Gives = ({ type }) => {
                                             status={money.status}
                                             actual_return_date={money.actual_return_date}
                                             _id={money._id}
+                                            index={index}
                                         />
                                     );
                                 })
@@ -162,18 +168,17 @@ const Gives = ({ type }) => {
                         onClick={() => dispatch(fetchGivenMoney())}
                     > Refresh </Button>
                 </Box>
-                <SuccessSnack open={success} setOpen={setSuccess} message={reminders.message ? reminders.message : token.message}/>
-                <FailureSnack open={failure} setOpen={setFailure} message={reminders.message  ? reminders.message : token.message}/>
+                <SuccessSnack open={success} setOpen={setSuccess} message={reminders.message ? reminders.message : token.message} />
+                <FailureSnack open={failure} setOpen={setFailure} message={reminders.message ? reminders.message : token.message} />
             </Container>
         );
     }
     else if (type === 'Items') {
         return (
-            <Container className={classes.content} maxWidth="md">
-                <Typography variant="h4" align="center" display="block" className={classes.header}> Given {type} </Typography>
-                <div className={classes.toolbar} />
+            <Container maxWidth="md">
+                <Heading heading={`Given ${type}`} /> <div className={classes.toolbar} />
                 <Legend />
-                <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken}/>
+                <TokenDialog open={tokenOp} setOpen={setTokenOp} message={token.secretToken} />
                 <div className={classes.toolbar} />
                 <TableContainer>
                     <Table stickyHeader={true} className={classes.table}>
@@ -204,6 +209,7 @@ const Gives = ({ type }) => {
                                         status={item.status}
                                         actual_return_date={item.actual_return_date}
                                         _id={item._id}
+                                        index={index}
                                     />
                                 );
                             })
@@ -223,8 +229,8 @@ const Gives = ({ type }) => {
                         onClick={() => dispatch(fetchGivenItems())}
                     > Refresh </Button>
                 </Box>
-                <SuccessSnack open={success} setOpen={setSuccess} message={reminders.message ? reminders.message : token.message}/>
-                <FailureSnack open={failure} setOpen={setFailure} message={reminders.message  ? reminders.message : token.message}/>
+                <SuccessSnack open={success} setOpen={setSuccess} message={reminders.message ? reminders.message : token.message} />
+                <FailureSnack open={failure} setOpen={setFailure} message={reminders.message ? reminders.message : token.message} />
             </Container >
         );
     }
@@ -237,12 +243,12 @@ const Gives = ({ type }) => {
         );
 }
 
-const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, actual_return_date, status, _id }) => {
+const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, actual_return_date, status, _id, index }) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [edit, setEdit] = useState(false);
     const [validate, setValidate] = useState(false);
-    const [remind, setReminder ] = useState(false);
+    const [remind, setReminder] = useState(false);
     const dispatch = useDispatch();
     const handleViewToken = () => {
         dispatch(getToken(_id));
@@ -261,21 +267,21 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
         color = indigo;
     } return (
         <React.Fragment>
-            <ReminderModal 
+            <ReminderModal
                 open={remind}
                 setOpen={setReminder}
                 borrowId={_id}
             />
             <EditGiveMoneyComponent
-                open={edit} 
+                open={edit}
                 setOpen={setEdit}
                 borrowId={_id}
                 amount={amount}
                 occasion={occasion}
                 place={place}
                 expected_return_date={expected_return_date}
-                 />
-            <ValidateDialog open={validate} setOpen={setValidate} page={'money'} borrowId={_id} type={'borrow'}/>
+            />
+            <ValidateDialog open={validate} setOpen={setValidate} page={'money'} borrowId={_id} type={'borrow'} />
             <TableRow hover>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -346,7 +352,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                 variant="outlined"
                                 endIcon={<DeleteRoundedIcon />}
                                 type="button"
-                                onClick={() => dispatch(deleteBorrowMoney(_id))}
+                                onClick={() => dispatch(deleteBorrowMoney(_id,index))}
                             > Delete </Button> : ''}
 
                             <span className={classes.button} />
@@ -357,7 +363,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                     style={{ backgroundColor: lime[500], color: 'white' }}
                                     endIcon={<NotificationsRoundedIcon />}
                                     type="button"
-                                    onClick={()=> setReminder(true)}
+                                    onClick={() => setReminder(true)}
                                 > Remind </Button> : ''}
                             <span className={classes.button} />
                             {status === 1 ? <Button
@@ -376,11 +382,11 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
     );
 }
 
-const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date, _id }) => {
+const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date, _id, index }) => {
     const [open, setOpen] = useState(false);
-    const [ edit, setEdit ] = useState(false);
-    const [ validate, setValidate ] = useState(false);
-    const [ remind, setReminder ] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [validate, setValidate] = useState(false);
+    const [remind, setReminder] = useState(false);
     const classes = useStyles();
     const dispatch = useDispatch();
     const handleViewToken = () => {
@@ -401,13 +407,13 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
     }
     return (
         <React.Fragment>
-            <ReminderModal 
+            <ReminderModal
                 open={remind}
                 setOpen={setReminder}
                 borrowId={_id}
             />
-            <EditGiveItemComponent 
-                open={edit} 
+            <EditGiveItemComponent
+                open={edit}
                 setOpen={setEdit}
                 itemName={itemName}
                 description={description}
@@ -415,8 +421,8 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                 occasion={occasion}
                 expected_return_date={expected_return_date}
                 borrowId={_id}
-                />
-            <ValidateDialog open={validate} setOpen={setValidate} page={'items'} borrowId={_id} type={'borrow'}/>
+            />
+            <ValidateDialog open={validate} setOpen={setValidate} page={'items'} borrowId={_id} type={'borrow'} />
             <TableRow hover>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -491,7 +497,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                 variant="outlined"
                                 endIcon={<DeleteRoundedIcon />}
                                 type="button"
-                                onClick={()=> dispatch(deleteBorrowItem(_id))}
+                                onClick={() => dispatch(deleteBorrowItem(_id,index))}
                             > Delete </Button> : ''}
                             <span className={classes.button} />
                             {status === 1 ?
@@ -501,7 +507,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                     style={{ backgroundColor: lime[500], color: 'white' }}
                                     endIcon={<NotificationsRoundedIcon />}
                                     type="button"
-                                    onClick={()=> setReminder(true)}
+                                    onClick={() => setReminder(true)}
                                 > Remind </Button> : ''}
                             <span className={classes.button} />
                             {status === 1 ? <Button

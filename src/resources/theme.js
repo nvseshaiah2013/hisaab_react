@@ -40,6 +40,11 @@ export const theme = createMuiTheme({
                 lineHeight: '1.5rem'
             }
         },
+        MuiContainer : {
+            root : {
+                padding : '24px'
+            }
+        },
         MuiTableCell: {
             body: {
                 fontWeight: '200',

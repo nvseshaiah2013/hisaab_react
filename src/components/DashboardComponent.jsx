@@ -10,8 +10,6 @@ import Loading from './LoadingComponent';
 const useStyles = makeStyles((theme) => ({
 
     content: {
-        padding: theme.spacing(3),
-        marginTop : theme.spacing(3),
         [theme.breakpoints.up('md')] : {
             marginLeft : '15vw'
         }
@@ -25,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         width: '100vw',
         marginLeft: -theme.spacing(2),
+        marginTop : -theme.spacing(3),
         backgroundColor: theme.palette.info.dark,
         [theme.breakpoints.up('sm')]: {
             display: 'none',
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
     white: {
         color: 'white',
-        alignItems: 'base'
+        alignItems: 'baseline'
     }
 }));
 

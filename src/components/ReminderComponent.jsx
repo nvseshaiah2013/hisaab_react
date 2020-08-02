@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-    Container, Typography, Radio, RadioGroup,
-    FormControlLabel, Dialog, DialogContent,
-    DialogTitle, DialogActions, Button,
-    Box, Divider
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import Container from '@material-ui/core/Container';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
 import indigo from '@material-ui/core/colors/indigo';
 import red from '@material-ui/core/colors/red';
 import green from '@material-ui/core/colors/green';
@@ -18,16 +24,9 @@ import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import FailureSnack from './FailureSnackComponent';
 import SuccessSnack from './SuccessSnackComponent';
+import Heading from './HeadingComponent';
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        padding: theme.spacing(3)
-    },
-    header: {
-        borderBottom: `3px solid ${theme.palette.info.dark}`,
-        marginBottom: '1rem',
-        paddingBottom: '1rem'
-    },
     flex: {
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -46,27 +45,33 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 'auto',
     },
     rightAlign: {
-        marginLeft: 'auto'
-    }, span: {
+        marginLeft: 'auto',
+        display : 'flex'
+    },
+    span: {
         width: '25px',
         height: '25px',
         borderRadius: '50%',
         display: 'inline-block',
         verticalAlign: 'middle'
+    },
+    button: {
+        marginRight: '0.2rem',
+        flexGrow : 1
     }
 }));
 
 const Reminders = () => {
     const classes = useStyles();
-    const [type, setType] = useState('Sent');
+    const [type, setType] = React.useState('Sent');
     const reminders = useSelector(state => state.reminders);
-    const [success, setSuccess] = useState(false);
-    const [failure, setFailure] = useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
     const dispatch = useDispatch();
     const handleChange = (event) => {
         setType(event.target.value);
     }
-    useEffect(() => {
+    React.useEffect(() => {
         if (type === 'Sent') {
             dispatch(fetchSentReminders());
         }
@@ -75,7 +80,7 @@ const Reminders = () => {
         }
         return () => { };
     }, [dispatch, type]);
-    useEffect(() => {
+    React.useEffect(() => {
         if (reminders.status === true) {
             setSuccess(true);
         }
@@ -84,8 +89,9 @@ const Reminders = () => {
         }
     }, [reminders]);
     return (
-        <Container maxWidth="md" className={classes.content}>
-            <Typography variant="h4" align="center" className={classes.header}> My Reminders </Typography>
+        <Container maxWidth="md">
+            <Heading heading={'My Reminders'} />
+            <Legend />
             <RadioGroup aria-label="type" name="type" value={type} onChange={handleChange} className={classes.flex}>
                 <FormControlLabel value="Sent" control={<Radio color="primary" />} label="Sent Reminders" className={classes.flexCell} />
                 <FormControlLabel value="Received" control={<Radio color="primary" />} label="Received Reminders" className={classes.flexCell} />
@@ -99,15 +105,14 @@ const Reminders = () => {
 };
 
 const ReminderList = ({ type, list }) => {
-    const [open, setOpen] = useState(false);
-    const [index, setIndex] = useState(-1);
-    useEffect(() => {
+    const [open, setOpen] = React.useState(false);
+    const [index, setIndex] = React.useState(-1);
+    React.useEffect(() => {
         setIndex(-1);
         return () => { };
     }, [type]);
     return (
         <Box margin={1}>
-            <Legend />
             <BorrowDialog
                 actual_return_date={index >= 0 ? list[index].borrow_id.actual_return_date : ''}
                 expected_return_date={index >= 0 ? list[index].borrow_id.expected_return_date : ''}
@@ -176,11 +181,27 @@ const Reminder = ({ index, borrower, borowee, header, message, createdAt, type, 
                     <Typography variant="body1">{type === 'Sent' ? borowee.name : borrower.name}</Typography>
                     <Typography variant="body2">{type === 'Sent' ? borowee.username : borrower.username}</Typography>
                 </Box>
-                <Box className={classes.rightAlign}>
-                    {type === 'Sent' ? <Button style={{ borderColor: red[500], marginRight: '0.2rem' }} variant="outlined" type="button" 
-                                            onClick={handleDelete}> Delete </Button> :
-                        <Button variant="outlined" style={{ borderColor: green[500], marginRight: '0.2rem' }} type="button" 
-                                    onClick={() => dispatch(markReminderAsRead(reminderId))}> Mark As Read </Button>}
+                <Box className={classes.rightAlign} marginTop={2}>
+                    {type === 'Sent' ?
+                        <Button
+                            className={classes.button}
+                            style={{ borderColor: red[500] }}
+                            variant="outlined"
+                            type="button"
+                            onClick={handleDelete}>
+                            Delete
+                    </Button>
+                        :
+                        !read ? <Button
+                            className={classes.button}
+                            variant="outlined"
+                            style={{ borderColor: green[500] }}
+                            type="button"
+                            onClick={() => dispatch(markReminderAsRead(reminderId))}>
+                            Mark As Read
+                    </Button> : null
+                    }
+                    <div className={classes.button}/>
                     <Button type="button" onClick={() => { setIndex(index); setOpen(true); }} variant="contained" color="primary"> View Borrow Info </Button>
                 </Box>
             </Box>

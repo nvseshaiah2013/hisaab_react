@@ -1,15 +1,17 @@
-import React,{lazy} from 'react';
+import React from 'react';
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
 import MonetizationOnSharpIcon from '@material-ui/icons/MonetizationOnSharp';
 import NotificationsSharpIcon from '@material-ui/icons/NotificationsSharp';
 import StorageSharpIcon from '@material-ui/icons/StorageSharp';
 import InfoSharpIcon from '@material-ui/icons/InfoSharp';
+import LockIcon from '@material-ui/icons/Lock';
 
-const Takes = lazy(() => import('../components/TakesComponent'));
-const GiveForm = lazy(() => import('../components/GiveFormComponent'));
-const About = lazy(() => import('../components/AboutComponent'));
-const Gives = lazy(()=> import('../components/GivesComponent'));
-const Reminders = lazy(() => import('../components/ReminderComponent'));
+const Takes = React.lazy(() => import('../components/TakesComponent'));
+const GiveForm = React.lazy(() => import('../components/GiveFormComponent'));
+const About = React.lazy(() => import('../components/AboutComponent'));
+const Gives = React.lazy(()=> import('../components/GivesComponent'));
+const Reminders = React.lazy(() => import('../components/ReminderComponent'));
+const ChangePassword = React.lazy(() => import('../components/ChangePasswordComponent'));
 
 export const routes = [
     {
@@ -74,6 +76,15 @@ export const routes = [
         type : '',
         show : true,
         icon : <InfoSharpIcon />
+    },
+    {
+        key : 108,
+        url : '/change-password',
+        name : 'Change Password',
+        component : ChangePassword,
+        type : '',
+        show : true ,
+        icon : <LockIcon />
     },
     {
         key : 106,

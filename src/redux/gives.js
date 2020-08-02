@@ -8,7 +8,9 @@ import { SELECT_FRIEND,
          FETCH_GIVEN_ITEMS, 
          GIVES_LOADING, 
          UPDATE_GIVE_ITEM, 
-         UPDATE_GIVE_MONEY } 
+         UPDATE_GIVE_MONEY, 
+         DELETE_BORROW_ITEM,
+         DELETE_BORROW_MONEY} 
 from './ActionTypes';
 
 export const Gives = (state = {
@@ -34,14 +36,28 @@ export const Gives = (state = {
                                          isLoading : false, 
                                          status : action.payload.status, 
                                          message : action.payload.message, 
-                                         givenItems : state.givenItems.map((value) => value._id === action.payload.borrow._id ? action.payload.borrow : value) }
+                                         givenItems : state.givenItems.map((value) => value._id === action.payload.borrow._id ? {...value,...action.payload.borrow} : value) }
 
         case UPDATE_GIVE_MONEY: return { ...state, 
                                         isLoading : false, 
                                         status : action.payload.status, 
                                         message : action.payload.message, 
-                                        givenMoney : state.givenMoney.map((value) => value._id === action.payload.borrow._id ? action.payload.borrow : value) }
+                                        givenMoney : state.givenMoney.map((value) => value._id === action.payload.borrow._id ? {...value,...action.payload.borrow} : value) }
 
+        case DELETE_BORROW_ITEM : return { ...state, 
+                                            isLoading : false,
+                                            status : action.payload.status,
+                                            message : action.payload.message,
+                                            givenItems : [...state.givenItems.slice(0,action.payload.index), ...state.givenItems.slice(action.payload.index + 1)]
+                                         };
+
+        case DELETE_BORROW_MONEY : return { ...state, 
+                                            isLoading : false, 
+                                            status : action.payload.status,
+                                            message : action.payload.message,
+                                            givenMoney : [...state.givenMoney.slice(0,action.payload.index), ...state.givenMoney.slice(action.payload.index + 1)]
+                                          };
+        
         case GIVE_ITEM: return { ...state, givenItem: action.payload.borrow, status: action.payload.status, message: action.payload.message };
 
         case FETCH_GIVEN_ITEMS: return { ...state, givenItems: action.payload.borrows };

@@ -237,11 +237,12 @@ export const generateToken = (borrowId) => dispatch => {
         });
 }
 
-export const deleteBorrowMoney = (borrowId) => dispatch => {
+export const deleteBorrowMoney = (borrowId,index) => dispatch => {
     dispatch(givesLoading());
     axios.delete(`${baseurl}borrow/borrowMoney/${borrowId}`)
         .then(response => {
-            dispatch(fetchGivenMoney(1));
+            response.data.index = index;
+            dispatch({type : ActionTypes.DELETE_BORROW_MONEY, payload : response.data });
         })
         .catch(err=> {
             dispatch({ type : ActionTypes.GIVE_ERROR, payload : err.response.data });
@@ -251,11 +252,12 @@ export const deleteBorrowMoney = (borrowId) => dispatch => {
         })
 }
 
-export const deleteBorrowItem = (borrowId) => dispatch => {
+export const deleteBorrowItem = (borrowId,index) => dispatch => {
     dispatch(givesLoading());
     axios.delete(`${baseurl}borrow/borrowItem/${borrowId}`)
         .then(response => {
-            dispatch(fetchGivenItems(1));
+            response.data.index = index;
+            dispatch({ type : ActionTypes.DELETE_BORROW_ITEM, payload : response.data });
         })
         .catch(err=> {
             dispatch({ type : ActionTypes.GIVE_ERROR, payload : err.response.data });

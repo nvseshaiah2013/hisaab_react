@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
         flexWrap : 'wrap'
     },
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '50%',
         display: 'inline-block',
         verticalAlign : 'middle',
-        padding : '0.8rem 0'
+        marginRight : '1rem'
     },
     redDot: {
         backgroundColor: red[500],
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '50%',
         display: 'inline-block',
         verticalAlign : 'middle',
-        padding : '0.8rem 0'
+        marginRight : '1rem'
     },
     indigoDot: {
         backgroundColor: indigo[500],
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '50%',
         display: 'inline-block',
         verticalAlign : 'middle',
-        padding : '0.8rem 0'
+        marginRight : '1rem'
     },
     orangeDot: {
         backgroundColor: orange[500],
@@ -49,10 +49,11 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '50%',
         display: 'inline-block',
         verticalAlign : 'middle',
-        padding : '0.8rem 0'
+        marginRight : '1rem'
     },
     padding : {
-        padding : '0.8rem 0'
+        padding : '0.8rem 0.8rem',
+        margin : '0 auto'
     }
 }));
 
@@ -61,13 +62,13 @@ const Legend = () => {
     const classes = useStyles();
     return (
         <Container maxWidth="md" className={classes.root}>
-            <Typography variant="body2" className={classes.padding}> Accepted <span className={classes.greenDot} />
+            <Typography variant="body2" className={classes.padding}> <span className={classes.greenDot} />Accepted 
             </Typography>
-            <Typography variant="body2" className={classes.padding}> Request Pending <span className={classes.orangeDot} />
+            <Typography variant="body2" className={classes.padding}><span className={classes.orangeDot} /> Pending 
             </Typography>
-            <Typography variant="body2" className={classes.padding}> Rejected <span className={classes.redDot} />
+            <Typography variant="body2" className={classes.padding}> <span className={classes.redDot} />Rejected 
             </Typography>
-            <Typography variant="body2" className={classes.padding}> Returned <span className={classes.indigoDot} />
+            <Typography variant="body2" className={classes.padding}> <span className={classes.indigoDot} />Returned 
             </Typography>
         </Container>
     );

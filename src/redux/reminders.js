@@ -57,7 +57,7 @@ export const Reminders = (state = {
             status: action.payload.status,
             message: action.payload.message,
             isLoading : false,
-            receivedReminders : state.receivedReminders.map(reminder => reminder._id === action.payload.reminder._id ? action.payload.reminder : reminder)
+            receivedReminders : state.receivedReminders.map(reminder => reminder._id === action.payload.reminder._id ? {...reminder,...action.payload.reminder} : reminder)
         };
         case SEND_REMINDER: return {
             ...state,
