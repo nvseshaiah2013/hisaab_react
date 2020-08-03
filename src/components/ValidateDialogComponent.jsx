@@ -1,7 +1,14 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
+import React from 'react';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField  from '@material-ui/core/TextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { generateToken, validateBorrow, validateReturn } from '../redux/ActionCreators';
@@ -24,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
 const ValidateDialog = ({ open, setOpen, type, borrowId, page }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [ generated, setGenerated ] = useState(false);
+    const [ generated, setGenerated ] = React.useState(false);
     const code = useSelector(state => state.token.code);
-    useEffect(() => {
+    React.useEffect(() => {
         if(code === 201 ) {
             setGenerated(true);
         }

@@ -1,9 +1,15 @@
-import { Box, Button, Container, IconButton, InputAdornment, TextField, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useFormik } from 'formik';
-import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../redux/ActionCreators';
@@ -59,14 +65,14 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = (props) => {
     const classes = useStyles();
-    const [pwd, togglePwd] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [failure, setFailure] = useState(false);
-    const [message, setMessage] = useState('');
+    const [pwd, togglePwd] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
+    const [message, setMessage] = React.useState('');
     const state = useSelector(state => state.signup);
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (state.status === true) {
             setSuccess(true);
             setMessage(state.message);

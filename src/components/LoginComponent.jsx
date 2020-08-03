@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, TextField, Button, InputAdornment, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -65,19 +71,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
     const classes = useStyles();
-    const [pwd, togglePwd] = useState(false);
+    const [pwd, togglePwd] = React.useState(false);
     const auth = useSelector(state => state.auth);
-    const [open, setOpen] = useState(false);
-    const [message, setMessage] = useState('');
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState('');
     const dispatch = useDispatch();
     const history = useHistory();
-    useEffect(() => {
+    React.useEffect(() => {
         if (auth.errMess) {
             setOpen(true);
             setMessage(auth.errMess);
         }
     }, [auth.errMess]);
-    useEffect(() => {
+    React.useEffect(() => {
         if (auth.isAuthenticated) {
             history.push('/dashboard');
         }
@@ -120,9 +126,9 @@ const Login = () => {
                             value={formik.values.username}
                             error={formik.touched.username && formik.errors.username ? true : false}
                         />
-                        {formik.touched.username && formik.errors.username ? 
+                        {formik.touched.username && formik.errors.username ?
                             <ErrorMessage message={formik.errors.username} />
-                         : null}
+                            : null}
                     </Box>
                     <Box className={classes.flex}>
                         <Link to='/forgot-password' className={clsx(classes.pushRight, classes.hover, classes.red)}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -68,10 +68,10 @@ const Gives = ({ type }) => {
     const gives = useSelector(state => state.gives);
     const token = useSelector(state => state.token);
     const reminders = useSelector(state => state.reminders);
-    const [failure, setFailure] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [tokenOp, setTokenOp] = useState(false);
-    useEffect(() => {
+    const [failure, setFailure] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [tokenOp, setTokenOp] = React.useState(false);
+    React.useEffect(() => {
         if (type === 'Money') {
             dispatch(fetchGivenMoney());
         }
@@ -82,7 +82,7 @@ const Gives = ({ type }) => {
 
         }
     }, [type, dispatch]);
-    useEffect(() => {
+    React.useEffect(() => {
         if (token.secretToken) {
             setTokenOp(true);
         }
@@ -97,7 +97,7 @@ const Gives = ({ type }) => {
         }
     }, [token]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (reminders.status === true) {
             setSuccess(true);
         }
@@ -245,10 +245,10 @@ const Gives = ({ type }) => {
 
 const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, actual_return_date, status, _id, index }) => {
     const classes = useStyles();
-    const [open, setOpen] = useState(false);
-    const [edit, setEdit] = useState(false);
-    const [validate, setValidate] = useState(false);
-    const [remind, setReminder] = useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [edit, setEdit] = React.useState(false);
+    const [validate, setValidate] = React.useState(false);
+    const [remind, setReminder] = React.useState(false);
     const dispatch = useDispatch();
     const handleViewToken = () => {
         dispatch(getToken(_id));
@@ -383,10 +383,10 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
 }
 
 const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date, _id, index }) => {
-    const [open, setOpen] = useState(false);
-    const [edit, setEdit] = useState(false);
-    const [validate, setValidate] = useState(false);
-    const [remind, setReminder] = useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [edit, setEdit] = React.useState(false);
+    const [validate, setValidate] = React.useState(false);
+    const [remind, setReminder] = React.useState(false);
     const classes = useStyles();
     const dispatch = useDispatch();
     const handleViewToken = () => {

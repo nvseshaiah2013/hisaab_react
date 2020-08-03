@@ -1,6 +1,7 @@
 import React from 'react';
-import { Snackbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import HighlightOffTwoToneIcon from '@material-ui/icons/HighlightOffTwoTone';
 
 const useStyles = makeStyles((theme) => ({

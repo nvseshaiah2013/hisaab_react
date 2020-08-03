@@ -1,8 +1,11 @@
-import React, { useEffect} from 'react';
-import { Typography, Button, Box } from '@material-ui/core';
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch,useSelector } from 'react-redux';
-import  { selectedFriend, clearFriend } from '../redux/ActionCreators';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectedFriend, clearFriend } from '../redux/ActionCreators';
 import ErrorMessage from './ErrorMessageComponent';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'grab',
         width: '100%'
     },
-    infoBox : {
-        padding : theme.spacing(2),
-        borderRadius  : '0.3rem',
-        backgroundColor : theme.palette.info.light,
-        color : theme.palette.grey.main,
-        marginTop : '0.5rem',
-        marginBottom : '0.5rem'
+    infoBox: {
+        padding: theme.spacing(2),
+        borderRadius: '0.3rem',
+        backgroundColor: theme.palette.info.light,
+        color: theme.palette.grey.main,
+        marginTop: '0.5rem',
+        marginBottom: '0.5rem'
     }
 }));
 
@@ -35,10 +38,10 @@ const useStyles = makeStyles((theme) => ({
 const Typeahead = ({ users, username, width, searched, setUsers, open, setOpen }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const selectFriend = useSelector(state=> state.gives.selectedFriend);
+    const selectFriend = useSelector(state => state.gives.selectedFriend);
     const handleClick = (user) => {
         setOpen(false);
-        dispatch(selectedFriend(user.username,user.name));
+        dispatch(selectedFriend(user.username, user.name));
     }
 
     const handleClear = () => {
@@ -47,43 +50,43 @@ const Typeahead = ({ users, username, width, searched, setUsers, open, setOpen }
         dispatch(clearFriend());
     }
 
-    useEffect(()=> {
+    React.useEffect(() => {
 
-    },[selectFriend]);
-    if (username !== '' && ((selectFriend == null && !searched) || open ))
+    }, [selectFriend]);
+    if (username !== '' && ((selectFriend == null && !searched) || open))
         return (
-            <div className={classes.root} style={{ width: width, display : open && users.length!==0 ? 'block' : 'none' }}>
+            <div className={classes.root} style={{ width: width, display: open && users.length !== 0 ? 'block' : 'none' }}>
                 {
                     users.slice(0, 5).map((user, index) => {
                         return (
-                            <div className={classes.listItem} key={index} onClick={()=> handleClick(user)}>
+                            <div className={classes.listItem} key={index} onClick={() => handleClick(user)}>
                                 <Typography variant="body1" align="center" display="block">{user.name}</Typography>
                                 <Typography variant="body2" align="center" display="block">{user.username}</Typography>
                             </div>);
                     })
                 }
-            </div> 
+            </div>
         );
-    else if(selectFriend!== null)
+    else if (selectFriend !== null)
         return (
             <div className={classes.infoBox}>
-                <Typography variant="h5" display="block">{selectFriend ? selectFriend.name  : ''}</Typography>
+                <Typography variant="h5" display="block">{selectFriend ? selectFriend.name : ''}</Typography>
                 <Typography variant="h6" display="block">{selectFriend ? selectFriend.username : ''}</Typography>
                 <Box textAlign="right"> <Button color="secondary" onClick={handleClear} variant="contained"> Clear </Button></Box>
             </div>
-            );
-    else if(searched && users.length === 1) {
-            setOpen(false);
-            return (
-                <div className={classes.infoBox}>
-                     <Typography variant="h5" display="block">{users[0].name}</Typography>
-                     <Typography variant="h6" display="block">{users[0].username}</Typography>
-                     <Box textAlign="right"> <Button color="primary" onClick={()=> handleClick(users[0])} variant="contained"> Select </Button></Box>
-                </div>
-            );
+        );
+    else if (searched && users.length === 1) {
+        setOpen(false);
+        return (
+            <div className={classes.infoBox}>
+                <Typography variant="h5" display="block">{users[0].name}</Typography>
+                <Typography variant="h6" display="block">{users[0].username}</Typography>
+                <Box textAlign="right"> <Button color="primary" onClick={() => handleClick(users[0])} variant="contained"> Select </Button></Box>
+            </div>
+        );
     }
     else if (searched && users.length === 0) {
-        return (<ErrorMessage message={`No User with username ${username} found !`}/>);
+        return (<ErrorMessage message={`No User with username ${username} found !`} />);
     }
     else
         return (<div className={classes.root} />);

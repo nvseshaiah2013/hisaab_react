@@ -1,6 +1,13 @@
-import React, { useLayoutEffect, useRef, useState, lazy } from 'react';
-import { Box, Button, Container, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button'; 
+import Container from '@material-ui/core/Container';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -11,8 +18,8 @@ import { clearFriend } from '../redux/ActionCreators';
 import { baseurl } from '../resources/baseurl';
 import Typeahead from './TypeAheadComponent';
 import ErrorMessage from './ErrorMessageComponent';
-const GiveItemForm = lazy(() => import('./GiveItemComponent'));
-const GiveMoneyForm = lazy(() => import('./GiveMoneyComponent'));
+const GiveItemForm = React.lazy(() => import('./GiveItemComponent'));
+const GiveMoneyForm = React.lazy(() => import('./GiveMoneyComponent'));
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -38,15 +45,15 @@ const useStyles = makeStyles((theme) => ({
 
 const GiveForm = (props) => {
     const classes = useStyles();
-    const [type, setType] = useState('Money');
-    const [users, setUsers] = useState([]);
-    const [width, setWidth] = useState(0);
-    const [searched, setSearched] = useState(false);
-    const [open, setOpen] = useState(true);
-    const ref = useRef();
+    const [type, setType] = React.useState('Money');
+    const [users, setUsers] = React.useState([]);
+    const [width, setWidth] = React.useState(0);
+    const [searched, setSearched] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
+    const ref = React.useRef();
     const token = useSelector(state => state.auth.token);
     const dispatch = useDispatch();
-    useLayoutEffect(() => {
+    React.useLayoutEffect(() => {
         if (ref.current) {
             setWidth(ref.current.clientWidth);
         }

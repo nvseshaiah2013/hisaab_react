@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import red from '@material-ui/core/colors/red';
 import indigo from '@material-ui/core/colors/indigo';
 import green from '@material-ui/core/colors/green';

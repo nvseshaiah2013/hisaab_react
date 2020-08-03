@@ -1,6 +1,10 @@
 import React from 'react';
-import { Container, TextField, Button, Typography, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useFormik } from 'formik';
 import ErrorMessage from './ErrorMessageComponent';
 import * as Yup from 'yup';
@@ -21,15 +25,15 @@ const ForgotPassword = () => {
     const classes = useStyles();
     const formik = useFormik({
         initialValues: { username: ' ' },
-        validationSchema : Yup.object({
-                    username :Yup.string()
-                    .required('Email Address is Required')
-                    .email('Username should be valid email id') 
-            }),
-        onSubmit : values => alert('Hello World')
+        validationSchema: Yup.object({
+            username: Yup.string()
+                .required('Email Address is Required')
+                .email('Username should be valid email id')
+        }),
+        onSubmit: values => alert('Hello World')
     });
     return (
-        <Container maxWidth="sm"  className={classes.box}>
+        <Container maxWidth="sm" className={classes.box}>
             <Box margin={1} padding={2}>
                 <Typography variant="h5" align="center" className={classes.header}> Forgot Password </Typography>
             </Box>

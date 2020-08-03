@@ -1,6 +1,9 @@
 import React, { Suspense } from 'react';
-import { IconButton, Box, Container, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Navbar from './NavbarComponent';
 import MenuIcon from '@material-ui/icons/Menu';
 import { routes } from '../resources/private.navbar';

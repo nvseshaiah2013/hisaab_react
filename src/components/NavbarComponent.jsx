@@ -1,11 +1,19 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { routes } from '../resources/private.navbar';
-import { List, ListItem, ListItemText, Hidden, Drawer, Divider, Typography, ListItemIcon, Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
 import SettingsPowerSharpIcon from '@material-ui/icons/SettingsPowerSharp';
-import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { logout } from '../redux/ActionCreators';
+import { routes } from '../resources/private.navbar';
 
 const drawerWidth = '20vw';
 

@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import moment from 'moment';
 import { giveitem, updateBorrowItem } from '../redux/ActionCreators';
-import { Container, TextField, Button, Box } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import FailureSnack from './FailureSnackComponent';
 import SuccessSnack from './SuccessSnackComponent';
 import ErrorMessage from './ErrorMessageComponent';
@@ -26,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
 
 const GiveItemForm = ({ setOpen, borrowId, itemName, description, occasion, expected_return_date, place }) => {
     const classes = useStyles();
-    const [message, setMessage] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [failure, setFailure] = useState(false);
+    const [message, setMessage] = React.useState('');
+    const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
     const dispatch = useDispatch();
     const gives = useSelector(state => state.gives);
     const selectedFriend = gives.selectedFriend;
-    useEffect(() => {
+    React.useEffect(() => {
         if (gives.status === true) {
             setMessage(gives.message);
             setSuccess(true);
