@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid gray',
         margin: '20vh auto',
         padding: '1rem 2rem',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        boxShadow: theme.shadows[2]
     },
 }))
 
@@ -53,9 +54,11 @@ const ForgotPassword = () => {
                     />
                     {formik.touched.username && formik.errors.username ? <ErrorMessage message={formik.errors.username} /> : null}
                 </Box>
-                <Button type="submit" variant="contained" color="primary">
-                    Get OTP
+                <Box marginLeft={3}>
+                    <Button type="submit" variant="contained" color="primary">
+                        Get OTP
                 </Button>
+                </Box>
             </form>
         </Container>
     );

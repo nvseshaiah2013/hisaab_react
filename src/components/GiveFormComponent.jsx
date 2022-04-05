@@ -53,8 +53,8 @@ const GiveForm = (props) => {
     const ref = React.useRef();
     const token = useSelector(state => state.auth.token);
     const dispatch = useDispatch();
-    React.useLayoutEffect(() => {
-        if (ref.current) {
+    React.useEffect(() => {
+        document.onreadystatechange = () => {
             setWidth(ref.current.clientWidth);
         }
     }, []);

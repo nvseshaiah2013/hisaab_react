@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectedFriend, clearFriend } from '../redux/ActionCreators';
@@ -53,7 +52,28 @@ const Typeahead = ({ users, username, width, searched, setUsers, open, setOpen }
     React.useEffect(() => {
 
     }, [selectFriend]);
-    if (username !== '' && ((selectFriend == null && !searched) || open))
+    if (selectFriend !== null) {
+        return (
+            <div className={classes.infoBox}>
+                <Typography variant="h5" display="block">{selectFriend ? selectFriend.name : ''}</Typography>
+                <Typography variant="h6" display="block">{selectFriend ? selectFriend.username : ''}</Typography>
+                <Box textAlign="right"> <Button color="secondary" onClick={handleClear} variant="contained"> Clear </Button></Box>
+            </div>
+        );
+    }    
+    else if (searched && users.length === 1) {
+        return (
+            <div className={classes.infoBox}>
+                <Typography variant="h5" display="block">{users[0].name}</Typography>
+                <Typography variant="h6" display="block">{users[0].username}</Typography>
+                <Box textAlign="right"> <Button color="primary" onClick={() => handleClick(users[0])} variant="contained"> Select </Button></Box>
+            </div>
+        );
+    }
+    else if (username !== '' && users.length === 0) {
+        return (<ErrorMessage message={`No User with username ${username} found !`} />);
+    }
+    else
         return (
             <div className={classes.root} style={{ width: width, display: open && users.length !== 0 ? 'block' : 'none' }}>
                 {
@@ -67,29 +87,6 @@ const Typeahead = ({ users, username, width, searched, setUsers, open, setOpen }
                 }
             </div>
         );
-    else if (selectFriend !== null)
-        return (
-            <div className={classes.infoBox}>
-                <Typography variant="h5" display="block">{selectFriend ? selectFriend.name : ''}</Typography>
-                <Typography variant="h6" display="block">{selectFriend ? selectFriend.username : ''}</Typography>
-                <Box textAlign="right"> <Button color="secondary" onClick={handleClear} variant="contained"> Clear </Button></Box>
-            </div>
-        );
-    else if (searched && users.length === 1) {
-        setOpen(false);
-        return (
-            <div className={classes.infoBox}>
-                <Typography variant="h5" display="block">{users[0].name}</Typography>
-                <Typography variant="h6" display="block">{users[0].username}</Typography>
-                <Box textAlign="right"> <Button color="primary" onClick={() => handleClick(users[0])} variant="contained"> Select </Button></Box>
-            </div>
-        );
-    }
-    else if (searched && users.length === 0) {
-        return (<ErrorMessage message={`No User with username ${username} found !`} />);
-    }
-    else
-        return (<div className={classes.root} />);
 }
 
 export default Typeahead;

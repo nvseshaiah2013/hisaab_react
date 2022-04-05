@@ -5,9 +5,10 @@ import NotificationsSharpIcon from '@material-ui/icons/NotificationsSharp';
 import StorageSharpIcon from '@material-ui/icons/StorageSharp';
 import InfoSharpIcon from '@material-ui/icons/InfoSharp';
 import LockIcon from '@material-ui/icons/Lock';
+import GiveForm from '../components/GiveFormComponent';
 
 const Takes = React.lazy(() => import('../components/TakesComponent'));
-const GiveForm = React.lazy(() => import('../components/GiveFormComponent'));
+// const GiveForm = React.lazy(() => import('../components/GiveFormComponent'));
 const About = React.lazy(() => import('../components/AboutComponent'));
 const Gives = React.lazy(()=> import('../components/GivesComponent'));
 const Reminders = React.lazy(() => import('../components/ReminderComponent'));
