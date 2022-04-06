@@ -111,7 +111,7 @@ const SignUp = (props) => {
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Sign Up </Typography>
                 <form onSubmit={formik.handleSubmit} noValidate>
-                    <Box marginRight={3} marginLeft={3}>
+                    <Box marginRight={{xs :0, sm:3}} marginLeft={{xs :0, sm:3}}>
                         <TextField
                             label="Enter Name"
                             variant="outlined"
@@ -127,7 +127,7 @@ const SignUp = (props) => {
                         />
                         {formik.touched.name && formik.errors.name ? <ErrorMessage message={formik.errors.name} /> : null}
                     </Box>
-                    <Box marginLeft={3} marginRight={3}>
+                    <Box marginLeft={{xs :0, sm:3}} marginRight={{xs :0, sm:3}}>
                         <TextField
                             label="Enter Email"
                             variant="outlined"
@@ -143,7 +143,7 @@ const SignUp = (props) => {
                         />
                         {formik.touched.username && formik.errors.username ? <ErrorMessage message={formik.errors.username} /> : null}
                     </Box>
-                    <Box marginRight={3} marginLeft={3}>
+                    <Box marginRight={{xs :0, sm:3}} marginLeft={{xs :0, sm:3}}>
                         <TextField
                             label="Enter Password"
                             variant="outlined"
@@ -172,7 +172,7 @@ const SignUp = (props) => {
                         />
                         {formik.touched.password && formik.errors.password ? <ErrorMessage message={formik.errors.password} /> : null}
                     </Box>
-                    <Box marginRight={3} marginLeft={3}>
+                    <Box marginRight={{xs :0, sm:3}} marginLeft={{xs :0, sm:3}}>
                         <TextField
                             label="Confirm Password"
                             variant="outlined"

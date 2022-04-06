@@ -8,11 +8,11 @@ import LockIcon from '@material-ui/icons/Lock';
 import GiveForm from '../components/GiveFormComponent';
 
 const Takes = React.lazy(() => import('../components/TakesComponent'));
-// const GiveForm = React.lazy(() => import('../components/GiveFormComponent'));
 const About = React.lazy(() => import('../components/AboutComponent'));
 const Gives = React.lazy(()=> import('../components/GivesComponent'));
 const Reminders = React.lazy(() => import('../components/ReminderComponent'));
 const ChangePassword = React.lazy(() => import('../components/ChangePasswordComponent'));
+const NotFound = React.lazy(() => import('../components/NotFoundComponent'));
 
 export const routes = [
     {
@@ -91,7 +91,7 @@ export const routes = [
         key : 106,
         url : '/*',
         name : 'Not Found',
-        component : GiveForm,
+        component : NotFound,
         type : '',
         show : false
     },

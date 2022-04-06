@@ -112,7 +112,7 @@ const Login = () => {
             <Box className={classes.box} boxShadow={3}>
                 <Typography variant="h4" className={classes.header} align="center"> Login </Typography>
                 <form noValidate={true} onSubmit={formik.handleSubmit} >
-                    <Box marginTop={3} marginBottom={1} marginLeft={3} marginRight={3}>
+                    <Box marginTop={3} marginBottom={1} marginLeft={{xs :0, sm:3}} marginRight={{ xs:0, sm:3}}>
                         <TextField
                             variant="outlined"
                             id="username"
@@ -137,7 +137,7 @@ const Login = () => {
                             </Typography>
                         </Link>
                     </Box>
-                    <Box marginBottom={3} marginTop={1} marginLeft={3} marginRight={3}>
+                    <Box marginBottom={3} marginTop={1} marginLeft={{ xs:0,sm :3}} marginRight={{ xs:0, sm:3}}>
                         <TextField
                             variant="outlined"
                             id="password"

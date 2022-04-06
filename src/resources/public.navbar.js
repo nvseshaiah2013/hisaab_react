@@ -4,6 +4,7 @@ import Home from '../components/HomeComponent';
 import Dashboard from '../components/DashboardComponent';
 import ForgotPassword from '../components/ForgotPassword';
 import NotFound from '../components/NotFoundComponent';
+import ResetPassword from '../components/ResetPassword';
 
 export const routes = [
     {
@@ -29,6 +30,11 @@ export const routes = [
     {
         url : '/forgot-password',
         component : ForgotPassword,
+        protected : false
+    },
+    {
+        url : '/reset-password',
+        component : ResetPassword,
         protected : false
     },
     {

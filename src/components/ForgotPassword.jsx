@@ -7,7 +7,11 @@ import Box from '@material-ui/core/Box';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useFormik } from 'formik';
 import ErrorMessage from './ErrorMessageComponent';
+import SuccessSnack from './SuccessSnackComponent';
+import FailureSnack from './FailureSnackComponent';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { requestForgotPasswordLink } from '../redux/ActionCreators';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -24,6 +28,21 @@ const useStyles = makeStyles((theme) => ({
 
 const ForgotPassword = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
+    const [message, setMessage] = React.useState('');
+    const state = useSelector(state => state.signup);
+    React.useEffect(() => {
+        if (state.status === true) {
+            setSuccess(true);
+            setMessage(state.message);
+        }
+        else if (state.status === false) {
+            setFailure(true);
+            setMessage(state.message);
+        }
+    }, [state]);
     const formik = useFormik({
         initialValues: { username: ' ' },
         validationSchema: Yup.object({
@@ -31,7 +50,11 @@ const ForgotPassword = () => {
                 .required('Email Address is Required')
                 .email('Username should be valid email id')
         }),
-        onSubmit: values => alert('Hello World')
+        onSubmit: (values, {setSubmitting, resetForm}) => {
+            dispatch(requestForgotPasswordLink(values.username));
+            setSubmitting(false);
+            resetForm();
+        }
     });
     return (
         <Container maxWidth="sm" className={classes.box}>
@@ -56,10 +79,12 @@ const ForgotPassword = () => {
                 </Box>
                 <Box marginLeft={3}>
                     <Button type="submit" variant="contained" color="primary">
-                        Get OTP
+                        Send Password Reset Link
                 </Button>
                 </Box>
             </form>
+            <SuccessSnack message={message} open={success} setOpen={setSuccess} />
+            <FailureSnack message={message} open={failure} setOpen={setFailure} />
         </Container>
     );
 }

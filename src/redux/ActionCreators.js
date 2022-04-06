@@ -60,6 +60,21 @@ export const changePassword = (oldPassword, newPassword) => dispatch => {
 }
 
 
+const requestForgotPasswordLoading = () => ({ type : ActionTypes.FORGOT_PASSWORD_LOADING });
+
+export const requestForgotPasswordLink = (username) => dispatch => {
+    dispatch(requestForgotPasswordLoading());
+    axios.get(`${baseurl}users/forgotPassword?username=${username}`)
+    .then(response => {
+        dispatch({type : ActionTypes.FORGOT_PASSWORD_REQUEST, payload : response.data });
+     })
+     .catch(err => dispatch({ type: ActionTypes.FORGOT_PASSWORD_REQUEST , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
+    .finally(() => {
+        setTimeout(() => dispatch({type : ActionTypes.CLEAR_FORGOT_PASSWORD_MESSAGE }),1500);
+    })
+}
+
+
 // Gives Creators
 
 export const selectedFriend = (username, name) => dispatch => {
@@ -84,7 +99,7 @@ export const givemoney = (moneyForm, friend) => dispatch => {
         occasion: moneyForm.occasion,
         place: moneyForm.place
     };
-    axios.post(baseurl + 'borrow/borrowMoney', money)
+    axios.post(`${baseurl}borrow/borrowMoney`, money)
         .then(response => {
             dispatch({ type: ActionTypes.GIVE_MONEY, payload: response.data });
         })
@@ -105,7 +120,7 @@ export const giveitem = (itemForm, friend) => dispatch => {
         occasion: itemForm.occasion,
         place: itemForm.place
     };
-    axios.post(baseurl + 'borrow/borrowItem', item)
+    axios.post(`${baseurl}borrow/borrowItem`, item)
         .then(response => {
             dispatch({ type: ActionTypes.GIVE_ITEM, payload: response.data });
         })
