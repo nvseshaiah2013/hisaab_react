@@ -9,6 +9,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ErrorMessage from './ErrorMessageComponent';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { resetPassword } from '../redux/ActionCreators';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -66,6 +68,7 @@ const ResetPassword = (props) => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const history = useHistory();
+    const dispatch = useDispatch();
     useEffect(() => {
         if (searchParams.get('reset-token') === null) {
             history.push('/');
@@ -86,8 +89,10 @@ const ResetPassword = (props) => {
                 .oneOf([Yup.ref('password')], 'Passwords do not match')
         }),
         onSubmit: (values, { setSubmitting, resetForm }) => {
+            dispatch(resetPassword(values.secretToken, values.password, values.confirm_password));
             resetForm();
             setSubmitting(false);
+            setTimeout(()=> history.push('/'), 1500);
         }
     });
     return (

@@ -74,6 +74,20 @@ export const requestForgotPasswordLink = (username) => dispatch => {
     })
 }
 
+const resetPasswordLoading = () => ({ type : ActionTypes.RESET_PASSWORD_REQUEST_LOADING});
+
+export const resetPassword = (token, password, confirm_password) => dispatch => {
+    dispatch(resetPasswordLoading());
+    axios.post(`${baseurl}users/forgotPassword`, { token, password, confirm_password})
+    .then(response => {
+        dispatch({type : ActionTypes.RESET_PASSWORD_REQUEST, payload : response.data });
+     })
+     .catch(err => dispatch({ type: ActionTypes.RESET_PASSWORD_REQUEST , payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
+    .finally(() => {
+        setTimeout(() => dispatch({type : ActionTypes.RESET_PASSWORD_CLEAR_MESSAGE }),1500);
+    })
+}
+
 
 // Gives Creators
 
