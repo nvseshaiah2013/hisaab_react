@@ -34,7 +34,7 @@ import SuccessSnack from './SuccessSnackComponent';
 import FailureSnack from './FailureSnackComponent';
 import TokenDialog from './TokenDialogComponent';
 import axios from 'axios';
-import { baseurl } from '../resources/baseurl';
+import { config } from '../resources/config'
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -227,7 +227,7 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
         dispatch(getToken(_id));
     }
     const handleReturn = () => {
-        axios.post(`${baseurl}borrow/borrowMoney/${_id}/return`)
+        axios.post(`${config.baseurl}borrow/borrowMoney/${_id}/return`)
             .then(response => {
                 setValidate(true);
             })
@@ -347,7 +347,7 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
         setTimeout(() => setTokenOp(true), 1000);
     }
     const handleReturn = () => {
-        axios.post(`${baseurl}borrow/borrowItem/${_id}/return`)
+        axios.post(`${config.baseurl}borrow/borrowItem/${_id}/return`)
             .then(response => {
                 setValidate(true);
             })

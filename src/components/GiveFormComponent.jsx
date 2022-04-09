@@ -15,11 +15,12 @@ import { debounce } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { clearFriend } from '../redux/ActionCreators';
-import { baseurl } from '../resources/baseurl';
 import Typeahead from './TypeAheadComponent';
 import ErrorMessage from './ErrorMessageComponent';
+import { config } from '../resources/config';
 const GiveItemForm = React.lazy(() => import('./GiveItemComponent'));
 const GiveMoneyForm = React.lazy(() => import('./GiveMoneyComponent'));
+
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -73,7 +74,7 @@ const GiveForm = (props) => {
     const fetchUsers = () => {
         if (formik.values.username === '')
             return;
-        axios.get(baseurl + `users`, { params: { username: formik.values.username } })
+        axios.get(config.baseurl + `users`, { params: { username: formik.values.username } })
             .then((data) => { setUsers(data.data.users) })
             .catch(err => console.log(err));
     }

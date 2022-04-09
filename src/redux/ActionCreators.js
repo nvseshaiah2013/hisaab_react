@@ -1,13 +1,15 @@
 import axios from 'axios';
 import * as ActionTypes from './ActionTypes';
-import { baseurl } from '../resources/baseurl';
+import { config } from '../resources/config';
+
+
 
 const loginLoading = () => ({ type : ActionTypes.LOGIN_LOADING });
 
 export const login = (username, password) => dispatch => {
     dispatch(loginLoading());
     dispatch({ type: ActionTypes.LOGIN, payload: username });
-    axios.post(`${baseurl}users/login`, { username: username, password: password })
+    axios.post(`${config.baseurl}users/login`, { username: username, password: password })
         .then((response) => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('username', username);
@@ -24,7 +26,7 @@ const signupLoading = () => ({ type : ActionTypes.SIGNUP_LOADING });
 export const signup = (name, username, password) => dispatch => {
     dispatch({ type: ActionTypes.SIGNUP, payload: username });
     dispatch(signupLoading());
-    axios.post(`${baseurl}users/signup`, { username: username, name: name, password: password })
+    axios.post(`${config.baseurl}users/signup`, { username: username, name: name, password: password })
         .then((response) => {
             dispatch({ type: ActionTypes.SIGNUP_SUCCESS, payload: { status: response.data.status, message: response.data.message } })
         })
@@ -49,7 +51,7 @@ export const changePassword = (oldPassword, newPassword) => dispatch => {
         oldPassword : oldPassword,
         newPassword : newPassword
     }
-    axios.post(`${baseurl}users/changePassword`, changePasswordObj )
+    axios.post(`${config.baseurl}users/changePassword`, changePasswordObj )
          .then(response => {
             dispatch({type : ActionTypes.CHANGE_PASSWORD, payload : response.data });
          })
@@ -64,7 +66,7 @@ const requestForgotPasswordLoading = () => ({ type : ActionTypes.FORGOT_PASSWORD
 
 export const requestForgotPasswordLink = (username) => dispatch => {
     dispatch(requestForgotPasswordLoading());
-    axios.get(`${baseurl}users/forgotPassword?username=${username}`)
+    axios.get(`${config.baseurl}users/forgotPassword?username=${username}`)
     .then(response => {
         dispatch({type : ActionTypes.FORGOT_PASSWORD_REQUEST, payload : response.data });
      })
@@ -78,7 +80,7 @@ const resetPasswordLoading = () => ({ type : ActionTypes.RESET_PASSWORD_REQUEST_
 
 export const resetPassword = (token, password, confirm_password) => dispatch => {
     dispatch(resetPasswordLoading());
-    axios.post(`${baseurl}users/forgotPassword`, { token, password, confirm_password})
+    axios.post(`${config.baseurl}users/forgotPassword`, { token, password, confirm_password})
     .then(response => {
         dispatch({type : ActionTypes.RESET_PASSWORD_REQUEST, payload : response.data });
      })
@@ -113,7 +115,7 @@ export const givemoney = (moneyForm, friend) => dispatch => {
         occasion: moneyForm.occasion,
         place: moneyForm.place
     };
-    axios.post(`${baseurl}borrow/borrowMoney`, money)
+    axios.post(`${config.baseurl}borrow/borrowMoney`, money)
         .then(response => {
             dispatch({ type: ActionTypes.GIVE_MONEY, payload: response.data });
         })
@@ -134,7 +136,7 @@ export const giveitem = (itemForm, friend) => dispatch => {
         occasion: itemForm.occasion,
         place: itemForm.place
     };
-    axios.post(`${baseurl}borrow/borrowItem`, item)
+    axios.post(`${config.baseurl}borrow/borrowItem`, item)
         .then(response => {
             dispatch({ type: ActionTypes.GIVE_ITEM, payload: response.data });
         })
@@ -148,7 +150,7 @@ export const giveitem = (itemForm, friend) => dispatch => {
 
 export const fetchGivenMoney = (pageNo = 1) => dispatch => {
     dispatch(givesLoading());
-    axios.get(`${baseurl}borrow/borrowMoney`, { params: { pageNo } })
+    axios.get(`${config.baseurl}borrow/borrowMoney`, { params: { pageNo } })
         .then(response => {
             dispatch({ type: ActionTypes.FETCH_GIVEN_MONEY, payload: response.data });
         })
@@ -162,7 +164,7 @@ export const fetchGivenMoney = (pageNo = 1) => dispatch => {
 
 export const fetchGivenItems = (pageNo = 1) => dispatch => {
     dispatch(givesLoading());
-    axios.get(`${baseurl}borrow/borrowItem`, { params: { pageNo } })
+    axios.get(`${config.baseurl}borrow/borrowItem`, { params: { pageNo } })
         .then(response => {
             dispatch({ type: ActionTypes.FETCH_GIVEN_ITEMS, payload: response.data });
         })
@@ -177,7 +179,7 @@ export const fetchGivenItems = (pageNo = 1) => dispatch => {
 
 export const fetchTakenItems = (pageNo = 1) => dispatch => {
     dispatch(takesLoading());
-    axios.get(`${baseurl}borrow/takenItems`, { params: { pageNo } })
+    axios.get(`${config.baseurl}borrow/takenItems`, { params: { pageNo } })
         .then(response => {
             dispatch({ type: ActionTypes.FETCH_TAKEN_ITEMS, payload: response.data });
         })
@@ -191,7 +193,7 @@ export const fetchTakenItems = (pageNo = 1) => dispatch => {
 
 export const fetchTakenMoney = (pageNo = 1) => dispatch => {
     dispatch(takesLoading());
-    axios.get(`${baseurl}borrow/takenMoney`, { params: { pageNo } })
+    axios.get(`${config.baseurl}borrow/takenMoney`, { params: { pageNo } })
         .then(response => {
             dispatch({ type: ActionTypes.FETCH_TAKEN_MONEY, payload: response.data });
         })
@@ -211,7 +213,7 @@ export const clearToken = () => ({ type: ActionTypes.CLEAR_TOKEN });
 
 export const validateBorrow = (secretToken, borrowId, type) => dispatch => {
     dispatch(isLoadingToken());
-    axios.post(`${baseurl}borrow/validateborrow/${borrowId}`, { secretToken })
+    axios.post(`${config.baseurl}borrow/validateborrow/${borrowId}`, { secretToken })
         .then(response => {
             dispatch({ type: ActionTypes.VALIDATE_BORROW, payload: response.data });
             if (type === 'money') {
@@ -231,7 +233,7 @@ export const validateBorrow = (secretToken, borrowId, type) => dispatch => {
 
 export const rejectBorrow = (borrowId, type) => dispatch => {
     dispatch(isLoadingToken());
-    axios.post(`${baseurl}borrow/reject/${borrowId}`)
+    axios.post(`${config.baseurl}borrow/reject/${borrowId}`)
         .then(response => {
             dispatch({ type: ActionTypes.REJECT_BORROW, payload: response.data });
             if (type === 'money') {
@@ -249,7 +251,7 @@ export const rejectBorrow = (borrowId, type) => dispatch => {
 
 export const validateReturn = (secretToken, borrowId, type) => dispatch => {
     dispatch(isLoadingToken());
-    axios.post(`${baseurl}borrow/validatereturn/${borrowId}`, { secretToken })
+    axios.post(`${config.baseurl}borrow/validatereturn/${borrowId}`, { secretToken })
         .then(response => {
             dispatch({ type: ActionTypes.VALIDATE_RETURN, payload: response.data });
             if (type === 'money') {
@@ -269,7 +271,7 @@ export const validateReturn = (secretToken, borrowId, type) => dispatch => {
 
 export const getToken = (borrowId) => dispatch => {
     dispatch(isLoadingToken());
-    axios.get(`${baseurl}token/${borrowId}`)
+    axios.get(`${config.baseurl}token/${borrowId}`)
         .then(response => {
             dispatch({ type: ActionTypes.GET_TOKEN, payload: response.data });
         })
@@ -283,7 +285,7 @@ export const getToken = (borrowId) => dispatch => {
 
 export const generateToken = (borrowId) => dispatch => {
     dispatch(isLoadingToken());
-    axios.post(`${baseurl}token/${borrowId}`)
+    axios.post(`${config.baseurl}token/${borrowId}`)
         .then(response => {
             dispatch({ type: ActionTypes.GENERATE_TOKEN, payload: response.data });
         })
@@ -297,7 +299,7 @@ export const generateToken = (borrowId) => dispatch => {
 
 export const deleteBorrowMoney = (borrowId,index) => dispatch => {
     dispatch(givesLoading());
-    axios.delete(`${baseurl}borrow/borrowMoney/${borrowId}`)
+    axios.delete(`${config.baseurl}borrow/borrowMoney/${borrowId}`)
         .then(response => {
             response.data.index = index;
             dispatch({type : ActionTypes.DELETE_BORROW_MONEY, payload : response.data });
@@ -312,7 +314,7 @@ export const deleteBorrowMoney = (borrowId,index) => dispatch => {
 
 export const deleteBorrowItem = (borrowId,index) => dispatch => {
     dispatch(givesLoading());
-    axios.delete(`${baseurl}borrow/borrowItem/${borrowId}`)
+    axios.delete(`${config.baseurl}borrow/borrowItem/${borrowId}`)
         .then(response => {
             response.data.index = index;
             dispatch({ type : ActionTypes.DELETE_BORROW_ITEM, payload : response.data });
@@ -332,7 +334,7 @@ export const updateBorrowMoney = (borrowId, values) => dispatch => {
         occasion: values.occasion,
         place: values.place
     };
-    axios.put(`${baseurl}borrow/borrowMoney/${borrowId}`, money)
+    axios.put(`${config.baseurl}borrow/borrowMoney/${borrowId}`, money)
         .then(response => {
             dispatch({ type: ActionTypes.UPDATE_GIVE_MONEY, payload: response.data });
         })
@@ -352,7 +354,7 @@ export const updateBorrowItem = (borrowId, values) => dispatch => {
         occasion: values.occasion,
         place: values.place
     };
-    axios.put(`${baseurl}borrow/borrowItem/${borrowId}`, item)
+    axios.put(`${config.baseurl}borrow/borrowItem/${borrowId}`, item)
         .then(response => {
             dispatch({ type: ActionTypes.UPDATE_GIVE_ITEM, payload: response.data });
         })
@@ -376,7 +378,7 @@ export const sendReminder = (borrowId, reminder) => dispatch => {
         header : reminder.header,
         message : reminder.message
     }
-    axios.post(`${baseurl}reminder/sent`,reminderObj )
+    axios.post(`${config.baseurl}reminder/sent`,reminderObj )
         .then(response => {
             dispatch({ type : ActionTypes.SEND_REMINDER, payload : response.data })
         })
@@ -390,7 +392,7 @@ export const sendReminder = (borrowId, reminder) => dispatch => {
 
 export const fetchSentReminders = (pageNo=1) => dispatch => {
     dispatch(reminderLoading());
-    axios.get(`${baseurl}reminder/sent`, { params : { pageNo }})
+    axios.get(`${config.baseurl}reminder/sent`, { params : { pageNo }})
         .then(response => {
             dispatch({ type : ActionTypes.FETCH_SENT_REMINDERS, payload : response.data })
         })
@@ -404,7 +406,7 @@ export const fetchSentReminders = (pageNo=1) => dispatch => {
 
 export const fetchReceivedReminders = (pageNo=1) => dispatch => {
     dispatch(reminderLoading());
-    axios.get(`${baseurl}reminder/received`,{ params : { pageNo }})
+    axios.get(`${config.baseurl}reminder/received`,{ params : { pageNo }})
         .then(response => {
             dispatch({ type : ActionTypes.FETCH_RECEIVED_REMINDERS, payload : response.data })
         })
@@ -418,7 +420,7 @@ export const fetchReceivedReminders = (pageNo=1) => dispatch => {
 
 export const markReminderAsRead = (reminderId) => dispatch => {
     dispatch(reminderLoading());
-    axios.post(`${baseurl}reminder/${reminderId}`)
+    axios.post(`${config.baseurl}reminder/${reminderId}`)
         .then(response => {
             dispatch({ type : ActionTypes.MARK_REMINDER_READ, payload : response.data })
         })
@@ -432,7 +434,7 @@ export const markReminderAsRead = (reminderId) => dispatch => {
 
 export const deleteReminder = (reminderId, index ) => dispatch => {
     dispatch(reminderLoading());
-    axios.delete(`${baseurl}reminder/${reminderId}`)
+    axios.delete(`${config.baseurl}reminder/${reminderId}`)
         .then(response => {
             response.data.index = index;
             dispatch({ type : ActionTypes.DELETE_SENT_REMINDER, payload : response.data })
