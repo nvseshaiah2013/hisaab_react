@@ -2,7 +2,11 @@ import axios from 'axios';
 import * as ActionTypes from './ActionTypes';
 import { config } from '../resources/config';
 
-
+if (localStorage.getItem('token') != null) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+} else {
+    delete axios.defaults.headers.common['Authorization'];
+}
 
 const loginLoading = () => ({ type : ActionTypes.LOGIN_LOADING });
 
@@ -37,11 +41,10 @@ export const signup = (name, username, password) => dispatch => {
         })
     }
 
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}` || null;
-
 export const logout = () => dispatch => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    delete axios.defaults.headers.common['Authorization'];
     dispatch({ type: ActionTypes.LOGOUT });
 }
 
