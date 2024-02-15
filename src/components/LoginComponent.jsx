@@ -1,23 +1,23 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import {makeStyles } from '@mui/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../redux/ActionCreators';
 import { useHistory, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import FailureSnack from './FailureSnackComponent';
 import ErrorMessage from './ErrorMessageComponent';
-import LockOpenRoundedIcon from '@material-ui/icons/LockOpenRounded';
+import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -157,7 +157,7 @@ const Login = () => {
                                         aria-label="toggle password visibility"
                                         onClick={() => togglePwd(!pwd)}
                                         edge="end"
-                                    >
+                                        size="large">
                                         {pwd ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>

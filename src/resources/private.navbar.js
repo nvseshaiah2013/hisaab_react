@@ -1,9 +1,9 @@
 import React from 'react';
-import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
-import MonetizationOnSharpIcon from '@material-ui/icons/MonetizationOnSharp';
-import NotificationsSharpIcon from '@material-ui/icons/NotificationsSharp';
-import StorageSharpIcon from '@material-ui/icons/StorageSharp';
-import LockIcon from '@material-ui/icons/Lock';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import MonetizationOnSharpIcon from '@mui/icons-material/MonetizationOnSharp';
+import NotificationsSharpIcon from '@mui/icons-material/NotificationsSharp';
+import StorageSharpIcon from '@mui/icons-material/StorageSharp';
+import LockIcon from '@mui/icons-material/Lock';
 import GiveForm from '../components/GiveFormComponent';
 
 const Takes = React.lazy(() => import('../components/TakesComponent'));

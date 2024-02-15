@@ -1,10 +1,10 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import {makeStyles } from '@mui/styles';
 import { useFormik } from 'formik';
 import ErrorMessage from './ErrorMessageComponent';
 import SuccessSnack from './SuccessSnackComponent';

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import React, { useEffect, useMemo } from 'react';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import {makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ErrorMessage from './ErrorMessageComponent';
@@ -66,9 +66,12 @@ const useStyles = makeStyles((theme) => ({
 const ResetPassword = (props) => {
     const classes = useStyles();
     const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
+    let searchParams;
     const history = useHistory();
     const dispatch = useDispatch();
+    useMemo(() => {
+        searchParams = new URLSearchParams(location.search)
+    });
     useEffect(() => {
         if (searchParams.get('reset-token') === null) {
             history.push('/');

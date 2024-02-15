@@ -1,18 +1,18 @@
 import React from "react";
-import Container from '@material-ui/core/Container';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import Container from '@mui/material/Container';
+import {makeStyles } from '@mui/styles';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    marginTop: '2rem',
+    paddingTop: '2rem'
   },
   container: {
-    color: '0048ba',
+    color: '#0048ba',
     backgroundColor: '#f0f8ff'
   },
   button: {

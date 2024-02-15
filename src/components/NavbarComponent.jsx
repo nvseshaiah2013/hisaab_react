@@ -1,15 +1,15 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
-import SettingsPowerSharpIcon from '@material-ui/icons/SettingsPowerSharp';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import Hidden from '@mui/material/Hidden';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import {makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
+import SettingsPowerSharpIcon from '@mui/icons-material/SettingsPowerSharp';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../redux/ActionCreators';
@@ -20,7 +20,7 @@ const drawerWidth = '20vw';
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
     drawerPaper1: {
-        [theme.breakpoints.down('sm')] : {
+        [theme.breakpoints.down('xl')] : {
             width : '50vw'
         },
         width : 0
@@ -70,63 +70,62 @@ const Navbar = ({ mobileOpen, handleDrawerToggle, handleClose }) => {
         );
     });
     return (
-        
-            <nav>
-                <Hidden smUp implementation="css">
-                    <Drawer
-                        variant="temporary"
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper1,
-                        }}
-                        ModalProps={{
-                            keepMounted: false,
-                        }}
-                    >
-                        <List>
-                            <ListItem key={991}>
-                                <Typography variant="h5" className={classes.header} align="center">Hisaab Kitaab</Typography>
-                            </ListItem>
-                            <Drawer />
-                            {drawer}
-                            <ListItem key={1101}>
-                                <Button onClick={() => dispatch(logout())}>
-                                    <ListItemIcon>
-                                        <SettingsPowerSharpIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Sign Out'} />
-                                </Button>
-                            </ListItem>
-                        </List>
-                    </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation="css">
-                    <Drawer
-                        classes={{
-                            paper: classes.drawerPaper2,
-                        }}
-                        variant="permanent"
-                        open
-                    >
-                        <List className={classes.hover}>
-                            <ListItem key={99}>
-                                <Typography variant="h5" align="right" className={classes.header}> Hisaab Kitaab </Typography>
-                            </ListItem>
-                            <Divider />
-                            {drawer}              
-                            <ListItem key={110}>
-                                <Button onClick={() => dispatch(logout())}>
-                                    <ListItemIcon>
-                                        <SettingsPowerSharpIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Sign Out'} />
-                                </Button>
-                            </ListItem>
-                        </List>
-                    </Drawer>
-                </Hidden>
-            </nav>
+        <nav>
+            <Hidden smUp implementation="css">
+                <Drawer
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper1,
+                    }}
+                    ModalProps={{
+                        keepMounted: false,
+                    }}
+                >
+                    <List>
+                        <ListItem key={991}>
+                            <Typography variant="h5" className={classes.header} align="center">Hisaab Kitaab</Typography>
+                        </ListItem>
+                        <Drawer />
+                        {drawer}
+                        <ListItem key={1101}>
+                            <Button onClick={() => dispatch(logout())}>
+                                <ListItemIcon>
+                                    <SettingsPowerSharpIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Sign Out'} />
+                            </Button>
+                        </ListItem>
+                    </List>
+                </Drawer>
+            </Hidden>
+            <Hidden lgDown implementation="css">
+                <Drawer
+                    classes={{
+                        paper: classes.drawerPaper2,
+                    }}
+                    variant="permanent"
+                    open
+                >
+                    <List className={classes.hover}>
+                        <ListItem key={99}>
+                            <Typography variant="h5" align="right" className={classes.header}> Hisaab Kitaab </Typography>
+                        </ListItem>
+                        <Divider />
+                        {drawer}              
+                        <ListItem key={110}>
+                            <Button onClick={() => dispatch(logout())}>
+                                <ListItemIcon>
+                                    <SettingsPowerSharpIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Sign Out'} />
+                            </Button>
+                        </ListItem>
+                    </List>
+                </Drawer>
+            </Hidden>
+        </nav>
     );
 }
 

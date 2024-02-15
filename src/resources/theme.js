@@ -1,12 +1,13 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 
 
-export const theme = createTheme({
+
+export const theme = createTheme(({
     typography: {
         fontFamily: [
             'Special Elite',
             'sans-serif'
-        ],
+        ].join(','),
     },
     overrides: {
         MuiTextField : {
@@ -69,5 +70,5 @@ export const theme = createTheme({
             }
         },
     }
-});
+}));
 

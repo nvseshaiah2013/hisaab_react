@@ -1,36 +1,31 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import TableHead from '@material-ui/core/TableHead';
-import TableCell from '@material-ui/core/TableCell';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Collapse from '@material-ui/core/Collapse';
-import Button from '@material-ui/core/Button';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableRow from '@mui/material/TableRow';
+import TableBody from '@mui/material/TableBody';
+import TableHead from '@mui/material/TableHead';
+import TableCell from '@mui/material/TableCell';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
+import {makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGivenItems, fetchGivenMoney, getToken, deleteBorrowMoney, deleteBorrowItem } from '../redux/ActionCreators';
 import moment from 'moment';
-import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
-import orange from '@material-ui/core/colors/orange';
-import green from '@material-ui/core/colors/green'
-import red from '@material-ui/core/colors/red';
-import indigo from '@material-ui/core/colors/indigo';
-import lime from '@material-ui/core/colors/lime'
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import Legend from './LegendComponent';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
-import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
-import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded';
-import NotificationsRoundedIcon from '@material-ui/icons/NotificationsRounded';
-import RefreshRoundedIcon from '@material-ui/icons/RefreshRounded';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import EditGiveItemComponent from './EditGiveItemComponent';
 import EditGiveMoneyComponent from './EditGiveMoneyComponent';
 import ValidateDialog from './ValidateDialogComponent';
@@ -39,6 +34,8 @@ import SuccessSnack from './SuccessSnackComponent';
 import FailureSnack from './FailureSnackComponent';
 import ReminderModal from './ReminderModalComponent';
 import Heading from './HeadingComponent';
+
+import { orange, green, red, indigo, lime } from '@mui/material/colors';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -266,120 +263,120 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
     else if (status === 3) {
         color = indigo;
     } return (
-        <React.Fragment>
-            <ReminderModal
-                open={remind}
-                setOpen={setReminder}
-                borrowId={_id}
-            />
-            <EditGiveMoneyComponent
-                open={edit}
-                setOpen={setEdit}
-                borrowId={_id}
-                amount={amount}
-                occasion={occasion}
-                place={place}
-                expected_return_date={expected_return_date}
-            />
-            <ValidateDialog open={validate} setOpen={setValidate} page={'money'} borrowId={_id} type={'borrow'} />
-            <TableRow hover>
-                <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+    <React.Fragment>
+        <ReminderModal
+            open={remind}
+            setOpen={setReminder}
+            borrowId={_id}
+        />
+        <EditGiveMoneyComponent
+            open={edit}
+            setOpen={setEdit}
+            borrowId={_id}
+            amount={amount}
+            occasion={occasion}
+            place={place}
+            expected_return_date={expected_return_date}
+        />
+        <ValidateDialog open={validate} setOpen={setValidate} page={'money'} borrowId={_id} type={'borrow'} />
+        <TableRow hover>
+            <TableCell>
+                <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+            </TableCell>
+            <TableCell >
+                {amount}
+            </TableCell>
+            <TableCell>
+                {borowee.name}
+                <Tooltip enterTouchDelay={100} title={borowee.username}>
+                    <IconButton aria-label={borowee.username} size="large">
+                        <InfoRoundedIcon />
                     </IconButton>
-                </TableCell>
-                <TableCell >
-                    {amount}
-                </TableCell>
-                <TableCell>
-                    {borowee.name}
-                    <Tooltip enterTouchDelay={100} title={borowee.username}>
-                        <IconButton aria-label={borowee.username}>
-                            <InfoRoundedIcon />
-                        </IconButton>
-                    </Tooltip>
-                </TableCell>
+                </Tooltip>
+            </TableCell>
 
-                <TableCell>
-                    {place}
-                    <Tooltip enterTouchDelay={100} title={occasion}>
-                        <IconButton aria-label={occasion}>
-                            <InfoRoundedIcon />
-                        </IconButton>
-                    </Tooltip>
-                </TableCell>
+            <TableCell>
+                {place}
+                <Tooltip enterTouchDelay={100} title={occasion}>
+                    <IconButton aria-label={occasion} size="large">
+                        <InfoRoundedIcon />
+                    </IconButton>
+                </Tooltip>
+            </TableCell>
 
-                <TableCell>
-                    {moment(expected_return_date).format('Do, MMM, YYYY')}
-                    <Tooltip enterTouchDelay={100} title={actual_return_date ? `Returned On : ${moment(actual_return_date).format('Do, MMM, YYYY')}` : 'Not Returned'}>
-                        <IconButton aria-label={borowee.username}>
-                            <InfoRoundedIcon />
-                        </IconButton>
-                    </Tooltip>
-                </TableCell>
-                <TableCell>
-                    <span className={classes.span} style={{ backgroundColor: color[500] }} />
-                </TableCell>
+            <TableCell>
+                {moment(expected_return_date).format('Do, MMM, YYYY')}
+                <Tooltip enterTouchDelay={100} title={actual_return_date ? `Returned On : ${moment(actual_return_date).format('Do, MMM, YYYY')}` : 'Not Returned'}>
+                    <IconButton aria-label={borowee.username} size="large">
+                        <InfoRoundedIcon />
+                    </IconButton>
+                </Tooltip>
+            </TableCell>
+            <TableCell>
+                <span className={classes.span} style={{ backgroundColor: color[500] }} />
+            </TableCell>
 
-            </TableRow>
-            <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={1} className={classes.flex}>
-                            {status === 0 ? <Button
-                                className={classes.button}
-                                style={{ backgroundColor: green[500], color: 'white' }}
+        </TableRow>
+        <TableRow>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                    <Box margin={1} className={classes.flex}>
+                        {status === 0 ? <Button
+                            className={classes.button}
+                            style={{ backgroundColor: green[500], color: 'white' }}
+                            variant="outlined"
+                            endIcon={<CheckCircleOutlineRoundedIcon />}
+                            type="button"
+                            onClick={() => setValidate(true)}
+                        > Validate </Button> : ''}
+
+                        <span className={classes.button} />
+                        {status === 0 ? <Button
+                            className={classes.button}
+                            style={{ backgroundColor: orange[500], color: 'white' }}
+                            variant="outlined"
+                            endIcon={<EditIcon />}
+                            type="button"
+                            onClick={() => setEdit(true)}
+                        > Edit </Button> : ''}
+
+                        <span className={classes.button} />
+                        {status !== 1 ? <Button
+                            className={classes.button}
+                            style={{ backgroundColor: red[500], color: 'white' }}
+                            variant="outlined"
+                            endIcon={<DeleteRoundedIcon />}
+                            type="button"
+                            onClick={() => dispatch(deleteBorrowMoney(_id,index))}
+                        > Delete </Button> : ''}
+
+                        <span className={classes.button} />
+                        {status === 1 ?
+                            <Button
                                 variant="outlined"
-                                endIcon={<CheckCircleOutlineRoundedIcon />}
-                                type="button"
-                                onClick={() => setValidate(true)}
-                            > Validate </Button> : ''}
-
-                            <span className={classes.button} />
-                            {status === 0 ? <Button
                                 className={classes.button}
-                                style={{ backgroundColor: orange[500], color: 'white' }}
-                                variant="outlined"
-                                endIcon={<EditIcon />}
+                                style={{ backgroundColor: lime[500], color: 'white' }}
+                                endIcon={<NotificationsRoundedIcon />}
                                 type="button"
-                                onClick={() => setEdit(true)}
-                            > Edit </Button> : ''}
-
-                            <span className={classes.button} />
-                            {status !== 1 ? <Button
-                                className={classes.button}
-                                style={{ backgroundColor: red[500], color: 'white' }}
-                                variant="outlined"
-                                endIcon={<DeleteRoundedIcon />}
-                                type="button"
-                                onClick={() => dispatch(deleteBorrowMoney(_id,index))}
-                            > Delete </Button> : ''}
-
-                            <span className={classes.button} />
-                            {status === 1 ?
-                                <Button
-                                    variant="outlined"
-                                    className={classes.button}
-                                    style={{ backgroundColor: lime[500], color: 'white' }}
-                                    endIcon={<NotificationsRoundedIcon />}
-                                    type="button"
-                                    onClick={() => setReminder(true)}
-                                > Remind </Button> : ''}
-                            <span className={classes.button} />
-                            {status === 1 ? <Button
-                                className={classes.button}
-                                style={{ backgroundColor: indigo[500], color: 'white' }}
-                                variant="outlined"
-                                endIcon={<CodeRoundedIcon />}
-                                type="button"
-                                onClick={handleViewToken}
-                            > View Token </Button> : ''}
-                        </Box>
-                    </Collapse>
-                </TableCell>
-            </TableRow>
-        </React.Fragment>
-    );
+                                onClick={() => setReminder(true)}
+                            > Remind </Button> : ''}
+                        <span className={classes.button} />
+                        {status === 1 ? <Button
+                            className={classes.button}
+                            style={{ backgroundColor: indigo[500], color: 'white' }}
+                            variant="outlined"
+                            endIcon={<CodeRoundedIcon />}
+                            type="button"
+                            onClick={handleViewToken}
+                        > View Token </Button> : ''}
+                    </Box>
+                </Collapse>
+            </TableCell>
+        </TableRow>
+    </React.Fragment>
+);
 }
 
 const GivenItem = ({ itemName, description, borowee, place, occasion, expected_return_date, status, actual_return_date, _id, index }) => {
@@ -432,7 +429,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                 <TableCell>
                     {itemName}
                     <Tooltip title={description} enterTouchDelay={100}>
-                        <IconButton aria-label={description}>
+                        <IconButton aria-label={description} size="large">
                             <InfoRoundedIcon />
                         </IconButton>
                     </Tooltip>
@@ -440,7 +437,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                 <TableCell>
                     {borowee.name}
                     <Tooltip title={borowee.username} enterTouchDelay={100}>
-                        <IconButton aria-label={borowee.username}>
+                        <IconButton aria-label={borowee.username} size="large">
                             <InfoRoundedIcon />
                         </IconButton>
                     </Tooltip>
@@ -449,7 +446,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                 <TableCell>
                     {place}
                     <Tooltip title={`Occasion : ${occasion}`} enterTouchDelay={100}>
-                        <IconButton aria-label={`Occasion : ${occasion}`}>
+                        <IconButton aria-label={`Occasion : ${occasion}`} size="large">
                             <InfoRoundedIcon />
                         </IconButton>
                     </Tooltip>
@@ -458,7 +455,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                 <TableCell>
                     {moment(expected_return_date).format('Do, MMM, YYYY')}
                     <Tooltip enterTouchDelay={100} title={actual_return_date ? `Returned On : ${moment(actual_return_date).format('Do, MMM, YYYY')}` : 'Not Returned'}>
-                        <IconButton aria-label={borowee.username}>
+                        <IconButton aria-label={borowee.username} size="large">
                             <InfoRoundedIcon />
                         </IconButton>
                     </Tooltip>
