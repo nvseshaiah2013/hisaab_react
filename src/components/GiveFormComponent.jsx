@@ -53,6 +53,7 @@ const GiveForm = (props) => {
     const [open, setOpen] = React.useState(true);
     const ref = React.useRef();
     const token = useSelector(state => state.auth.token);
+    const name = useSelector(state => state.auth.name);
     const dispatch = useDispatch();
     React.useEffect(() => {
         document.onreadystatechange = () => {
@@ -62,7 +63,7 @@ const GiveForm = (props) => {
     const formik = useFormik({
         initialValues: { username: '' },
         validationSchema: Yup.object({
-            username: Yup.string().required('Username is Required to Search')
+            username: Yup.string().required('Email is Required to Search')
         }),
         onSubmit: values => { fetchUsers(); setSearched(true); setOpen(true); dispatch(clearFriend()); }
     });
@@ -82,14 +83,14 @@ const GiveForm = (props) => {
 
     return (
         <Container maxWidth="sm" className={classes.content}>
-            <Typography align="center" variant="h4">Welcome {localStorage.getItem('username').split('@')[0]}</Typography>
+            <Typography align="center" variant="h4">Welcome {name == null ? localStorage.getItem('username').split('@')[0] : name.split(' ')[0]}</Typography>
             <div className={classes.toolbar} />
 
             <form noValidate onSubmit={formik.handleSubmit}>
                 <Box>
 
                     <TextField
-                        label="Search Friend's Username"
+                        label="Search Friend's Email"
                         name="username"
                         id="username"
                         variant="outlined"

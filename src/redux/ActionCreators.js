@@ -17,7 +17,7 @@ export const login = (username, password) => dispatch => {
         .then((response) => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('username', username);
-            dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: response.data.token })
+            dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: response.data })
         })
         .catch(err => dispatch({ type: ActionTypes.LOGIN_FAILED, payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} }))
         .finally(() => {

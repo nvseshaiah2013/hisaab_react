@@ -67,7 +67,7 @@ const ForgotPassword = () => {
                         value={formik.values.username}
                         id="username"
                         name="username"
-                        label="Enter Username"
+                        label="Enter Email Id"
                         error={formik.touched.username && formik.errors.username ? true : false}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
