@@ -1,11 +1,8 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import red from '@material-ui/core/colors/red';
-import indigo from '@material-ui/core/colors/indigo';
-import green from '@material-ui/core/colors/green';
-import orange from '@material-ui/core/colors/orange';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import {makeStyles } from '@mui/styles';
+import { red, indigo, green, orange } from '@mui/material/colors';
 
 const useStyles = makeStyles((theme) => ({
     root:

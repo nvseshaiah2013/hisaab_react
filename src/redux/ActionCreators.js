@@ -46,6 +46,8 @@ export const logout = () => dispatch => {
     localStorage.removeItem('username');
     delete axios.defaults.headers.common['Authorization'];
     dispatch({ type: ActionTypes.LOGOUT });
+
+    // nohup "serve -p 3000 build" > app.log 2>&1 &
 }
 
 export const changePassword = (oldPassword, newPassword) => dispatch => {

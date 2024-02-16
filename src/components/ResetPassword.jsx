@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import {makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ErrorMessage from './ErrorMessageComponent';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { resetPassword } from '../redux/ActionCreators';
 
@@ -65,17 +65,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ResetPassword = (props) => {
     const classes = useStyles();
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const history = useHistory();
+    let searchParams = useSearchParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    let [entries, setEntries] = React.useState(Object.fromEntries(searchParams[0].entries()));
     useEffect(() => {
-        if (searchParams.get('reset-token') === null) {
-            history.push('/');
+        if (entries['reset-token'] == null) {
+            navigate('/');
         }
-    }, [searchParams, history]);
+    }, [searchParams, navigate, entries]);
     const formik = useFormik({
-        initialValues: { secretToken: searchParams.get('reset-token'), password: '', confirm_password: '' },
+        initialValues: { secretToken: entries['reset-token'], password: '', confirm_password: '' },
         validationSchema: Yup.object({
             password: Yup.string()
                 .required('Password is Required')
@@ -92,7 +92,7 @@ const ResetPassword = (props) => {
             dispatch(resetPassword(values.secretToken, values.password, values.confirm_password));
             resetForm();
             setSubmitting(false);
-            setTimeout(()=> history.push('/'), 1500);
+            setTimeout(()=> navigate('/'), 1500);
         }
     });
     return (

@@ -1,11 +1,11 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -65,7 +65,7 @@ const ReminderModal = ({ open, setOpen, borrowId }) => {
                             fullWidth
                             multiline
                             rows={3}
-                            rowsMax={4}
+                            maxRows={4}
                         />
                         {formik.touched.message && formik.errors.message ? <ErrorMessage message={formik.errors.message} /> : <React.Fragment />}
                     </Box>

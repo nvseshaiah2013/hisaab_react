@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import {makeStyles } from '@mui/styles';
 import Navbar from './NavbarComponent';
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import { routes } from '../resources/private.navbar';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Loading from './LoadingComponent';
 import SocialButtons from './SocialComponent';
 
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Dashboard = ({ match }) => {
+const Dashboard = () => {
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
@@ -61,7 +61,7 @@ const Dashboard = ({ match }) => {
                     aria-label="open drawer"
                     onClick={handleDrawerToggle}
                     className={classes.menuButton}
-                >
+                    size="large">
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h5" className={classes.white} display="inline">Hisaab Kitaab</Typography>
@@ -70,13 +70,13 @@ const Dashboard = ({ match }) => {
                 <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleClose={handleClose} />
                 <div className={classes.content}>
                     <Suspense fallback={<Loading />}>
-                        <Switch>
+                        <Routes>
                             {routes.map((route) => {
                                 return (
-                                    <Route exact path={`${match.path}${route.url}`} render={(props) => <route.component {...props} type={route.type} />} key={route.key + 100} />
+                                    <Route exact path={`${route.url}`} element={<route.component type={route.type} />} key={route.key + 100} />
                                 );
                             })}
-                        </Switch>
+                        </Routes>
                     </Suspense>
                 </div>
             </div>

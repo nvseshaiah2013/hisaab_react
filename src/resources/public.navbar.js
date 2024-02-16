@@ -23,7 +23,7 @@ export const routes = [
         protected : false
     },
     {
-        url : '/dashboard',
+        url : '/dashboard/*',
         component : Dashboard,
         protected : true
     },

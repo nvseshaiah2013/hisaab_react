@@ -1,6 +1,6 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red'
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
 
 const ErrorMessage = ({message}) => {
     return (

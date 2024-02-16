@@ -1,12 +1,12 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import IconButton from '@material-ui/core/IconButton';
+import Box from '@mui/material/Box';
+import {makeStyles } from '@mui/styles';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import IconButton from '@mui/material/IconButton';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,19 +35,34 @@ const SocialButtons = () => {
     const classes = useStyles();
     return (
         <Box display={'flex'} flexDirection={'column'}>
-            <IconButton style={{ flexGrow: 1, display : 'block' }} className={classes.hover} >
+            <IconButton
+                style={{ flexGrow: 1, display : 'block' }}
+                className={classes.hover}
+                size="large">
                 <LinkedInIcon fontSize="large" className={classes.linkedin} />
             </IconButton>
-            <IconButton style={{ flexGrow: 1 , display : 'block' }} className={classes.hover}>
+            <IconButton
+                style={{ flexGrow: 1 , display : 'block' }}
+                className={classes.hover}
+                size="large">
                 <InstagramIcon fontSize="large" className={classes.instagram} />
             </IconButton>
-            <IconButton  style={{ flexGrow: 1, display : 'block'  }} className={classes.hover}>
+            <IconButton
+                style={{ flexGrow: 1, display : 'block'  }}
+                className={classes.hover}
+                size="large">
                 <FacebookIcon fontSize="large" className={classes.facebook} />
             </IconButton>
-            <IconButton  style={{ flexGrow: 1, display : 'block'  }} className={classes.hover} >
+            <IconButton
+                style={{ flexGrow: 1, display : 'block'  }}
+                className={classes.hover}
+                size="large">
                 <WhatsAppIcon fontSize="large" className={classes.whatsapp} />
             </IconButton>
-            <IconButton style={{ flexGrow: 1 , display : 'block' }} className={classes.hover} >
+            <IconButton
+                style={{ flexGrow: 1 , display : 'block' }}
+                className={classes.hover}
+                size="large">
                 <GitHubIcon fontSize="large" />
             </IconButton>
         </Box>

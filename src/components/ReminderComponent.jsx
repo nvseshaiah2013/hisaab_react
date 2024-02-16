@@ -1,30 +1,28 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
-import Divider from '@material-ui/core/Divider';
-import indigo from '@material-ui/core/colors/indigo';
-import red from '@material-ui/core/colors/red';
-import green from '@material-ui/core/colors/green';
-import orange from '@material-ui/core/colors/orange';
+import Container from '@mui/material/Container';
+import {makeStyles } from '@mui/styles';
+import Typography from '@mui/material/Typography';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Legend from './LegendComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchReceivedReminders, fetchSentReminders, markReminderAsRead, deleteReminder } from '../redux/ActionCreators';
 import moment from 'moment';
-import DoneIcon from '@material-ui/icons/Done';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
+import DoneIcon from '@mui/icons-material/Done';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import FailureSnack from './FailureSnackComponent';
 import SuccessSnack from './SuccessSnackComponent';
 import Heading from './HeadingComponent';
+
+import { indigo, red, green, orange } from '@mui/material/colors';
 
 const useStyles = makeStyles((theme) => ({
     flex: {

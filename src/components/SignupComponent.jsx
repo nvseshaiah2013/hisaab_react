@@ -1,14 +1,14 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import {makeStyles } from '@mui/styles';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -163,7 +163,7 @@ const SignUp = (props) => {
                                         aria-label="toggle password visibility"
                                         onClick={() => togglePwd(!pwd)}
                                         edge="end"
-                                    >
+                                        size="large">
                                         {pwd ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
