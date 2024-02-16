@@ -68,13 +68,14 @@ const ResetPassword = (props) => {
     let searchParams = useSearchParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    let [entries, setEntries] = React.useState(Object.fromEntries(searchParams[0].entries()));
     useEffect(() => {
-        if (searchParams.get('reset-token') === null) {
+        if (entries['reset-token'] == null) {
             navigate('/');
         }
-    }, [searchParams, navigate]);
+    }, [searchParams, navigate, entries]);
     const formik = useFormik({
-        initialValues: { secretToken: searchParams.get('reset-token'), password: '', confirm_password: '' },
+        initialValues: { secretToken: entries['reset-token'], password: '', confirm_password: '' },
         validationSchema: Yup.object({
             password: Yup.string()
                 .required('Password is Required')
