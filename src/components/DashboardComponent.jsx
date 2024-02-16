@@ -7,7 +7,7 @@ import {makeStyles } from '@mui/styles';
 import Navbar from './NavbarComponent';
 import MenuIcon from '@mui/icons-material/Menu';
 import { routes } from '../resources/private.navbar';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Loading from './LoadingComponent';
 import SocialButtons from './SocialComponent';
 
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Dashboard = ({ match }) => {
+const Dashboard = () => {
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
@@ -70,13 +70,13 @@ const Dashboard = ({ match }) => {
                 <Navbar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleClose={handleClose} />
                 <div className={classes.content}>
                     <Suspense fallback={<Loading />}>
-                        <Switch>
+                        <Routes>
                             {routes.map((route) => {
                                 return (
-                                    <Route exact path={`${match.path}${route.url}`} render={(props) => <route.component {...props} type={route.type} />} key={route.key + 100} />
+                                    <Route exact path={`${route.url}`} element={<route.component type={route.type} />} key={route.key + 100} />
                                 );
                             })}
-                        </Switch>
+                        </Routes>
                     </Suspense>
                 </div>
             </div>

@@ -13,7 +13,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../redux/ActionCreators';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import FailureSnack from './FailureSnackComponent';
 import ErrorMessage from './ErrorMessageComponent';
@@ -76,7 +76,7 @@ const Login = () => {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     React.useEffect(() => {
         if (auth.errMess) {
             setOpen(true);
@@ -85,7 +85,7 @@ const Login = () => {
     }, [auth.errMess]);
     React.useEffect(() => {
         if (auth.isAuthenticated) {
-            history.push('/dashboard');
+            navigate('/dashboard');
         }
     }, [auth.isAuthenticated, history]);
     const formik = useFormik({

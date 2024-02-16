@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const SuccessSnack = ({ message, open, setOpen }) => {
     const classes = useStyles();
     return (
-        <Snackbar open={open && message !== null} onClose={() => setOpen(false)}>
+        <Snackbar open={open && message !== null} onClose={() => setOpen(false)} anchorOrigin={{ vertical : 'bottom', horizontal : 'center'}}>
             <div className={classes.content}> <DoneOutlineOutlinedIcon className={classes.icon} /><Typography variant="body1" display="inline" >
                     {message}
                 </Typography></div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {makeStyles } from '@mui/styles';
@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ErrorMessage from './ErrorMessageComponent';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { resetPassword } from '../redux/ActionCreators';
 
@@ -65,18 +65,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ResetPassword = (props) => {
     const classes = useStyles();
-    const location = useLocation();
-    let searchParams;
-    const history = useHistory();
+    let searchParams = useSearchParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    useMemo(() => {
-        searchParams = new URLSearchParams(location.search)
-    });
     useEffect(() => {
         if (searchParams.get('reset-token') === null) {
-            history.push('/');
+            navigate('/');
         }
-    }, [searchParams, history]);
+    }, [searchParams, navigate]);
     const formik = useFormik({
         initialValues: { secretToken: searchParams.get('reset-token'), password: '', confirm_password: '' },
         validationSchema: Yup.object({
@@ -95,7 +91,7 @@ const ResetPassword = (props) => {
             dispatch(resetPassword(values.secretToken, values.password, values.confirm_password));
             resetForm();
             setSubmitting(false);
-            setTimeout(()=> history.push('/'), 1500);
+            setTimeout(()=> navigate('/'), 1500);
         }
     });
     return (
