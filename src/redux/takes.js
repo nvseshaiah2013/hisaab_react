@@ -9,8 +9,8 @@ export const Takes = (state = {
     isLoading : false
 }, action) => {
     switch(action.type) {
-        case FETCH_TAKEN_ITEMS : return { ...state, isLoading : false, takenItems : action.payload.borrows  };
-        case FETCH_TAKEN_MONEY : return { ...state, isLoading : false, takenMoney : action.payload.borrows };
+        case FETCH_TAKEN_ITEMS : return { ...state, isLoading : false, takenItems : action.payload.payload.borrows  };
+        case FETCH_TAKEN_MONEY : return { ...state, isLoading : false, takenMoney : action.payload.payload.borrows };
         case TAKES_LOADING : return { ...state, isLoading : true };
         case TAKE_ERROR : return { ...state, message : action.payload.message, status : action.payload.status, isLoading : false  };
         default : return state;

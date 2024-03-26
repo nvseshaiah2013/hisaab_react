@@ -13,6 +13,7 @@ const loginLoading = () => ({ type : ActionTypes.LOGIN_LOADING });
 export const login = (username, password) => dispatch => {
     dispatch(loginLoading());
     dispatch({ type: ActionTypes.LOGIN, payload: username });
+    delete axios.defaults.headers.common['Authorization'];
     axios.post(`${config.baseurl}users/login`, { username: username, password: password })
         .then((response) => {
             localStorage.setItem('token', response.data.token);
@@ -46,8 +47,6 @@ export const logout = () => dispatch => {
     localStorage.removeItem('username');
     delete axios.defaults.headers.common['Authorization'];
     dispatch({ type: ActionTypes.LOGOUT });
-
-    // nohup "serve -p 3000 build" > app.log 2>&1 &
 }
 
 export const changePassword = (oldPassword, newPassword) => dispatch => {
@@ -143,9 +142,13 @@ export const giveitem = (itemForm, friend) => dispatch => {
     };
     axios.post(`${config.baseurl}borrow/borrowItem`, item)
         .then(response => {
+            console.log('Inside then block');
+            console.log(response.data);
             dispatch({ type: ActionTypes.GIVE_ITEM, payload: response.data });
         })
         .catch(err => {
+            console.log('Catch Block');
+            console.log(err);
             dispatch({ type: ActionTypes.GIVE_ERROR,payload: err.response ? err.response.data : { status : 0, message : 'Unknown Error'} });
         })
         .finally(() => {

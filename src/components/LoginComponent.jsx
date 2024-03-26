@@ -81,6 +81,8 @@ const Login = () => {
         if (auth.errMess) {
             setOpen(true);
             setMessage(auth.errMess);
+        } else {
+            setOpen(false);
         }
     }, [auth.errMess]);
     React.useEffect(() => {

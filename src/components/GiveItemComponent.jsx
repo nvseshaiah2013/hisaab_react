@@ -36,11 +36,11 @@ const GiveItemForm = ({ setOpen, borrowId, itemName, description, occasion, expe
     const gives = useSelector(state => state.gives);
     const selectedFriend = gives.selectedFriend;
     React.useEffect(() => {
-        if (gives.status === true) {
+        if (gives.status === "CREATED") {
             setMessage(gives.message);
             setSuccess(true);
         }
-        else if (gives.status === false) {
+        else if (gives.status !== "CREATED") {
             setMessage(gives.message);
             setFailure(true);
         }
@@ -74,8 +74,7 @@ const GiveItemForm = ({ setOpen, borrowId, itemName, description, occasion, expe
                     setFailure(true);
                     setMessage('Please select a friend before submitting!');
                 }
-            }
-            else {
+            } else {
                 dispatch(updateBorrowItem(borrowId, values))
                 setTimeout(() => setOpen(false),1500);
             }

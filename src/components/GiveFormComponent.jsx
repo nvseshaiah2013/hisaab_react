@@ -75,11 +75,11 @@ const GiveForm = (props) => {
     const fetchUsers = () => {
         if (formik.values.username === '')
             return;
-        axios.get(config.baseurl + `users`, { params: { username: formik.values.username } })
-            .then((data) => { setUsers(data.data.users) })
+        axios.get(config.baseurl + `users/`, { params: { username: formik.values.username } })
+            .then((data) => { setUsers(data.data.payload.users) })
             .catch(err => console.log(err));
     }
-    const debouncedFetchUsers = debounce(fetchUsers, 3000);
+    const debouncedFetchUsers = debounce(fetchUsers, 1000);
 
     return (
         <Container maxWidth="sm" className={classes.content}>

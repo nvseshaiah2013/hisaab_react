@@ -122,7 +122,7 @@ const Takes = ({ type }) => {
                                             expected_return_date={item.expected_return_date}
                                             status={item.status}
                                             actual_return_date={item.actual_return_date}
-                                            _id={item._id}
+                                            _id={item.id}
                                         />
                                     );
                                 })
@@ -183,7 +183,7 @@ const Takes = ({ type }) => {
                                             expected_return_date={money.expected_return_date}
                                             status={money.status}
                                             actual_return_date={money.actual_return_date}
-                                            _id={money._id}
+                                            _id={money.id}
                                         />
                                     );
                                 })
@@ -237,16 +237,16 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
         dispatch(rejectBorrow(_id, 'money'));
     }
     let color = orange;
-    if (status === 0) {
+    if (status === "PENDING") {
         color = orange;
     }
-    else if (status === 1) {
+    else if (status === "APPROVED") {
         color = green;
     }
-    else if (status === 2) {
+    else if (status === "REJECTED") {
         color = red;
     }
-    else if (status === 3) {
+    else if (status === "RETURNED") {
         color = indigo;
     } return (
     <React.Fragment>
@@ -305,7 +305,7 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
                         > Reject </Button> : ''}
                         <span className={classes.button} />
 
-                        {status === 1 ? <Button
+                        {status === "APPROVED" ? <Button
                             className={classes.button}
                             style={{ backgroundColor: green[500], color: 'white' }}
                             variant="outlined"
@@ -313,9 +313,9 @@ const TakenMoney = ({ amount, borrower, place, occasion, expected_return_date, s
                             type="button"
                             onClick={handleReturn}
                         > Return </Button> : ''}
-                        {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight: 'bolder' }}> You rejected the borrow!</Typography> : ''}
-                        {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight: 'bolder' }}> You returned the borrow!</Typography> : ''}
-                        {status === 0 ? <Button
+                        {status === "REJECTED" ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight: 'bolder' }}> You rejected the borrow!</Typography> : ''}
+                        {status === "RETURNED" ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight: 'bolder' }}> You returned the borrow!</Typography> : ''}
+                        {status === "PENDING" ? <Button
                             className={classes.button}
                             style={{ backgroundColor: indigo[500], color: 'white' }}
                             variant="outlined"
@@ -358,16 +358,16 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
     }
 
     let color = orange;
-    if (status === 0) {
+    if (status === "PENDING") {
         color = orange;
     }
-    else if (status === 1) {
+    else if (status === "APPROVED") {
         color = green;
     }
-    else if (status === 2) {
+    else if (status === "REJECTED") {
         color = red;
     }
-    else if (status === 3) {
+    else if (status === "RETURNED") {
         color = indigo;
     }
     return (
@@ -425,7 +425,7 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
                         <Box margin={1} className={classes.flex}>
 
 
-                            {status === 0 ? <Button
+                            {status === "PENDING" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: red[500], color: 'white' }}
                                 variant="outlined"
@@ -434,10 +434,10 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
                                 onClick={handleReject}
                             > Reject </Button> : ''}
                             <span className={classes.button} />
-                            {status === 2 ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight: 'bolder' }}> You rejected the borrow!</Typography> : ''}
-                            {status === 3 ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight: 'bolder' }}> You returned the borrow!</Typography> : ''}
+                            {status === "REJECTED" ? <Typography display="block" className={classes.button} style={{ color: red[500], fontWeight: 'bolder' }}> You rejected the borrow!</Typography> : ''}
+                            {status === "RETURNED" ? <Typography display="block" className={classes.button} style={{ color: indigo[500], fontWeight: 'bolder' }}> You returned the borrow!</Typography> : ''}
 
-                            {status === 1 ? <Button
+                            {status === "APPROVED" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: green[500], color: 'white' }}
                                 variant="outlined"
@@ -445,7 +445,7 @@ const TakenItem = ({ itemName, description, borrower, place, occasion, expected_
                                 type="button"
                                 onClick={handleReturn}
                             > Return </Button> : ''}
-                            {status === 0 ? <Button
+                            {status === "PENDING" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: indigo[500], color: 'white' }}
                                 variant="outlined"

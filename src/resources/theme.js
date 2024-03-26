@@ -67,7 +67,7 @@ export const theme = createTheme({
                     borderBottom : '2px solid grey',
                     fontWeight: 'bolder',
                     backgroundColor: 'rgb(110,110,110,0.9)',
-                    '&:first-child': {
+                    '&:first-of-type': {
                         borderTopLeftRadius: '10px'
                     },
                     '&:last-child': {

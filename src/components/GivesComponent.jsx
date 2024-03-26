@@ -144,7 +144,7 @@ const Gives = ({ type }) => {
                                             expected_return_date={money.expected_return_date}
                                             status={money.status}
                                             actual_return_date={money.actual_return_date}
-                                            _id={money._id}
+                                            _id={money.id}
                                             index={index}
                                         />
                                     );
@@ -205,7 +205,7 @@ const Gives = ({ type }) => {
                                         expected_return_date={item.expected_return_date}
                                         status={item.status}
                                         actual_return_date={item.actual_return_date}
-                                        _id={item._id}
+                                        _id={item.id}
                                         index={index}
                                     />
                                 );
@@ -251,16 +251,16 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
         dispatch(getToken(_id));
     }
     let color = orange;
-    if (status === 0) {
+    if (status === "PENDING") {
         color = orange;
     }
-    else if (status === 1) {
+    else if (status === "APPROVED") {
         color = green;
     }
-    else if (status === 2) {
+    else if (status === "REJECTED") {
         color = red;
     }
-    else if (status === 3) {
+    else if (status === "RETURNED") {
         color = indigo;
     } return (
     <React.Fragment>
@@ -323,7 +323,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <Box margin={1} className={classes.flex}>
-                        {status === 0 ? <Button
+                        {status === "PENDING" ? <Button
                             className={classes.button}
                             style={{ backgroundColor: green[500], color: 'white' }}
                             variant="outlined"
@@ -333,7 +333,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                         > Validate </Button> : ''}
 
                         <span className={classes.button} />
-                        {status === 0 ? <Button
+                        {status === "PENDING" ? <Button
                             className={classes.button}
                             style={{ backgroundColor: orange[500], color: 'white' }}
                             variant="outlined"
@@ -343,7 +343,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                         > Edit </Button> : ''}
 
                         <span className={classes.button} />
-                        {status !== 1 ? <Button
+                        {status !== "APPROVED" ? <Button
                             className={classes.button}
                             style={{ backgroundColor: red[500], color: 'white' }}
                             variant="outlined"
@@ -353,7 +353,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                         > Delete </Button> : ''}
 
                         <span className={classes.button} />
-                        {status === 1 ?
+                        {status === "APPROVED" ?
                             <Button
                                 variant="outlined"
                                 className={classes.button}
@@ -363,7 +363,7 @@ const GivenMoney = ({ amount, borowee, place, occasion, expected_return_date, ac
                                 onClick={() => setReminder(true)}
                             > Remind </Button> : ''}
                         <span className={classes.button} />
-                        {status === 1 ? <Button
+                        {status === "APPROVED" ? <Button
                             className={classes.button}
                             style={{ backgroundColor: indigo[500], color: 'white' }}
                             variant="outlined"
@@ -390,16 +390,16 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
         dispatch(getToken(_id));
     }
     let color = orange;
-    if (status === 0) {
+    if (status === "PENDING") {
         color = orange;
     }
-    else if (status === 1) {
+    else if (status === "APPROVED") {
         color = green;
     }
-    else if (status === 2) {
+    else if (status === "REJECTED") {
         color = red;
     }
-    else if (status === 3) {
+    else if (status === "RETURNED") {
         color = indigo;
     }
     return (
@@ -468,7 +468,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1} className={classes.flex}>
-                            {status === 0 ? <Button
+                            {status === "PENDING" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: green[500], color: 'white' }}
                                 variant="outlined"
@@ -478,7 +478,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                             > Validate </Button> : ''}
 
                             <span className={classes.button} />
-                            {status === 0 ? <Button
+                            {status === "PENDING" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: orange[500], color: 'white' }}
                                 variant="outlined"
@@ -488,7 +488,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                             > Edit </Button> : ''}
 
                             <span className={classes.button} />
-                            {status !== 1 ? <Button
+                            {status !== "APPROVED" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: red[500], color: 'white' }}
                                 variant="outlined"
@@ -497,7 +497,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                 onClick={() => dispatch(deleteBorrowItem(_id,index))}
                             > Delete </Button> : ''}
                             <span className={classes.button} />
-                            {status === 1 ?
+                            {status === "APPROVED" ?
                                 <Button
                                     variant="outlined"
                                     className={classes.button}
@@ -507,7 +507,7 @@ const GivenItem = ({ itemName, description, borowee, place, occasion, expected_r
                                     onClick={() => setReminder(true)}
                                 > Remind </Button> : ''}
                             <span className={classes.button} />
-                            {status === 1 ? <Button
+                            {status === "APPROVED" ? <Button
                                 className={classes.button}
                                 style={{ backgroundColor: indigo[500], color: 'white' }}
                                 variant="outlined"

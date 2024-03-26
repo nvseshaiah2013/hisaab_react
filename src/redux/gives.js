@@ -28,9 +28,9 @@ export const Gives = (state = {
 
         case DESELET_FRIEND: return { ...state, selectedFriend: null };
 
-        case GIVE_MONEY: return { ...state, givenAmount: action.payload.borrow, status: action.payload.status, message: action.payload.message };
+        case GIVE_MONEY: return { ...state, givenAmount: action.payload.payload.savedBorrow, status: action.payload.status, message: action.payload.message };
 
-        case FETCH_GIVEN_MONEY: return { ...state, isLoading: false, givenMoney: action.payload.borrows };
+        case FETCH_GIVEN_MONEY: return { ...state, isLoading: false, givenMoney: action.payload.payload.borrows };
 
         case UPDATE_GIVE_ITEM: return { ...state, 
                                          isLoading : false, 
@@ -58,11 +58,11 @@ export const Gives = (state = {
                                             givenMoney : [...state.givenMoney.slice(0,action.payload.index), ...state.givenMoney.slice(action.payload.index + 1)]
                                           };
         
-        case GIVE_ITEM: return { ...state, givenItem: action.payload.borrow, status: action.payload.status, message: action.payload.message };
+        case GIVE_ITEM: return { ...state, givenItem: (action.payload.payload.savedBorrow || {}), status: action.payload.status, message: action.payload.message };
 
-        case FETCH_GIVEN_ITEMS: return { ...state, givenItems: action.payload.borrows };
+        case FETCH_GIVEN_ITEMS: return { ...state, givenItems: (action.payload.payload.borrows || []) };
 
-        case GIVE_ERROR: return { ...state, message: action.payload.message, status: action.payload.status, isLoading: false };
+        case GIVE_ERROR: return { ...state, message: action.payload.payload.errorMessage, status: action.payload.status, isLoading: false };
 
         case CLEAR_GIVE_MESSAGE: return { ...state, status: null, message: null };
 

@@ -14,7 +14,7 @@ export const Token = (state =
             case CLEAR_TOKEN_MESSAGE : return { ...state, status : null, message :  null};
             case TOKEN_LOADING : return { ...state, isLoading : true };
             case CLEAR_TOKEN : return { ...state, isLoading : false, secretToken : null };
-            case GENERATE_TOKEN : return { ...state, isLoading : false, message : action.payload.message, status : action.payload.status, code : action.payload.code };
+            case GENERATE_TOKEN : return { ...state, isLoading : false, message : action.payload.message, status : action.payload.status, code : action.payload.payload.code };
             case GET_TOKEN : return { ...state, isLoading : false, secretToken : action.payload.token, status : action.payload.status, message : action.payload.message };
             case VALIDATE_BORROW : return { ...state, isLoading : false, status : action.payload.status, message : action.payload.message };
             case VALIDATE_RETURN : return { ...state, isLoading : false, status : action.payload.status, message : action.payload.message };
